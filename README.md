@@ -1,4 +1,4 @@
-# 🍲 DailyMeal (SmartKitchen) – "Hôm Nay Ăn Gì?"
+# 🍲 DailyMeal – "Hôm Nay Ăn Gì?"
 ### Trợ lý Lập Mâm Cơm Gia Đình & Điều Phối Nấu Ăn Thông Minh Tích Hợp AI
 
 [![FastAPI](https://img.shields.io/badge/Backend-FastAPI_0.115-009688?style=flat-square&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
