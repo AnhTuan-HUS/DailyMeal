@@ -1,0 +1,72 @@
+services:
+  # Database Service (PostgreSQL 16)
+  db:
+    image: postgres:16-alpine
+    container_name: dailymeal-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-dailymeal_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-dailymeal_secret_password}
+      POSTGRES_DB: ${POSTGRES_DB:-dailymeal_db}
+    ports:
+      - "${POSTGRES_PORT:-15432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-dailymeal_user} -d ${POSTGRES_DB:-dailymeal_db}" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - dailymeal-net
+
+  # Backend Service (FastAPI)
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: dailymeal-backend
+    restart: unless-stopped
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    environment:
+      - ENVIRONMENT=${ENVIRONMENT:-development}
+      - DEBUG=${DEBUG:-true}
+      - POSTGRES_SERVER=db
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=${POSTGRES_USER:-dailymeal_user}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-dailymeal_secret_password}
+      - POSTGRES_DB=${POSTGRES_DB:-dailymeal_db}
+      - GEMINI_API_KEY=${GEMINI_API_KEY:-}
+      - SECRET_KEY=${SECRET_KEY:-super_secret_development_key}
+    volumes:
+      - ./backend:/app
+    ports:
+      - "${BACKEND_PORT:-18000}:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - dailymeal-net
+
+  # Frontend Service (React / Vite + Nginx Reverse Proxy)
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: dailymeal-frontend
+    restart: unless-stopped
+    ports:
+      - "${FRONTEND_PORT:-13000}:80"
+    depends_on:
+      - backend
+    networks:
+      - dailymeal-net
+
+networks:
+  dailymeal-net:
+    driver: bridge
+
+volumes:
+  postgres_data:
+    driver: local
