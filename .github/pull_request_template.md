@@ -3,7 +3,7 @@
 - **Liên kết Issue:** Closes #`[Điền số Issue, ví dụ #1]`
 - **Mã Task (Tracking Sheet):** `[Ví dụ: T1.2, T2.1, T3.2]`
 - **Người thực hiện:** @`[Tên bạn]`
-- **Người được chỉ định Review chéo:** @`[Tên reviewer]`
+- **Leader / Reviewer phụ trách duyệt:** @`[Tên Leader]`
 
 ---
 
@@ -32,9 +32,9 @@
 
 ---
 
-### 👨‍💻 4. Khu vực dành cho Người Review (Reviewer's Feedback)
-> ⚠️ **Quy định môn học:** Người review bắt buộc phải chạy thử lại và nêu nhận xét kỹ thuật cụ thể. Không được chỉ ghi "OK" hoặc approve mà không kiểm tra.
+### 👨‍💻 4. Khu vực dành cho Leader / Reviewer
+> ⚠️ **Quy trình nghiệm thu:** Leader kiểm tra code, chạy thử độc lập và đưa ra nhận xét trước khi Approve và Hợp nhất (Merge) vào nhánh `dev`.
 
-- **Kết quả chạy thử của Reviewer:** 
+- **Kết quả chạy thử của Leader:** 
 - **Nhận xét chất lượng mã / Góp ý tối ưu:**
-- **Quyết định:** `[ ] APPROVE (Hợp nhất vào main) | [ ] REQUEST CHANGES (Cần sửa đổi)`
+- **Quyết định:** `[ ] APPROVE (Hợp nhất vào dev) | [ ] REQUEST CHANGES (Yêu cầu sửa đổi)`
