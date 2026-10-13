@@ -21,9 +21,12 @@
 ## 📌 QUY ƯỚC QUY TRÌNH & ĐIỀU KIỆN HOÀN THÀNH (DEFINITION OF DONE - DoD)
 
 Để đảm bảo trọn vẹn điểm quá trình cá nhân ($P_i = 2.0$) và điểm cộng trưởng nhóm ($T_i = 1.0$), tất cả thành viên phải tuân thủ nghiêm ngặt:
-1. **Quy trình Git:** `Tạo Issue` $\rightarrow$ `Tạo nhánh tính năng (feat/...)` $\rightarrow$ `Commit có ý nghĩa (Conventional Commits)` $\rightarrow$ `Mở Pull Request (PR)` $\rightarrow$ `Thành viên khác Review chéo & Test thử` $\rightarrow$ `Merge vào main` $\rightarrow$ `Đóng Issue`.
-2. **Không tự merge:** Mã của bất kỳ ai (kể cả Trưởng nhóm) đều bắt buộc phải có ít nhất **01 thành viên khác review có nhận xét kỹ thuật** trước khi merge.
-3. **Minh chứng cụ thể:** Mỗi đầu việc hoàn thành phải gắn kèm số hiệu PR/Issue hoặc log chạy thử nghiệm.
+1. **Quy trình Git Flow 2 tầng (Main & Dev):**
+   - **Tầng 1 (Hằng ngày):** `Tạo Issue` $\rightarrow$ `Tạo nhánh tính năng từ dev (feat/<mã-task>)` $\rightarrow$ `Commit chuẩn` $\rightarrow$ `Mở PR vào nhánh dev` $\rightarrow$ `Thành viên khác Review chéo & Test` $\rightarrow$ `Merge vào dev`.
+   - **Tầng 2 (Bản phát hành chính thức - Chỉ Leader):** Khi nhánh `dev` chạy ổn định và vượt qua kiểm thử tích hợp $\rightarrow$ Duy nhất **Leader (Release Owner)** mới có quyền mở PR và merge từ `dev` vào `main` $\rightarrow$ Gắn tag Release (`v1.0.0`, `v1.1.0`) phục vụ nghiệm thu.
+2. **Không tự merge:** Mã của bất kỳ ai đều bắt buộc phải có ít nhất **01 thành viên khác review có nhận xét kỹ thuật** trước khi merge vào `dev`.
+3. **Bảo vệ tuyệt đối nhánh `main`:** Thành viên không được mở PR trực tiếp vào `main`. Nhánh `main` luôn là phiên bản chạy ổn định nhất (Production-ready).
+4. **Minh chứng cụ thể:** Mỗi đầu việc hoàn thành phải gắn kèm số hiệu PR/Issue hoặc log chạy thử nghiệm.
 
 ---
 
