@@ -1,15 +1,14 @@
 ---
-name: "📋 Nhận & Thực hiện Task được giao (Assigned Task)"
-about: "Dành cho thành viên tiếp nhận, làm rõ yêu cầu và triển khai công việc được phân công"
 title: "[TASK] <Mã_Task> - <Tên công việc ngắn gọn>"
 labels: ["task"]
 assignees: ""
 ---
 
 ### 📌 1. Thông tin phân công
-- **Mã Task (Project / Sheet):** `[Ví dụ: T1.2, T2.1, T3.4]`
-- **Thành viên thực hiện:** @`[Tên thành viên]`
-- **Leader / Reviewer phụ trách duyệt:** @`[Tên Leader]`
+- **Mã Task (Project / Sheet):** `[Ví dụ: T1.2, T2.1, T3.4]` # T1: TV1, T2: TV2 ,...
+- **Thành viên thực hiện:** @
+- **Người giao việc (Leader):** @
+- **Người kiểm tra chéo (Reviewer):** @
 - **Hạn hoàn thành dự kiến (Deadline):** `[DD/MM/YYYY]`
 ---
 
