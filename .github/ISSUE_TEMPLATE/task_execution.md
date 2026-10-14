@@ -1,4 +1,6 @@
 ---
+name: "📋 Nhận & Thực hiện Task được giao (Assigned Task)"
+about: "Dành cho thành viên tiếp nhận, làm rõ yêu cầu và triển khai công việc được phân công"
 title: "[TASK] <Mã_Task> - <Tên công việc ngắn gọn>"
 labels: ["task"]
 assignees: ""
