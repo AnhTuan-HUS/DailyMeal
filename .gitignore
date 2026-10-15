@@ -60,3 +60,6 @@ htmlcov/
 .pytest_cache/
 
 more/*
+
+# data
+data/*.pdf
