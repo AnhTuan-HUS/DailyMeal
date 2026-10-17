@@ -62,4 +62,6 @@ htmlcov/
 more/*
 
 # data
-data/*.pdf
+data/ingredients/*.pdf
+data/recipes/raw/
+data/recipes/processed/
