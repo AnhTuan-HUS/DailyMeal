@@ -6,7 +6,7 @@
 
 ## I. TỔNG QUAN CẤU TRÚC GIAO DIỆN & ĐIỀU HƯỚNG
 
-Giao diện tổ chức theo SPA multi-page: sidebar desktop + bottom nav mobile. Luồng chính theo Kitchen Loop: Quyết định → Đi chợ → Vào bếp → Ghi nhận lịch sử.
+Giao diện tổ chức theo SPA multi-page: sidebar desktop . Luồng chính theo Kitchen Loop: Quyết định → Đi chợ → Vào bếp → Ghi nhận lịch sử.
 
 ### I.1. Khung bố cục chính
 
