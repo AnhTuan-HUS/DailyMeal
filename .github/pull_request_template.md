@@ -37,4 +37,6 @@
 
 - **Kết quả chạy thử của Leader:** 
 - **Nhận xét chất lượng mã / Góp ý tối ưu:**
-- **Quyết định:** `[ ] APPROVE (Hợp nhất vào dev) | [ ] REQUEST CHANGES (Yêu cầu sửa đổi)`
+- **Quyết định:** 
+    - [ ] APPROVE (Hợp nhất vào dev)
+    - [ ] REQUEST CHANGES (Yêu cầu sửa đổi)`
