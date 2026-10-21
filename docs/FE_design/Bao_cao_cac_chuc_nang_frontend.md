@@ -84,9 +84,15 @@ Phân hệ Must Have quan trọng nhất. UI hiện thực "Mâm 1 chạm" ngay 
 
 - Mỗi món: ⇄ Đổi món + Xem · Chip Mood · Chốt giúp tôi · Chốt mâm.
 
+- **Tổng hợp nguyên liệu hôm nay**: Cuối khối mâm hôm nay và bảng Thực đơn tuần này trên Trang chủ hiển thị danh sách tổng hợp nguyên liệu cần mua kèm nút **“🛒 Liệt kê nguyên liệu hoàn thiện bữa ăn hôm nay ở phần Đi chợ →”** để đẩy thẳng sang phần Đi chợ.
+
 - Banner "Đổi vị" + disclaimer dinh dưỡng.
 
 ![](media/image11.jpg)
+
+![](media/image30_home_summary.png)
+
+![](media/image34_week_widget_summary.png)
 
 ### III.3. Luồng đổi món (Swap ≤ 3)
 
@@ -126,11 +132,15 @@ Phân hệ Must Have quan trọng nhất. UI hiện thực "Mâm 1 chạm" ngay 
 
 - Lưới 7 ngày × 3 bữa · Mỗi slot: Xem + ⇄ Thay.
 
+- **Tổng hợp nguyên liệu cuối mỗi thực đơn ngày**: Ở cuối mỗi thẻ thực đơn của từng ngày (Thứ Hai đến Chủ Nhật) có phần **🧺 Tổng hợp nguyên liệu cần mua**, tự động gom và cộng gộp định lượng nguyên liệu của cả 3 bữa trong ngày đó.
+
+- **Nút chuyển nguyên liệu sang Đi chợ**: Nút **“🛒 Liệt kê nguyên liệu cho bữa ăn hôm đó ở phần Đi chợ”** ở cuối mỗi ngày giúp nạp toàn bộ nguyên liệu cần mua của ngày đó sang phần Đi chợ chỉ với 1 chạm.
+
 - Tạo tự động: số ngày, ưu tiên, tránh lặp 7 ngày.
 
 - Lưu thực đơn → CTA tạo danh sách đi chợ.
 
-![](media/image17.jpg)
+![](media/image31_plan_summary.png)
 
 ![](media/image18.jpg)
 
@@ -140,7 +150,15 @@ Phân hệ Must Have quan trọng nhất. UI hiện thực "Mâm 1 chạm" ngay 
 
 - Thêm nguyên liệu thủ công · Cứu tủ lạnh · Xuất Zalo · Hoàn tất.
 
+- **Tự tạo danh sách nguyên liệu bằng thanh tìm kiếm**: Người dùng có thể tìm kiếm nguyên liệu (có gợi ý tự động thả xuống) và bấm **“+ Thêm vào danh sách”** để tự tạo danh sách nguyên liệu mình muốn mua hoặc đang có, hỗ trợ xóa từng món, xóa hết hoặc đồng bộ lên giỏ đi chợ.
+
+- **Gợi ý tất cả các món ăn từ danh sách nguyên liệu tự tạo**: Từ danh sách nguyên liệu người dùng vừa tạo, hệ thống tự động lọc và gợi ý tất cả các món ăn có thể chế biến từ các nguyên liệu đó (kèm nhãn báo số lượng nguyên liệu khớp và sắp xếp ưu tiên món khớp nhiều nguyên liệu nhất lên đầu).
+
 ![](media/image19.jpg)
+
+![](media/image32_shopping_custom_list.png)
+
+![](media/image33_shopping_search_dropdown.png)
 
 ![](media/image20.jpg)
 
