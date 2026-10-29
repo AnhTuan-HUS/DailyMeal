@@ -4,14 +4,14 @@ import { useRef } from 'react'
 import { groupByStall } from '../utils/groceryStalls'
 
 const STALL_ACCENT = {
-  meat:   { bg: '#fdf3ef', dot: '#c45b3d' },
-  veggie: { bg: '#f0f6ee', dot: '#66835c' },
-  egg:    { bg: '#fdf8ec', dot: '#b5852a' },
-  dry:    { bg: '#f4f1f8', dot: '#7c6a9e' },
+  meat:   { bg: '#fdf3ef', dot: '#c45b3d', icon: '🥩' },
+  veggie: { bg: '#f0f6ee', dot: '#66835c', icon: '🥬' },
+  egg:    { bg: '#fdf8ec', dot: '#b5852a', icon: '🥚' },
+  dry:    { bg: '#f4f1f8', dot: '#7c6a9e', icon: '🧂' },
 }
 
 export default function ShoppingPage() {
-  const toast = useToast()
+  const toast  = useToast()
   const { ingredients, checked, checkIngredient, addIngredient, removeIngredient, clearChecked } = useApp()
   const inputRef = useRef()
 
@@ -35,36 +35,34 @@ export default function ShoppingPage() {
   return (
     <section id="page-shopping" className="shop-page">
 
-      {/* Header */}
-      <div className="shop-header">
-        <div>
-          <p className="shop-eyebrow">Hôm nay đi chợ</p>
-          <h2 className="shop-title">Danh sách nguyên liệu</h2>
-        </div>
+      {/* Banner tóm tắt quầy */}
+      <div className="shop-banner">
+        {Object.entries(STALL_ACCENT).map(([key, a]) => {
+          const stallData = stalls.find(s => s.key === key)
+          const count = stallData ? stallData.items.length : 0
+          return (
+            <div key={key} className="shop-banner-item" style={{ '--b-dot': a.dot, '--b-bg': a.bg }}>
+              <span className="shop-banner-icon">{a.icon}</span>
+              <span className="shop-banner-count">{count}</span>
+            </div>
+          )
+        })}
+        {total > 0 && (
+          <div className="shop-banner-progress">
+            <div className="shop-banner-bar">
+              <div className="shop-banner-fill" style={{ width: `${pct}%` }} />
+            </div>
+            <span>{bought === total && total > 0 ? '✓ Xong!' : `${bought}/${total}`}</span>
+          </div>
+        )}
         {bought > 0 && (
           <button className="btn-done" onClick={() => toast('Hoàn tất! Chúc nấu ngon 🎉')}>
-            Hoàn tất &nbsp;✓
+            ✓ Hoàn tất
           </button>
         )}
       </div>
 
-      {/* Tiến độ */}
-      {total > 0 && (
-        <div className="shop-progress-wrap">
-          <div className="shop-progress-track">
-            <div className="shop-progress-fill" style={{ width: `${pct}%` }} />
-          </div>
-          <span className="shop-progress-text">
-            {bought === 0
-              ? `${total} món cần mua`
-              : bought === total
-              ? 'Xong hết rồi! 🎉'
-              : `${bought}/${total} đã mua`}
-          </span>
-        </div>
-      )}
-
-      {/* Ô nhập */}
+      {/* Ô thêm nguyên liệu */}
       <div className="shop-add-row">
         <div className="shop-input-wrap">
           <span className="shop-input-icon">🔍</span>
@@ -86,8 +84,8 @@ export default function ShoppingPage() {
       {stalls.length === 0 ? (
         <div className="shop-empty">
           <span className="shop-empty-icon">🛒</span>
-          <p>Chưa có gì trong giỏ.</p>
-          <p className="shop-empty-sub">Gõ tên nguyên liệu phía trên rồi nhấn Enter.</p>
+          <p>Giỏ đang trống.</p>
+          <p className="shop-empty-sub">Gõ tên nguyên liệu phía trên rồi nhấn Enter để thêm.</p>
         </div>
       ) : (
         <div className="shop-stalls">
