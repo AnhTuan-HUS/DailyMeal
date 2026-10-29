@@ -28,8 +28,22 @@ export function AppProvider({ children }) {
     setIngredients(prev => [...prev, [name, '1 phần']])
   }, [])
 
+  const removeIngredient = useCallback((idx) => {
+    setIngredients(prev => prev.filter((_, i) => i !== idx))
+    setChecked(prev => {
+      const next = new Set()
+      prev.forEach(i => { if (i < idx) next.add(i); else if (i > idx) next.add(i - 1) })
+      return next
+    })
+  }, [])
+
+  const clearChecked = useCallback(() => {
+    setIngredients(prev => prev.filter((_, i) => !checked.has(i)))
+    setChecked(new Set())
+  }, [checked])
+
   return (
-    <AppContext.Provider value={{ saved, toggleSave, ingredients, checked, checkIngredient, addIngredient }}>
+    <AppContext.Provider value={{ saved, toggleSave, ingredients, checked, checkIngredient, addIngredient, removeIngredient, clearChecked }}>
       {children}
     </AppContext.Provider>
   )

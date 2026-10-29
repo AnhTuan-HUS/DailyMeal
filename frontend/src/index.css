@@ -817,3 +817,92 @@ li { padding: 3px 0; }
   .family-grid { grid-template-columns: 1fr; }
   .top-actions .icon-btn { width: 35px; height: 35px; }
 }
+
+/* ============================================================
+   Shopping Page — 4 Quầy chợ
+   ============================================================ */
+
+.shopping-progress {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 16px;
+}
+.progress-bar {
+  flex: 1;
+  height: 8px;
+  background: var(--line);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: var(--green);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+.progress-label {
+  font-size: 13px;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.stall-group {
+  margin-bottom: 20px;
+}
+.stall-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 0;
+  border-bottom: 2px solid var(--line);
+  margin-bottom: 8px;
+}
+.stall-label {
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--wine);
+}
+.stall-count {
+  font-size: 12px;
+  color: var(--muted);
+  background: var(--sand);
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+
+.shop-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 4px;
+  border-bottom: 1px solid var(--line);
+  cursor: pointer;
+}
+.shop-item:last-child { border-bottom: none; }
+.shop-item .qty {
+  margin-left: auto;
+  font-size: 12px;
+  color: var(--muted);
+}
+.btn-remove {
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-size: 18px;
+  cursor: pointer;
+  padding: 0 4px;
+  line-height: 1;
+}
+.btn-remove:hover { color: var(--rust); }
+
+.secondary {
+  background: var(--sand);
+  color: var(--wine);
+  border: 1px solid var(--line);
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 13px;
+}
+.secondary:hover { background: var(--line); }
