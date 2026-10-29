@@ -1,5 +1,5 @@
-/* ============================================================
-   DailyMeal — Global Design Tokens & Base Styles
+﻿/* ============================================================
+   DailyMeal â€” Global Design Tokens & Base Styles
    Palette: wine-cream, per demogiaodien.html
    ============================================================ */
 
@@ -17,7 +17,7 @@
   --line:   #eee2d4;
   --green:  #66835c;
 
-  /* Shadows — flat tone steps, no glows */
+  /* Shadows â€” flat tone steps, no glows */
   --shadow-card: 0 4px 18px rgba(75, 39, 30, 0.07);
   --shadow-hover: 0 10px 30px rgba(75, 39, 30, 0.13);
 
@@ -173,7 +173,8 @@ li { padding: 3px 0; }
   padding: 27px 32px 40px;
   max-width: 1700px;
   width: 100%;
-  margin: auto;
+  margin: 0 auto;
+  align-self: start;
 }
 
 /* ============================================================
@@ -736,7 +737,7 @@ li { padding: 3px 0; }
 }
 
 /* ============================================================
-   Responsive — 1200px
+   Responsive â€” 1200px
    ============================================================ */
 @media (max-width: 1200px) {
   .app { grid-template-columns: 215px minmax(0, 1fr); }
@@ -749,7 +750,7 @@ li { padding: 3px 0; }
 }
 
 /* ============================================================
-   Responsive — 800px (tablet / phone)
+   Responsive â€” 800px (tablet / phone)
    ============================================================ */
 @media (max-width: 800px) {
   .app { display: block; }
@@ -800,7 +801,7 @@ li { padding: 3px 0; }
 }
 
 /* ============================================================
-   Responsive — 460px (small phone)
+   Responsive â€” 460px (small phone)
    ============================================================ */
 @media (max-width: 460px) {
   .hero { min-height: 330px; }
@@ -819,7 +820,7 @@ li { padding: 3px 0; }
 }
 
 /* ============================================================
-   Shopping Page — 4 Quầy chợ
+   Shopping Page â€” 4 Quáº§y chá»£
    ============================================================ */
 
 .shop-page {
@@ -828,7 +829,7 @@ li { padding: 3px 0; }
   gap: 16px;
 }
 
-/* Banner tóm tắt 4 quầy */
+/* Banner tĂ³m táº¯t 4 quáº§y */
 .shop-banner {
   display: flex;
   align-items: center;
@@ -883,7 +884,7 @@ li { padding: 3px 0; }
   white-space: nowrap;
 }
 
-/* Ô thêm nguyên liệu */
+/* Ă” thĂªm nguyĂªn liá»‡u */
 .shop-add-row {
   display: flex;
   gap: 8px;
@@ -966,14 +967,14 @@ li { padding: 3px 0; }
 .shop-empty p { font-size: 15px; }
 .shop-empty-sub { font-size: 13px; margin-top: 6px; }
 
-/* Lưới quầy */
+/* LÆ°á»›i quáº§y */
 .shop-stalls {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 12px;
 }
 
-/* Từng quầy */
+/* Tá»«ng quáº§y */
 .stall {
   background: var(--stall-bg, var(--paper));
   border-radius: 14px;
@@ -1008,7 +1009,7 @@ li { padding: 3px 0; }
   border-radius: 99px;
 }
 
-/* Danh sách món */
+/* Danh sĂ¡ch mĂ³n */
 .stall-list {
   list-style: none;
   padding: 0;
@@ -1112,7 +1113,7 @@ li { padding: 3px 0; }
 }
 .btn-done:hover { opacity: .85; }
 
-/* Tiến độ */
+/* Tiáº¿n Ä‘á»™ */
 .shop-progress-wrap {
   display: flex;
   align-items: center;
@@ -1139,7 +1140,7 @@ li { padding: 3px 0; }
   text-align: right;
 }
 
-/* Ô thêm nguyên liệu */
+/* Ă” thĂªm nguyĂªn liá»‡u */
 .shop-add-row {
   display: flex;
   gap: 8px;
@@ -1208,14 +1209,14 @@ li { padding: 3px 0; }
 .shop-empty p { font-size: 15px; }
 .shop-empty-sub { font-size: 13px; margin-top: 6px; }
 
-/* Lưới quầy — 2 cột trên màn rộng */
+/* LÆ°á»›i quáº§y â€” 2 cá»™t trĂªn mĂ n rá»™ng */
 .shop-stalls {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 14px;
 }
 
-/* Từng quầy */
+/* Tá»«ng quáº§y */
 .stall {
   background: var(--stall-bg, var(--paper));
   border-radius: 14px;
@@ -1250,7 +1251,7 @@ li { padding: 3px 0; }
   border-radius: 99px;
 }
 
-/* Danh sách món */
+/* Danh sĂ¡ch mĂ³n */
 .stall-list {
   list-style: none;
   padding: 0;
