@@ -24,10 +24,10 @@ const KEYWORDS = {
 }
 
 const STALLS = [
-  { key: 'meat',   label: '🥩 Thịt & Cá' },
-  { key: 'veggie', label: '🥬 Rau củ' },
-  { key: 'egg',    label: '🥚 Trứng & Đậu' },
-  { key: 'dry',    label: '🧂 Đồ khô & Gia vị' },
+  { key: 'meat', label: ' Thịt & Cá' },
+  { key: 'veggie', label: ' Rau củ' },
+  { key: 'egg', label: ' Trứng & Đậu' },
+  { key: 'dry', label: ' Đồ khô & Gia vị' },
 ]
 
 export function classifyIngredient(name) {
@@ -49,3 +49,4 @@ export function groupByStall(ingredients) {
 
   return STALLS.map(s => ({ ...s, items: groups[s.key] })).filter(s => s.items.length > 0)
 }
+
