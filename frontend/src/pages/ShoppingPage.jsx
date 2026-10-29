@@ -3,21 +3,29 @@ import { useToast } from '../context/ToastContext'
 import { useRef } from 'react'
 import { groupByStall } from '../utils/groceryStalls'
 
+const STALL_ACCENT = {
+  meat:   { bg: '#fdf3ef', dot: '#c45b3d' },
+  veggie: { bg: '#f0f6ee', dot: '#66835c' },
+  egg:    { bg: '#fdf8ec', dot: '#b5852a' },
+  dry:    { bg: '#f4f1f8', dot: '#7c6a9e' },
+}
+
 export default function ShoppingPage() {
   const toast = useToast()
   const { ingredients, checked, checkIngredient, addIngredient, removeIngredient, clearChecked } = useApp()
   const inputRef = useRef()
 
   const stalls = groupByStall(ingredients)
-  const total = ingredients.length
+  const total  = ingredients.length
   const bought = checked.size
+  const pct    = total > 0 ? Math.round((bought / total) * 100) : 0
 
   function handleAdd() {
     const val = inputRef.current.value.trim()
     if (!val) { toast('Nhập tên nguyên liệu trước nhé'); return }
     addIngredient(val)
     inputRef.current.value = ''
-    toast('Đã thêm ' + val)
+    inputRef.current.focus()
   }
 
   function handleKeyDown(e) {
@@ -25,78 +33,104 @@ export default function ShoppingPage() {
   }
 
   return (
-    <section id="page-shopping">
-      <div className="section-head">
+    <section id="page-shopping" className="shop-page">
+
+      {/* Header */}
+      <div className="shop-header">
         <div>
-          <h3>Danh sách đi chợ</h3>
-          <p>Nguyên liệu được chia theo từng quầy để dễ mua.</p>
+          <p className="shop-eyebrow">Hôm nay đi chợ</p>
+          <h2 className="shop-title">Danh sách nguyên liệu</h2>
         </div>
-        <button className="primary" onClick={() => toast('Danh sách đi chợ đã sẵn sàng!')}>
-          ✓ Hoàn tất
-        </button>
+        {bought > 0 && (
+          <button className="btn-done" onClick={() => toast('Hoàn tất! Chúc nấu ngon 🎉')}>
+            Hoàn tất &nbsp;✓
+          </button>
+        )}
       </div>
 
-      {/* Thanh tiến độ */}
+      {/* Tiến độ */}
       {total > 0 && (
-        <div className="shopping-progress">
-          <div className="progress-bar">
-            <div className="progress-fill" style={{ width: `${(bought / total) * 100}%` }} />
+        <div className="shop-progress-wrap">
+          <div className="shop-progress-track">
+            <div className="shop-progress-fill" style={{ width: `${pct}%` }} />
           </div>
-          <span className="progress-label">Đã mua {bought}/{total} món</span>
+          <span className="shop-progress-text">
+            {bought === 0
+              ? `${total} món cần mua`
+              : bought === total
+              ? 'Xong hết rồi! 🎉'
+              : `${bought}/${total} đã mua`}
+          </span>
         </div>
       )}
 
-      <div className="panel">
-        {/* Ô thêm nguyên liệu */}
-        <div className="catalog-toolbar">
+      {/* Ô nhập */}
+      <div className="shop-add-row">
+        <div className="shop-input-wrap">
+          <span className="shop-input-icon">🔍</span>
           <input
             ref={inputRef}
-            id="newIngredient"
-            placeholder="Ví dụ: cà chua, hành lá, thịt gà..."
+            className="shop-input"
+            placeholder="Thêm nguyên liệu, ví dụ: thịt heo, cà chua..."
             onKeyDown={handleKeyDown}
+            autoComplete="off"
           />
-          <button className="primary" onClick={handleAdd}>+ Thêm</button>
-          {bought > 0 && (
-            <button className="secondary" onClick={clearChecked}>🗑 Xóa món đã mua</button>
-          )}
         </div>
-
-        {/* Danh sách theo quầy */}
-        {stalls.length === 0 ? (
-          <p style={{ color: 'var(--muted)', textAlign: 'center', padding: '2rem' }}>
-            Chưa có nguyên liệu nào. Thêm bằng ô phía trên nhé!
-          </p>
-        ) : (
-          stalls.map(stall => (
-            <div key={stall.key} className="stall-group">
-              <div className="stall-header">
-                <span className="stall-label">{stall.label}</span>
-                <span className="stall-count">{stall.items.length} món</span>
-              </div>
-              <div className="shopping-list">
-                {stall.items.map(({ name, qty, idx }) => (
-                  <label key={idx} className="shop-item">
-                    <input
-                      type="checkbox"
-                      checked={checked.has(idx)}
-                      onChange={e => checkIngredient(idx, e.target.checked)}
-                    />
-                    <span style={checked.has(idx) ? { textDecoration: 'line-through', color: 'var(--muted)' } : {}}>
-                      {name}
-                    </span>
-                    <span className="qty">{qty}</span>
-                    <button
-                      className="btn-remove"
-                      onClick={() => removeIngredient(idx)}
-                      title="Xóa món này"
-                    >×</button>
-                  </label>
-                ))}
-              </div>
-            </div>
-          ))
+        <button className="btn-add" onClick={handleAdd}>+ Thêm</button>
+        {bought > 0 && (
+          <button className="btn-clear" onClick={clearChecked}>Xóa đã mua</button>
         )}
       </div>
+
+      {/* Danh sách theo quầy */}
+      {stalls.length === 0 ? (
+        <div className="shop-empty">
+          <span className="shop-empty-icon">🛒</span>
+          <p>Chưa có gì trong giỏ.</p>
+          <p className="shop-empty-sub">Gõ tên nguyên liệu phía trên rồi nhấn Enter.</p>
+        </div>
+      ) : (
+        <div className="shop-stalls">
+          {stalls.map(stall => {
+            const accent = STALL_ACCENT[stall.key]
+            const stallBought = stall.items.filter(it => checked.has(it.idx)).length
+            return (
+              <div key={stall.key} className="stall" style={{ '--stall-bg': accent.bg, '--stall-dot': accent.dot }}>
+                <div className="stall-head">
+                  <span className="stall-dot" />
+                  <span className="stall-name">{stall.label}</span>
+                  <span className="stall-badge">
+                    {stallBought > 0 ? `${stallBought}/${stall.items.length}` : stall.items.length}
+                  </span>
+                </div>
+                <ul className="stall-list">
+                  {stall.items.map(({ name, qty, idx }) => {
+                    const done = checked.has(idx)
+                    return (
+                      <li key={idx} className={`stall-item${done ? ' is-done' : ''}`}>
+                        <button
+                          className="check-btn"
+                          onClick={() => checkIngredient(idx, !done)}
+                          aria-label={done ? 'Bỏ tích' : 'Đánh dấu đã mua'}
+                        >
+                          {done ? '✓' : ''}
+                        </button>
+                        <span className="item-name">{name}</span>
+                        <span className="item-qty">{qty}</span>
+                        <button
+                          className="item-del"
+                          onClick={() => removeIngredient(idx)}
+                          aria-label="Xóa"
+                        >×</button>
+                      </li>
+                    )
+                  })}
+                </ul>
+              </div>
+            )
+          })}
+        </div>
+      )}
     </section>
   )
 }

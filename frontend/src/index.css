@@ -822,87 +822,251 @@ li { padding: 3px 0; }
    Shopping Page — 4 Quầy chợ
    ============================================================ */
 
-.shopping-progress {
+.shop-page {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 680px;
+}
+
+/* Header */
+.shop-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding-bottom: 4px;
+}
+.shop-eyebrow {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+.shop-title {
+  font-family: var(--font-serif);
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -0.5px;
+}
+.btn-done {
+  background: var(--green);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 9px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: opacity .15s;
+}
+.btn-done:hover { opacity: .85; }
+
+/* Tiến độ */
+.shop-progress-wrap {
   display: flex;
   align-items: center;
   gap: 12px;
-  margin: 0 0 16px;
 }
-.progress-bar {
+.shop-progress-track {
   flex: 1;
-  height: 8px;
+  height: 6px;
   background: var(--line);
-  border-radius: 4px;
+  border-radius: 99px;
   overflow: hidden;
 }
-.progress-fill {
+.shop-progress-fill {
   height: 100%;
   background: var(--green);
-  border-radius: 4px;
-  transition: width 0.3s ease;
+  border-radius: 99px;
+  transition: width .35s ease;
 }
-.progress-label {
+.shop-progress-text {
+  font-size: 12px;
+  color: var(--muted);
+  white-space: nowrap;
+  min-width: 90px;
+  text-align: right;
+}
+
+/* Ô thêm nguyên liệu */
+.shop-add-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.shop-input-wrap {
+  flex: 1;
+  position: relative;
+}
+.shop-input-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 14px;
+  pointer-events: none;
+}
+.shop-input {
+  width: 100%;
+  padding: 10px 12px 10px 36px;
+  border: 1.5px solid var(--line);
+  border-radius: 10px;
+  background: var(--paper);
+  font-size: 14px;
+  color: var(--ink);
+  outline: none;
+  transition: border-color .15s;
+}
+.shop-input:focus { border-color: var(--wine3); }
+.shop-input::placeholder { color: var(--muted); }
+
+.btn-add {
+  background: var(--wine);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 18px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background .15s;
+}
+.btn-add:hover { background: var(--wine2); }
+
+.btn-clear {
+  background: none;
+  border: 1.5px solid var(--line);
+  color: var(--muted);
+  border-radius: 10px;
+  padding: 9px 14px;
   font-size: 13px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color .15s, border-color .15s;
+}
+.btn-clear:hover { color: var(--rust); border-color: var(--rust); }
+
+/* Empty state */
+.shop-empty {
+  text-align: center;
+  padding: 60px 24px;
+  color: var(--muted);
+}
+.shop-empty-icon { font-size: 40px; display: block; margin-bottom: 12px; }
+.shop-empty p { font-size: 15px; }
+.shop-empty-sub { font-size: 13px; margin-top: 6px; }
+
+/* Lưới quầy — 2 cột trên màn rộng */
+.shop-stalls {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 14px;
+}
+
+/* Từng quầy */
+.stall {
+  background: var(--stall-bg, var(--paper));
+  border-radius: 14px;
+  padding: 16px;
+  border: 1px solid color-mix(in srgb, var(--stall-dot, #888) 12%, transparent);
+}
+.stall-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.stall-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--stall-dot, var(--muted));
+  flex-shrink: 0;
+}
+.stall-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink);
+  flex: 1;
+}
+.stall-badge {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--stall-dot, var(--muted));
+  background: color-mix(in srgb, var(--stall-dot, #888) 12%, transparent);
+  padding: 2px 8px;
+  border-radius: 99px;
+}
+
+/* Danh sách món */
+.stall-list {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.stall-item {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 7px 4px;
+  border-radius: 8px;
+  transition: background .12s;
+}
+.stall-item:hover { background: color-mix(in srgb, var(--stall-dot, #888) 6%, transparent); }
+
+.check-btn {
+  width: 20px;
+  height: 20px;
+  border-radius: 6px;
+  border: 1.5px solid var(--line);
+  background: #fff;
+  display: grid;
+  place-items: center;
+  font-size: 11px;
+  font-weight: 700;
+  color: #fff;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background .15s, border-color .15s;
+}
+.stall-item.is-done .check-btn {
+  background: var(--green);
+  border-color: var(--green);
+}
+
+.item-name {
+  flex: 1;
+  font-size: 14px;
+  color: var(--ink);
+  transition: color .15s;
+}
+.stall-item.is-done .item-name {
+  color: var(--muted);
+  text-decoration: line-through;
+}
+
+.item-qty {
+  font-size: 12px;
   color: var(--muted);
   white-space: nowrap;
 }
 
-.stall-group {
-  margin-bottom: 20px;
-}
-.stall-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 6px 0;
-  border-bottom: 2px solid var(--line);
-  margin-bottom: 8px;
-}
-.stall-label {
-  font-weight: 700;
-  font-size: 15px;
-  color: var(--wine);
-}
-.stall-count {
-  font-size: 12px;
-  color: var(--muted);
-  background: var(--sand);
-  padding: 2px 8px;
-  border-radius: 10px;
-}
-
-.shop-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 8px 4px;
-  border-bottom: 1px solid var(--line);
-  cursor: pointer;
-}
-.shop-item:last-child { border-bottom: none; }
-.shop-item .qty {
-  margin-left: auto;
-  font-size: 12px;
-  color: var(--muted);
-}
-.btn-remove {
+.item-del {
   background: none;
   border: none;
-  color: var(--muted);
-  font-size: 18px;
+  color: transparent;
+  font-size: 16px;
   cursor: pointer;
-  padding: 0 4px;
+  padding: 0 2px;
   line-height: 1;
+  transition: color .12s;
 }
-.btn-remove:hover { color: var(--rust); }
-
-.secondary {
-  background: var(--sand);
-  color: var(--wine);
-  border: 1px solid var(--line);
-  padding: 8px 14px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 13px;
-}
-.secondary:hover { background: var(--line); }
+.stall-item:hover .item-del { color: var(--muted); }
+.item-del:hover { color: var(--rust) !important; }
