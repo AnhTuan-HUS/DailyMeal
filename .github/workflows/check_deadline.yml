@@ -1,0 +1,115 @@
+name: ⏰ Kiểm tra Deadline & Cảnh báo Quá hạn (Check Overdue Tasks)
+
+on:
+  schedule:
+    # Chạy tự động vào 00:00 hàng ngày theo giờ Việt Nam (17:00 UTC)
+    - cron: '0 17 * * *'
+  # Cho phép Leader bấm chạy thủ công bất kỳ lúc nào trên tab Actions
+  workflow_dispatch:
+
+permissions:
+  issues: write
+
+jobs:
+  check-deadlines:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Quét toàn bộ Issue và kiểm tra hạn chót
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+
+            // Lấy toàn bộ các Issue đang Open
+            const issues = await github.paginate(github.rest.issues.listForRepo, {
+              owner,
+              repo,
+              state: 'open'
+            });
+
+            console.log(`Tìm thấy ${issues.length} issue đang mở.`);
+
+            // Thời gian hiện tại theo múi giờ Việt Nam (UTC+7)
+            const now = new Date();
+            const vnNow = new Date(now.getTime() + (7 * 60 * 60 * 1000));
+            // Đặt về đầu ngày (00:00:00) để so sánh chính xác theo ngày
+            const todayDate = new Date(vnNow.getFullYear(), vnNow.getMonth(), vnNow.getDate());
+
+            for (const issue of issues) {
+              // Bỏ qua nếu là Pull Request (GitHub API coi PR cũng là một dạng issue)
+              if (issue.pull_request) continue;
+
+              let deadline = null;
+              let deadlineSource = '';
+
+              // 1. Kiểm tra Deadline từ Milestone (nếu có)
+              if (issue.milestone && issue.milestone.due_on) {
+                deadline = new Date(issue.milestone.due_on);
+                deadlineSource = 'Milestone';
+              }
+
+              // 2. Kiểm tra Deadline ghi trong nội dung Issue (Template)
+              if (!deadline && issue.body) {
+                // Tìm định dạng DD/MM/YYYY hoặc YYYY-MM-DD sau từ khóa Hạn hoàn thành / Deadline
+                const matchVn = issue.body.match(/(?:Hạn hoàn thành|Deadline)[^\n\r]*?(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})/i);
+                const matchIso = issue.body.match(/(?:Hạn hoàn thành|Deadline)[^\n\r]*?(\d{4})[\/\-](\d{1,2})[\/\-](\d{1,2})/i);
+
+                if (matchVn) {
+                  const day = parseInt(matchVn[1], 10);
+                  const month = parseInt(matchVn[2], 10) - 1; // 0-indexed
+                  const year = parseInt(matchVn[3], 10);
+                  deadline = new Date(year, month, day);
+                  deadlineSource = `${day}/${month + 1}/${year}`;
+                } else if (matchIso) {
+                  const year = parseInt(matchIso[1], 10);
+                  const month = parseInt(matchIso[2], 10) - 1;
+                  const day = parseInt(matchIso[3], 10);
+                  deadline = new Date(year, month, day);
+                  deadlineSource = `${day}/${month + 1}/${year}`;
+                }
+              }
+
+              if (!deadline) {
+                continue; // Không tìm thấy hạn chót thì bỏ qua
+              }
+
+              // So sánh ngày
+              const deadlineDate = new Date(deadline.getFullYear(), deadline.getMonth(), deadline.getDate());
+
+              if (todayDate > deadlineDate) {
+                console.log(`Issue #${issue.number} "${issue.title}" đã quá hạn! (Hạn: ${deadlineSource})`);
+
+                const labels = issue.labels.map(l => typeof l === 'string' ? l : l.name);
+                const isAlreadyOverdue = labels.includes('status: overdue');
+
+                if (!isAlreadyOverdue) {
+                  // Gắn nhãn status: overdue
+                  await github.rest.issues.addLabels({
+                    owner,
+                    repo,
+                    issue_number: issue.number,
+                    labels: ['status: overdue']
+                  });
+
+                  // Soạn thông báo nhắc nhở
+                  const assignees = issue.assignees.map(a => `@${a.login}`).join(' ');
+                  const assigneeText = assignees.length > 0 ? assignees : 'Thành viên phụ trách';
+
+                  const commentBody = `### ⚠️ CẢNH BÁO: TASK ĐÃ QUÁ HẠN HOÀN THÀNH (OVERDUE)\n\n` +
+                    `- **Hạn chót (Deadline):** \`${deadlineSource}\`\n` +
+                    `- **Người thực hiện:** ${assigneeText}\n` +
+                    `- **Leader nghiệm thu:** @${owner}\n\n` +
+                    `> 🚨 **Thông báo từ Bot:** Task này đã vượt quá thời hạn cam kết. Vui lòng khẩn trương mở **Pull Request** hoặc báo cáo lý do chậm trễ với Leader để gia hạn!`;
+
+                  await github.rest.issues.createComment({
+                    owner,
+                    repo,
+                    issue_number: issue.number,
+                    body: commentBody
+                  });
+
+                  console.log(`Đã gắn nhãn overdue và gửi comment cảnh báo vào Issue #${issue.number}`);
+                }
+              }
+            }

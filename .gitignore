@@ -60,3 +60,8 @@ htmlcov/
 .pytest_cache/
 
 more/*
+
+# data
+data/ingredients/*.pdf
+data/recipes/raw/
+data/recipes/processed/
