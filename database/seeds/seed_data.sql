@@ -56,14 +56,14 @@ INSERT INTO dish_type (dish_type_id, dish_type_name) VALUES (5, 'appetizer_condi
 INSERT INTO dish_type (dish_type_id, dish_type_name) VALUES (6, 'dessert') ON CONFLICT (dish_type_id) DO NOTHING;
 
 -- 7. COOKING_METHOD
-INSERT INTO cooking_method (cooking_method_id, method_name) VALUES (1, 'braised') ON CONFLICT (cooking_method_id) DO NOTHING;
-INSERT INTO cooking_method (cooking_method_id, method_name) VALUES (2, 'boiled_soup') ON CONFLICT (cooking_method_id) DO NOTHING;
-INSERT INTO cooking_method (cooking_method_id, method_name) VALUES (3, 'boiled_steamed') ON CONFLICT (cooking_method_id) DO NOTHING;
-INSERT INTO cooking_method (cooking_method_id, method_name) VALUES (4, 'stir_fried') ON CONFLICT (cooking_method_id) DO NOTHING;
-INSERT INTO cooking_method (cooking_method_id, method_name) VALUES (5, 'pan_fried') ON CONFLICT (cooking_method_id) DO NOTHING;
-INSERT INTO cooking_method (cooking_method_id, method_name) VALUES (6, 'stewed') ON CONFLICT (cooking_method_id) DO NOTHING;
-INSERT INTO cooking_method (cooking_method_id, method_name) VALUES (7, 'grilled') ON CONFLICT (cooking_method_id) DO NOTHING;
-INSERT INTO cooking_method (cooking_method_id, method_name) VALUES (8, 'tossed_salad') ON CONFLICT (cooking_method_id) DO NOTHING;
+INSERT INTO cooking_method (cooking_method_id, method_code, method_name, description) VALUES (1, 'braised', 'Kho / Rim', 'Kho / Rim (Đậm đà, nấu cạn nước)') ON CONFLICT (cooking_method_id) DO NOTHING;
+INSERT INTO cooking_method (cooking_method_id, method_code, method_name, description) VALUES (2, 'boiled_soup', 'Nấu canh / Hầm', 'Nấu canh / Hầm (Nhiều nước, lửa vừa)') ON CONFLICT (cooking_method_id) DO NOTHING;
+INSERT INTO cooking_method (cooking_method_id, method_code, method_name, description) VALUES (3, 'boiled_steamed', 'Luộc / Hấp', 'Luộc / Hấp (Giữ trọn vị ngọt tự nhiên)') ON CONFLICT (cooking_method_id) DO NOTHING;
+INSERT INTO cooking_method (cooking_method_id, method_code, method_name, description) VALUES (4, 'stir_fried', 'Xào', 'Xào (Lửa to, đảo nhanh)') ON CONFLICT (cooking_method_id) DO NOTHING;
+INSERT INTO cooking_method (cooking_method_id, method_code, method_name, description) VALUES (5, 'pan_fried', 'Rán / Chiên', 'Rán / Chiên (Ngập dầu hoặc áp chảo vàng giòn)') ON CONFLICT (cooking_method_id) DO NOTHING;
+INSERT INTO cooking_method (cooking_method_id, method_code, method_name, description) VALUES (6, 'stewed', 'Hầm nhừ / Tiềm', 'Hầm nhừ / Tiềm (Lửa nhỏ thời gian dài)') ON CONFLICT (cooking_method_id) DO NOTHING;
+INSERT INTO cooking_method (cooking_method_id, method_code, method_name, description) VALUES (7, 'grilled', 'Nướng', 'Nướng (Nướng than, nồi chiên không dầu)') ON CONFLICT (cooking_method_id) DO NOTHING;
+INSERT INTO cooking_method (cooking_method_id, method_code, method_name, description) VALUES (8, 'tossed_salad', 'Nộm / Trộn / Gỏi', 'Nộm / Trộn / Gỏi (Không dùng nhiệt, thanh mát)') ON CONFLICT (cooking_method_id) DO NOTHING;
 
 -- 8. NUTRIENT (86 chỉ số từ Bảng Thành Phần Thực Phẩm Việt Nam)
 INSERT INTO nutrient (nutrient_id, nutrient_name, unit, description) VALUES (1, 'water_g', 'g', 'Hàm lượng water trên 100g') ON CONFLICT (nutrient_id) DO NOTHING;
@@ -637,7 +637,7 @@ INSERT INTO ingredient (ingredient_id, code, ingredient_name, food_group, market
 INSERT INTO ingredient (ingredient_id, code, ingredient_name, food_group, market_stall, waste_rate_percent, description, image_url) VALUES (1024, '1024', 'Nui / Mì ống', 'Ngũ cốc và sản phẩm chế biến', 'Quầy gia vị & đồ khô', 0.00, 'Macaroni / Pasta', NULL) ON CONFLICT (ingredient_id) DO UPDATE SET ingredient_name = EXCLUDED.ingredient_name, food_group = EXCLUDED.food_group, market_stall = EXCLUDED.market_stall, waste_rate_percent = EXCLUDED.waste_rate_percent;
 
 -- 10. INGREDIENT_NUTRIENT
-INSERT INTO ingredient_nutrient (ingredient_id, nutrient_id, amount) VALUES
+INSERT INTO ingredient_nutrient (ingredient_id, nutrient_id, nutrient_amount) VALUES
 (1001, 1, 14.0000),
 (1001, 2, 344.0000),
 (1001, 3, 1441.0000),
@@ -1138,8 +1138,8 @@ INSERT INTO ingredient_nutrient (ingredient_id, nutrient_id, amount) VALUES
 (1017, 84, 267.0000),
 (1017, 85, 278.0000),
 (1017, 86, 310.0000)
-ON CONFLICT (ingredient_id, nutrient_id) DO UPDATE SET amount = EXCLUDED.amount;
-INSERT INTO ingredient_nutrient (ingredient_id, nutrient_id, amount) VALUES
+ON CONFLICT (ingredient_id, nutrient_id) DO UPDATE SET nutrient_amount = EXCLUDED.nutrient_amount;
+INSERT INTO ingredient_nutrient (ingredient_id, nutrient_id, nutrient_amount) VALUES
 (1018, 1, 14.0000),
 (1018, 2, 346.0000),
 (1018, 3, 1446.0000),
@@ -1640,8 +1640,8 @@ INSERT INTO ingredient_nutrient (ingredient_id, nutrient_id, amount) VALUES
 (2014, 84, 64.0000),
 (2014, 85, 64.0000),
 (2014, 86, 70.0000)
-ON CONFLICT (ingredient_id, nutrient_id) DO UPDATE SET amount = EXCLUDED.amount;
-INSERT INTO ingredient_nutrient (ingredient_id, nutrient_id, amount) VALUES
+ON CONFLICT (ingredient_id, nutrient_id) DO UPDATE SET nutrient_amount = EXCLUDED.nutrient_amount;
+INSERT INTO ingredient_nutrient (ingredient_id, nutrient_id, nutrient_amount) VALUES
 (2015, 1, 14.5000),
 (2015, 2, 332.0000),
 (2015, 3, 1390.0000),
@@ -2142,8 +2142,8 @@ INSERT INTO ingredient_nutrient (ingredient_id, nutrient_id, amount) VALUES
 (3007, 75, 2240.0000),
 (3007, 76, 1670.0000),
 (3007, 77, 2410.0000)
-ON CONFLICT (ingredient_id, nutrient_id) DO UPDATE SET amount = EXCLUDED.amount;
-INSERT INTO ingredient_nutrient (ingredient_id, nutrient_id, amount) VALUES
+ON CONFLICT (ingredient_id, nutrient_id) DO UPDATE SET nutrient_amount = EXCLUDED.nutrient_amount;
+INSERT INTO ingredient_nutrient (ingredient_id, nutrient_id, nutrient_amount) VALUES
 (3007, 78, 780.0000),
 (3007, 79, 485.0000),
 (3007, 80, 988.0000),
@@ -2644,8 +2644,8 @@ INSERT INTO ingredient_nutrient (ingredient_id, nutrient_id, amount) VALUES
 (3024, 49, 6.2500),
 (3024, 50, 4.7100),
 (3024, 52, 1.0100)
-ON CONFLICT (ingredient_id, nutrient_id) DO UPDATE SET amount = EXCLUDED.amount;
-INSERT INTO ingredient_nutrient (ingredient_id, nutrient_id, amount) VALUES
+ON CONFLICT (ingredient_id, nutrient_id) DO UPDATE SET nutrient_amount = EXCLUDED.nutrient_amount;
+INSERT INTO ingredient_nutrient (ingredient_id, nutrient_id, nutrient_amount) VALUES
 (3024, 56, 22.3300),
 (3024, 58, 0.0100),
 (3024, 59, 21.7100),
@@ -3146,8 +3146,8 @@ INSERT INTO ingredient_nutrient (ingredient_id, nutrient_id, amount) VALUES
 (4010, 19, 0.4500),
 (4010, 20, 31.0000),
 (4010, 21, 190.0000)
-ON CONFLICT (ingredient_id, nutrient_id) DO UPDATE SET amount = EXCLUDED.amount;
-INSERT INTO ingredient_nutrient (ingredient_id, nutrient_id, amount) VALUES
+ON CONFLICT (ingredient_id, nutrient_id) DO UPDATE SET nutrient_amount = EXCLUDED.nutrient_amount;
+INSERT INTO ingredient_nutrient (ingredient_id, nutrient_id, nutrient_amount) VALUES
 (4010, 22, 28.0000),
 (4010, 23, 0.8100),
 (4010, 24, 180.0000),
@@ -3648,8 +3648,8 @@ INSERT INTO ingredient_nutrient (ingredient_id, nutrient_id, amount) VALUES
 (4023, 4, 1.0000),
 (4023, 6, 6.0000),
 (4023, 7, 0.7000)
-ON CONFLICT (ingredient_id, nutrient_id) DO UPDATE SET amount = EXCLUDED.amount;
-INSERT INTO ingredient_nutrient (ingredient_id, nutrient_id, amount) VALUES
+ON CONFLICT (ingredient_id, nutrient_id) DO UPDATE SET nutrient_amount = EXCLUDED.nutrient_amount;
+INSERT INTO ingredient_nutrient (ingredient_id, nutrient_id, nutrient_amount) VALUES
 (4023, 8, 0.3000),
 (4023, 16, 8.0000),
 (4023, 20, 16.0000),
@@ -4150,8 +4150,8 @@ INSERT INTO ingredient_nutrient (ingredient_id, nutrient_id, amount) VALUES
 (4039, 16, 38.0000),
 (4039, 17, 0.8000),
 (4039, 18, 23.0000)
-ON CONFLICT (ingredient_id, nutrient_id) DO UPDATE SET amount = EXCLUDED.amount;
-INSERT INTO ingredient_nutrient (ingredient_id, nutrient_id, amount) VALUES
+ON CONFLICT (ingredient_id, nutrient_id) DO UPDATE SET nutrient_amount = EXCLUDED.nutrient_amount;
+INSERT INTO ingredient_nutrient (ingredient_id, nutrient_id, nutrient_amount) VALUES
 (4039, 19, 0.2000),
 (4039, 20, 58.0000),
 (4039, 21, 221.0000),
@@ -4652,8 +4652,8 @@ INSERT INTO ingredient_nutrient (ingredient_id, nutrient_id, amount) VALUES
 (4054, 20, 45.0000),
 (4054, 21, 139.0000),
 (4054, 22, 3.0000)
-ON CONFLICT (ingredient_id, nutrient_id) DO UPDATE SET amount = EXCLUDED.amount;
-INSERT INTO ingredient_nutrient (ingredient_id, nutrient_id, amount) VALUES
+ON CONFLICT (ingredient_id, nutrient_id) DO UPDATE SET nutrient_amount = EXCLUDED.nutrient_amount;
+INSERT INTO ingredient_nutrient (ingredient_id, nutrient_id, nutrient_amount) VALUES
 (4054, 23, 0.0700),
 (4054, 24, 35.0000),
 (4054, 25, 0.2000),
@@ -5154,8 +5154,8 @@ INSERT INTO ingredient_nutrient (ingredient_id, nutrient_id, amount) VALUES
 (4075, 31, 0.1290),
 (4075, 32, 64.0000),
 (4075, 38, 414.8000)
-ON CONFLICT (ingredient_id, nutrient_id) DO UPDATE SET amount = EXCLUDED.amount;
-INSERT INTO ingredient_nutrient (ingredient_id, nutrient_id, amount) VALUES
+ON CONFLICT (ingredient_id, nutrient_id) DO UPDATE SET nutrient_amount = EXCLUDED.nutrient_amount;
+INSERT INTO ingredient_nutrient (ingredient_id, nutrient_id, nutrient_amount) VALUES
 (4075, 39, 3142.0000),
 (4075, 41, 46.0000),
 (4075, 43, 5650.0000),
@@ -5656,8 +5656,8 @@ INSERT INTO ingredient_nutrient (ingredient_id, nutrient_id, amount) VALUES
 (4098, 18, 12.0000),
 (4098, 19, 0.1900),
 (4098, 20, 14.0000)
-ON CONFLICT (ingredient_id, nutrient_id) DO UPDATE SET amount = EXCLUDED.amount;
-INSERT INTO ingredient_nutrient (ingredient_id, nutrient_id, amount) VALUES
+ON CONFLICT (ingredient_id, nutrient_id) DO UPDATE SET nutrient_amount = EXCLUDED.nutrient_amount;
+INSERT INTO ingredient_nutrient (ingredient_id, nutrient_id, nutrient_amount) VALUES
 (4098, 21, 125.0000),
 (4098, 22, 2.0000),
 (4098, 23, 0.7400),
@@ -6158,8 +6158,8 @@ INSERT INTO ingredient_nutrient (ingredient_id, nutrient_id, amount) VALUES
 (4122, 20, 606.0000),
 (4122, 27, 0.1600),
 (4122, 28, 1.5900)
-ON CONFLICT (ingredient_id, nutrient_id) DO UPDATE SET amount = EXCLUDED.amount;
-INSERT INTO ingredient_nutrient (ingredient_id, nutrient_id, amount) VALUES
+ON CONFLICT (ingredient_id, nutrient_id) DO UPDATE SET nutrient_amount = EXCLUDED.nutrient_amount;
+INSERT INTO ingredient_nutrient (ingredient_id, nutrient_id, nutrient_amount) VALUES
 (4122, 29, 23.4000),
 (4123, 1, 87.0000),
 (4123, 2, 39.0000),
@@ -6660,8 +6660,8 @@ INSERT INTO ingredient_nutrient (ingredient_id, nutrient_id, amount) VALUES
 (5012, 38, 2.9000),
 (5012, 39, 30.0000),
 (5012, 43, 27.0000)
-ON CONFLICT (ingredient_id, nutrient_id) DO UPDATE SET amount = EXCLUDED.amount;
-INSERT INTO ingredient_nutrient (ingredient_id, nutrient_id, amount) VALUES
+ON CONFLICT (ingredient_id, nutrient_id) DO UPDATE SET nutrient_amount = EXCLUDED.nutrient_amount;
+INSERT INTO ingredient_nutrient (ingredient_id, nutrient_id, nutrient_amount) VALUES
 (5012, 49, 0.0400),
 (5012, 50, 0.0300),
 (5012, 61, 0.0300),
@@ -7162,8 +7162,8 @@ INSERT INTO ingredient_nutrient (ingredient_id, nutrient_id, amount) VALUES
 (5024, 58, 0.0100),
 (5024, 59, 0.0400),
 (5024, 61, 0.0600)
-ON CONFLICT (ingredient_id, nutrient_id) DO UPDATE SET amount = EXCLUDED.amount;
-INSERT INTO ingredient_nutrient (ingredient_id, nutrient_id, amount) VALUES
+ON CONFLICT (ingredient_id, nutrient_id) DO UPDATE SET nutrient_amount = EXCLUDED.nutrient_amount;
+INSERT INTO ingredient_nutrient (ingredient_id, nutrient_id, nutrient_amount) VALUES
 (5024, 68, 17.0000),
 (5025, 1, 84.7000),
 (5025, 2, 53.0000),
@@ -7664,8 +7664,8 @@ INSERT INTO ingredient_nutrient (ingredient_id, nutrient_id, amount) VALUES
 (5042, 83, 321.0000),
 (5042, 84, 116.0000),
 (5042, 85, 110.0000)
-ON CONFLICT (ingredient_id, nutrient_id) DO UPDATE SET amount = EXCLUDED.amount;
-INSERT INTO ingredient_nutrient (ingredient_id, nutrient_id, amount) VALUES
+ON CONFLICT (ingredient_id, nutrient_id) DO UPDATE SET nutrient_amount = EXCLUDED.nutrient_amount;
+INSERT INTO ingredient_nutrient (ingredient_id, nutrient_id, nutrient_amount) VALUES
 (5042, 86, 128.0000),
 (5043, 1, 83.9000),
 (5043, 2, 58.0000),
@@ -8166,8 +8166,8 @@ INSERT INTO ingredient_nutrient (ingredient_id, nutrient_id, amount) VALUES
 (6005, 22, 2.0000),
 (6005, 23, 0.0200),
 (6005, 27, 0.0100)
-ON CONFLICT (ingredient_id, nutrient_id) DO UPDATE SET amount = EXCLUDED.amount;
-INSERT INTO ingredient_nutrient (ingredient_id, nutrient_id, amount) VALUES
+ON CONFLICT (ingredient_id, nutrient_id) DO UPDATE SET nutrient_amount = EXCLUDED.nutrient_amount;
+INSERT INTO ingredient_nutrient (ingredient_id, nutrient_id, nutrient_amount) VALUES
 (6005, 28, 0.0200),
 (6005, 30, 0.0490),
 (6005, 31, 0.0050),
@@ -8668,8 +8668,8 @@ INSERT INTO ingredient_nutrient (ingredient_id, nutrient_id, amount) VALUES
 (7010, 35, 30.0000),
 (7010, 44, 182.0000),
 (7010, 49, 6.7000)
-ON CONFLICT (ingredient_id, nutrient_id) DO UPDATE SET amount = EXCLUDED.amount;
-INSERT INTO ingredient_nutrient (ingredient_id, nutrient_id, amount) VALUES
+ON CONFLICT (ingredient_id, nutrient_id) DO UPDATE SET nutrient_amount = EXCLUDED.nutrient_amount;
+INSERT INTO ingredient_nutrient (ingredient_id, nutrient_id, nutrient_amount) VALUES
 (7010, 50, 3.3000),
 (7010, 52, 2.5000),
 (7010, 56, 9.7000),
@@ -9170,8 +9170,8 @@ INSERT INTO ingredient_nutrient (ingredient_id, nutrient_id, amount) VALUES
 (7020, 84, 925.0000),
 (7020, 85, 860.0000),
 (7020, 86, 908.0000)
-ON CONFLICT (ingredient_id, nutrient_id) DO UPDATE SET amount = EXCLUDED.amount;
-INSERT INTO ingredient_nutrient (ingredient_id, nutrient_id, amount) VALUES
+ON CONFLICT (ingredient_id, nutrient_id) DO UPDATE SET nutrient_amount = EXCLUDED.nutrient_amount;
+INSERT INTO ingredient_nutrient (ingredient_id, nutrient_id, nutrient_amount) VALUES
 (7021, 1, 69.3000),
 (7021, 2, 158.0000),
 (7021, 3, 661.0000),
@@ -9672,8 +9672,8 @@ INSERT INTO ingredient_nutrient (ingredient_id, nutrient_id, amount) VALUES
 (7034, 31, 0.0340),
 (7034, 32, 3.0000),
 (7034, 34, 0.3000)
-ON CONFLICT (ingredient_id, nutrient_id) DO UPDATE SET amount = EXCLUDED.amount;
-INSERT INTO ingredient_nutrient (ingredient_id, nutrient_id, amount) VALUES
+ON CONFLICT (ingredient_id, nutrient_id) DO UPDATE SET nutrient_amount = EXCLUDED.nutrient_amount;
+INSERT INTO ingredient_nutrient (ingredient_id, nutrient_id, nutrient_amount) VALUES
 (7034, 37, 0.0400),
 (7034, 49, 4.0300),
 (7034, 50, 2.2600),
@@ -10174,8 +10174,8 @@ INSERT INTO ingredient_nutrient (ingredient_id, nutrient_id, amount) VALUES
 (7048, 63, 0.0900),
 (7048, 66, 0.0600),
 (7048, 67, 240.0000)
-ON CONFLICT (ingredient_id, nutrient_id) DO UPDATE SET amount = EXCLUDED.amount;
-INSERT INTO ingredient_nutrient (ingredient_id, nutrient_id, amount) VALUES
+ON CONFLICT (ingredient_id, nutrient_id) DO UPDATE SET nutrient_amount = EXCLUDED.nutrient_amount;
+INSERT INTO ingredient_nutrient (ingredient_id, nutrient_id, nutrient_amount) VALUES
 (7048, 69, 1300.0000),
 (7048, 70, 470.0000),
 (7048, 71, 180.0000),
@@ -10676,8 +10676,8 @@ INSERT INTO ingredient_nutrient (ingredient_id, nutrient_id, amount) VALUES
 (7057, 77, 1049.0000),
 (7057, 78, 422.0000),
 (7057, 79, 170.0000)
-ON CONFLICT (ingredient_id, nutrient_id) DO UPDATE SET amount = EXCLUDED.amount;
-INSERT INTO ingredient_nutrient (ingredient_id, nutrient_id, amount) VALUES
+ON CONFLICT (ingredient_id, nutrient_id) DO UPDATE SET nutrient_amount = EXCLUDED.nutrient_amount;
+INSERT INTO ingredient_nutrient (ingredient_id, nutrient_id, nutrient_amount) VALUES
 (7057, 80, 627.0000),
 (7057, 81, 1100.0000),
 (7057, 82, 1760.0000),
@@ -11178,8 +11178,8 @@ INSERT INTO ingredient_nutrient (ingredient_id, nutrient_id, amount) VALUES
 (8009, 18, 29.0000),
 (8009, 19, 0.0200),
 (8009, 20, 224.0000)
-ON CONFLICT (ingredient_id, nutrient_id) DO UPDATE SET amount = EXCLUDED.amount;
-INSERT INTO ingredient_nutrient (ingredient_id, nutrient_id, amount) VALUES
+ON CONFLICT (ingredient_id, nutrient_id) DO UPDATE SET nutrient_amount = EXCLUDED.nutrient_amount;
+INSERT INTO ingredient_nutrient (ingredient_id, nutrient_id, nutrient_amount) VALUES
 (8009, 21, 357.0000),
 (8009, 22, 65.0000),
 (8009, 23, 0.5200),
@@ -11680,8 +11680,8 @@ INSERT INTO ingredient_nutrient (ingredient_id, nutrient_id, amount) VALUES
 (8028, 1, 74.2000),
 (8028, 2, 110.0000),
 (8028, 3, 462.0000)
-ON CONFLICT (ingredient_id, nutrient_id) DO UPDATE SET amount = EXCLUDED.amount;
-INSERT INTO ingredient_nutrient (ingredient_id, nutrient_id, amount) VALUES
+ON CONFLICT (ingredient_id, nutrient_id) DO UPDATE SET nutrient_amount = EXCLUDED.nutrient_amount;
+INSERT INTO ingredient_nutrient (ingredient_id, nutrient_id, nutrient_amount) VALUES
 (8028, 4, 20.4000),
 (8028, 5, 3.2000),
 (8028, 8, 2.2000),
@@ -12182,8 +12182,8 @@ INSERT INTO ingredient_nutrient (ingredient_id, nutrient_id, amount) VALUES
 (8048, 30, 0.5000),
 (8048, 31, 0.0500),
 (8048, 32, 10.0000)
-ON CONFLICT (ingredient_id, nutrient_id) DO UPDATE SET amount = EXCLUDED.amount;
-INSERT INTO ingredient_nutrient (ingredient_id, nutrient_id, amount) VALUES
+ON CONFLICT (ingredient_id, nutrient_id) DO UPDATE SET nutrient_amount = EXCLUDED.nutrient_amount;
+INSERT INTO ingredient_nutrient (ingredient_id, nutrient_id, nutrient_amount) VALUES
 (8048, 33, 41.0000),
 (8048, 34, 16.0000),
 (8048, 35, 53.0000),
@@ -12684,8 +12684,8 @@ INSERT INTO ingredient_nutrient (ingredient_id, nutrient_id, amount) VALUES
 (9005, 8, 1.8000),
 (9005, 16, 146.0000),
 (9005, 17, 5.6000)
-ON CONFLICT (ingredient_id, nutrient_id) DO UPDATE SET amount = EXCLUDED.amount;
-INSERT INTO ingredient_nutrient (ingredient_id, nutrient_id, amount) VALUES
+ON CONFLICT (ingredient_id, nutrient_id) DO UPDATE SET nutrient_amount = EXCLUDED.nutrient_amount;
+INSERT INTO ingredient_nutrient (ingredient_id, nutrient_id, nutrient_amount) VALUES
 (9005, 20, 328.0000),
 (9005, 27, 0.5400),
 (9005, 28, 0.9400),
@@ -13186,8 +13186,8 @@ INSERT INTO ingredient_nutrient (ingredient_id, nutrient_id, amount) VALUES
 (10007, 75, 3177.0000),
 (10007, 76, 2278.0000),
 (10007, 77, 1025.0000)
-ON CONFLICT (ingredient_id, nutrient_id) DO UPDATE SET amount = EXCLUDED.amount;
-INSERT INTO ingredient_nutrient (ingredient_id, nutrient_id, amount) VALUES
+ON CONFLICT (ingredient_id, nutrient_id) DO UPDATE SET nutrient_amount = EXCLUDED.nutrient_amount;
+INSERT INTO ingredient_nutrient (ingredient_id, nutrient_id, nutrient_amount) VALUES
 (10007, 78, 877.0000),
 (10007, 79, 131.0000),
 (10007, 80, 1559.0000),
@@ -13688,8 +13688,8 @@ INSERT INTO ingredient_nutrient (ingredient_id, nutrient_id, amount) VALUES
 (11020, 20, 120.0000),
 (11020, 26, 1.0000),
 (11020, 27, 0.2600)
-ON CONFLICT (ingredient_id, nutrient_id) DO UPDATE SET amount = EXCLUDED.amount;
-INSERT INTO ingredient_nutrient (ingredient_id, nutrient_id, amount) VALUES
+ON CONFLICT (ingredient_id, nutrient_id) DO UPDATE SET nutrient_amount = EXCLUDED.nutrient_amount;
+INSERT INTO ingredient_nutrient (ingredient_id, nutrient_id, nutrient_amount) VALUES
 (11020, 28, 0.1900),
 (11020, 29, 5.5000),
 (11020, 35, 8.0000),
@@ -14190,8 +14190,8 @@ INSERT INTO ingredient_nutrient (ingredient_id, nutrient_id, amount) VALUES
 (13016, 20, 116.0000),
 (13017, 1, 71.1000),
 (13017, 2, 35.0000)
-ON CONFLICT (ingredient_id, nutrient_id) DO UPDATE SET amount = EXCLUDED.amount;
-INSERT INTO ingredient_nutrient (ingredient_id, nutrient_id, amount) VALUES
+ON CONFLICT (ingredient_id, nutrient_id) DO UPDATE SET nutrient_amount = EXCLUDED.nutrient_amount;
+INSERT INTO ingredient_nutrient (ingredient_id, nutrient_id, nutrient_amount) VALUES
 (13017, 3, 146.0000),
 (13017, 4, 5.1000),
 (13017, 5, 0.0100),
@@ -14594,7 +14594,7 @@ INSERT INTO ingredient_nutrient (ingredient_id, nutrient_id, amount) VALUES
 (14012, 2, 273.0000),
 (14012, 3, 1142.0000),
 (14012, 86, 455.0000)
-ON CONFLICT (ingredient_id, nutrient_id) DO UPDATE SET amount = EXCLUDED.amount;
+ON CONFLICT (ingredient_id, nutrient_id) DO UPDATE SET nutrient_amount = EXCLUDED.nutrient_amount;
 
 -- 11. RECIPE (2,496 món ăn chuẩn hóa)
 INSERT INTO recipe (recipe_id, recipe_name, description, instructions, cooking_time, servings, image_url, source_url, dish_type_id, cooking_method_id) VALUES
@@ -24832,7 +24832,7 @@ Bước 2: Đặt nồi lên bếp, cho ít dầu vào đun nóng rồi cho tỏ
 ON CONFLICT (recipe_id) DO UPDATE SET recipe_name = EXCLUDED.recipe_name, instructions = EXCLUDED.instructions, cooking_time = EXCLUDED.cooking_time, servings = EXCLUDED.servings, image_url = EXCLUDED.image_url;
 
 -- 12. RECIPE_STEP (Các bước chế biến chi tiết)
-INSERT INTO recipe_step (recipe_id, step_number, instruction, image_url) VALUES
+INSERT INTO recipe_step (recipe_id, step_number, instruction_text, image_url) VALUES
 (25001058, 1, 'Cải bẹ xanh rửa sạch, phần cọng và lá để riêng. Thái nhỏ vừa ăn. Thịt bằm trộn cùng mộc nhĩ xắt nhỏ, ướp chút gia vị cho thấm', 'https://img-global.cpcdn.com/steps/06294ecd4ee13563/400x400cq80/photo.jpg'),
 (25001058, 2, 'Phi thơm hành tím với dầu trong nồi. Chao thịt bằm trộn mộc nhĩ vào xào săn. Đổ nước vào nồi, đun sôi.', 'https://img-global.cpcdn.com/steps/20b09b9adece8d52/400x400cq80/photo.jpg'),
 (25001058, 3, 'Cho phần cọng cải vào nấu trước 2 phút.', 'https://img-global.cpcdn.com/steps/5d66e09af39aa090/400x400cq80/photo.jpg'),
@@ -25333,8 +25333,8 @@ INSERT INTO recipe_step (recipe_id, step_number, instruction, image_url) VALUES
 (16077658, 3, 'Sau khi sườn mềm thì cho Kim chi + nấm, cho vô 1MC hạt nêm + 2 MC đường + 1MC nước mắm nấu 5 phút. Tiếp đó cho đậu hủ non vô nấu thêm 5 phút nửa, nêm nếm vị vừa ăn rồi tắt bếp.', 'https://img-global.cpcdn.com/steps/73170cad2c1bf336/400x400cq80/photo.jpg'),
 (16077658, 4, 'Múc canh kim chi sườn non ra tô, cho hành lá vô ăn, nóng với cơm.', 'https://img-global.cpcdn.com/steps/bedc9f0713fb2ee3/400x400cq80/photo.jpg'),
 (24308608, 1, 'Sườn non làm sạch, để ráo nước rồi chần sơ qua nước sôi.', NULL)
-ON CONFLICT (recipe_id, step_number) DO UPDATE SET instruction = EXCLUDED.instruction, image_url = EXCLUDED.image_url;
-INSERT INTO recipe_step (recipe_id, step_number, instruction, image_url) VALUES
+ON CONFLICT (recipe_id, step_number) DO UPDATE SET instruction_text = EXCLUDED.instruction_text, image_url = EXCLUDED.image_url;
+INSERT INTO recipe_step (recipe_id, step_number, instruction_text, image_url) VALUES
 (24308608, 2, 'Củ dền gọt vỏ, ngâm nước muối và xả sạch vớt để ráo. Nấm nâu rửa sạch, ngâm nước muối loãng, xả sạch để ráo.', NULL),
 (24308608, 3, 'Bắc nồi nước cho thật sôi rồi thả sườn vào rồi hạ lửa nấu từ từ để sườn chín mềm và cho ra nước ngọt. Thả hành tím vào nấu cùng cho thơm.', NULL),
 (24308608, 4, 'Củ dền xắt thành những miếng vừa ăn rồi thả vào nấu cho chín mềm. Sau cùng cho nấm vào nấu thêm úc nữa cho nấm chín. Nêm nước gia vị cô đặc cho vừa ăn.', NULL),
@@ -25835,8 +25835,8 @@ INSERT INTO recipe_step (recipe_id, step_number, instruction, image_url) VALUES
 (8621046, 4, 'Chiên bơ tỏi. Muối hột rang vàng với tiêu dã nhỏ.', NULL),
 (8621046, 5, 'Cho gà và tỏi, muối tiêu vào hộp. Xóc đều. Rồi cho ra đĩa và thưởng thức thôi nào', 'https://img-global.cpcdn.com/steps/6b42bba76dc42af0/400x400cq80/photo.jpg'),
 (10515876, 1, 'Cho tất cả nvl vào nồi trừ kỷ tử và hành tiêu. Hầm trong vòng 30-45p đậy nắp. Tắt bếp để đó cho thịt mềm tiếp.', NULL)
-ON CONFLICT (recipe_id, step_number) DO UPDATE SET instruction = EXCLUDED.instruction, image_url = EXCLUDED.image_url;
-INSERT INTO recipe_step (recipe_id, step_number, instruction, image_url) VALUES
+ON CONFLICT (recipe_id, step_number) DO UPDATE SET instruction_text = EXCLUDED.instruction_text, image_url = EXCLUDED.image_url;
+INSERT INTO recipe_step (recipe_id, step_number, instruction_text, image_url) VALUES
 (10515876, 2, 'Trước khi ăn, hâm canh lại cho nóng rồi cho ra tô rắc kỷ tử, hành lá và tiêu lên. (Nếu kỷ tử mua loại nấu ăn thì khi hâm lại nên bỏ kỷ tử vào hâm chung luôn)', NULL),
 (8708539, 1, 'Sườn non trụng nước sôi, rửa sạch bằng nước lã, để ráo. Đun sôi nước thả sườn vào hầm lửa nhỏ 2 tới 4h. Mình dùng nồi ủ, hầm nhiều ần chia phần cấp đông khi nào nấu lấy ra thôi.', 'https://img-global.cpcdn.com/steps/2157efb65931bc72/400x400cq80/photo.jpg'),
 (8708539, 2, 'Bí xanh gọt vỏ, cắt quân cờ. Hành lá, ngò cắt nhỏ.', 'https://img-global.cpcdn.com/steps/61428b341f4ea79b/400x400cq80/photo.jpg'),
@@ -26337,8 +26337,8 @@ INSERT INTO recipe_step (recipe_id, step_number, instruction, image_url) VALUES
 (23929212, 4, 'Lúc này trộn thịt bò vào nêm lại vừa ăn. Trút ra đĩa rắc tiêu xay. Chấm nước tương dằm ớt.', 'https://img-global.cpcdn.com/steps/a000837bad2f0edb/400x400cq80/photo.jpg'),
 (25058845, 1, 'Carrot, ớt chuông cắt hạt lựu. Phi tỏi thơm kế cho thịt heo vào xào cho xăn, đoạn cho carrot vào, đảo đều', 'https://img-global.cpcdn.com/steps/6ca3b6478a947ca9/400x400cq80/photo.jpg'),
 (25058845, 2, 'Sau mới bỏ ớt chuông vào đảo đều đoạn trút tomato sauce vào, châm thêm 1 cup nước, rồi nêm nếm lại bằng nước tương', 'https://img-global.cpcdn.com/steps/61ce7530a243ae5a/400x400cq80/photo.jpg')
-ON CONFLICT (recipe_id, step_number) DO UPDATE SET instruction = EXCLUDED.instruction, image_url = EXCLUDED.image_url;
-INSERT INTO recipe_step (recipe_id, step_number, instruction, image_url) VALUES
+ON CONFLICT (recipe_id, step_number) DO UPDATE SET instruction_text = EXCLUDED.instruction_text, image_url = EXCLUDED.image_url;
+INSERT INTO recipe_step (recipe_id, step_number, instruction_text, image_url) VALUES
 (25058845, 3, 'Đun sôi nước để trụng nui, xong vớt nui ra rổ cho khô, kế rưới tý dầu ăn đảo đều cho nui không bị dính', 'https://img-global.cpcdn.com/steps/7ff3a887020b6415/400x400cq80/photo.jpg'),
 (25058845, 4, 'Khi sốt cà sôi, cho hành tây cắt mỏng và rãi đều vị Italian seasoning. Và khi ăn rắc thêm bột cheese, tiêu lên mặt.', 'https://img-global.cpcdn.com/steps/08cc91c97cd1d359/400x400cq80/photo.jpg'),
 (24704614, 1, 'Mì gói thay vì trụng như cách thông thường thì mình sẽ ngâm nước trong 10 phút cho mì mềm ra là được, cách này giúp sợi mì vẫn giữ được độ dai khi xào', 'https://img-global.cpcdn.com/steps/c11ebfd7afab33d7/400x400cq80/photo.jpg'),
@@ -26839,8 +26839,8 @@ INSERT INTO recipe_step (recipe_id, step_number, instruction, image_url) VALUES
 (4548396, 3, 'Chúc các bạn thành công vs ăn ngon. Mình có quay clip nhưng trên đây không up được nên đành post hình thôi👌🏻👌🏻👌🏻', 'https://img-global.cpcdn.com/steps/0593e2c4589b058b/400x400cq80/photo.jpg'),
 (12150233, 1, 'Cá cam sốt cà chua: - Cá cam mua về làm sạch cho muối hoặc chanh vào rửa cho bớt tanh rồi để ráo nước. Sau đó em chiên cho vàng đều 2 mặt, Tiếp theo lấy cà chua cắt hạt lựu nhỏ, Bắt chảo lên bếp cho ít dầu oliu + tỏi băm nhuyễn vào đảo cho vàng đều rồi cho cà chua vào làm sốt cho vào 1 ít hạt nêm + nước tương + 1 /2 đường trắng + y nước + nêm lại vì vừa ăn rồi cho cá cam đã chiên vào để lửa vừa cho cá thấm sốt tầm 5 phút cho hành lá cắt nhỏ vào là xong 😋', 'https://img-global.cpcdn.com/steps/b3c100f836e9b0b8/400x400cq80/photo.jpg'),
 (12150233, 2, 'Bầu xào trứng : - Bầu cắt sợi vừa ăn, Bắt chảo lên bếp cho 1 ít dầu oliu + tỏi băm vào đảo phi thơm vàng rồi cho bầu vào xào, lấy 1 cái bát cho trứng gà vào đánh tan đều cho ít hạt nêm rồi cho trứng vào bầu xào chung, nêm lại vừa ăn rồi cho hành lá cắt nhỏ vào là xong', 'https://img-global.cpcdn.com/steps/dee4082c8bab7fba/400x400cq80/photo.jpg')
-ON CONFLICT (recipe_id, step_number) DO UPDATE SET instruction = EXCLUDED.instruction, image_url = EXCLUDED.image_url;
-INSERT INTO recipe_step (recipe_id, step_number, instruction, image_url) VALUES
+ON CONFLICT (recipe_id, step_number) DO UPDATE SET instruction_text = EXCLUDED.instruction_text, image_url = EXCLUDED.image_url;
+INSERT INTO recipe_step (recipe_id, step_number, instruction_text, image_url) VALUES
 (12150233, 3, 'Bông cải xanh luôt, cơm lứt + cá cam sốt + bầu bày ra đĩa là đã xong buổi trưa đầy đủ chất dinh dưỡng rồi ạ.. Các bạn nhìn cứ như ăn cơm bình thường không nek nhưng đó là mình ăn theo eatclean rui ak hihihi', 'https://img-global.cpcdn.com/steps/c57634bdb760208c/400x400cq80/photo.jpg'),
 (26643473, 1, 'Phi thơm hành tím với dầu ăn', NULL),
 (26643473, 2, 'Cho thịt heo băm vào xào sơ rồi cho sốt sa tế, hắc xì dầu, đường vào đảo cho thấm gia vị.', NULL),
@@ -27341,8 +27341,8 @@ INSERT INTO recipe_step (recipe_id, step_number, instruction, image_url) VALUES
 (15734423, 2, 'Trộn cùng khoai tây, cà rốt cắt hạt lựu, lạp sườn thái mỏng', 'https://img-global.cpcdn.com/steps/2cd9718e0af3fd66/400x400cq80/photo.jpg'),
 (15734423, 3, 'Bỏ nước dùng gà xâm xấp mặt gạo, nấu thành cơm', NULL),
 (15734423, 4, 'Gà chặt miếng vừa, rán vàng trong chảo. Gần được thì chút hành tỏi băm nhỏ vào phi thơm cùng (chắt bớt mỡ ra nếu nhiều quá)', 'https://img-global.cpcdn.com/steps/ee7caeb422b0c526/400x400cq80/photo.jpg')
-ON CONFLICT (recipe_id, step_number) DO UPDATE SET instruction = EXCLUDED.instruction, image_url = EXCLUDED.image_url;
-INSERT INTO recipe_step (recipe_id, step_number, instruction, image_url) VALUES
+ON CONFLICT (recipe_id, step_number) DO UPDATE SET instruction_text = EXCLUDED.instruction_text, image_url = EXCLUDED.image_url;
+INSERT INTO recipe_step (recipe_id, step_number, instruction_text, image_url) VALUES
 (15734423, 5, 'Pha phở nước mắm + đường + ăn cơm nước lọc trộn đều, rưới vào chảo gà rim 10 phút cho thấm gia vị và hỗn hợp hơi keo lại', 'https://img-global.cpcdn.com/steps/57ab90ed8e755e9d/400x400cq80/photo.jpg'),
 (15734423, 6, 'Xới cơm, ăn chung với rau củ luộc hoặc dưa món', 'https://img-global.cpcdn.com/steps/193969988984940c/400x400cq80/photo.jpg'),
 (25209027, 1, 'Cá cơm kho còn dư', 'https://img-global.cpcdn.com/steps/de3ba3fb53c24c02/400x400cq80/photo.jpg'),
@@ -27843,8 +27843,8 @@ INSERT INTO recipe_step (recipe_id, step_number, instruction, image_url) VALUES
 (3237788, 4, 'Cho dầu vào chảo đến khi nóng già,thả gà vào chiên cho vàng đều rồi vớt ra đĩa.', NULL),
 (3237788, 5, 'Vậy là chúng ta đã có đĩa cánh gà chiên giòn thấm vị nhờ bột Ajiquick.Gói bột này giúp chúng ta tiết kiệm được rất nhiều thời gian về phần chuẩn bị nguyên liệu nhưng lại có đầy đủ gia vị cần thiết cho một món gà chiên giòn.Chúc các bạn thành công và ngon miệng🤗', 'https://img-global.cpcdn.com/steps/81f0fc74d7e76dac/400x400cq80/photo.jpg'),
 (11741119, 1, 'Lọc gà thành miếng nhỏ', NULL)
-ON CONFLICT (recipe_id, step_number) DO UPDATE SET instruction = EXCLUDED.instruction, image_url = EXCLUDED.image_url;
-INSERT INTO recipe_step (recipe_id, step_number, instruction, image_url) VALUES
+ON CONFLICT (recipe_id, step_number) DO UPDATE SET instruction_text = EXCLUDED.instruction_text, image_url = EXCLUDED.image_url;
+INSERT INTO recipe_step (recipe_id, step_number, instruction_text, image_url) VALUES
 (11741119, 2, 'Ướp gà với ói agiquick trong 20’', NULL),
 (11741119, 3, 'Trộn bột mì + bột ngô + bột nở và chia thành . Bát 1 thêm trứng và chút nước đánh tan thành hỗn hợp mịn và chảy dòng', NULL),
 (11741119, 4, 'Bát 2 thêm lá oregano', NULL),
@@ -28345,8 +28345,8 @@ INSERT INTO recipe_step (recipe_id, step_number, instruction, image_url) VALUES
 (12588368, 3, 'Ức gà lọc lấy thịt, cho vào bát to nước mắm, mì chính, trộn đều. Để tầm 5 phút rán ngập dầu ăn.', NULL),
 (12588368, 4, 'Gà chín vớt ra giấy thấm hết dầu để nguội. Xé nhỏ hoặc thái miếng tuỳ sở thick nhé', NULL),
 (12588368, 5, 'mắm, đường, 1 nửa quả chanh lấy cốt, giấm, dầu ô liu. Trộn đều thành 1 hỗn hợp', NULL)
-ON CONFLICT (recipe_id, step_number) DO UPDATE SET instruction = EXCLUDED.instruction, image_url = EXCLUDED.image_url;
-INSERT INTO recipe_step (recipe_id, step_number, instruction, image_url) VALUES
+ON CONFLICT (recipe_id, step_number) DO UPDATE SET instruction_text = EXCLUDED.instruction_text, image_url = EXCLUDED.image_url;
+INSERT INTO recipe_step (recipe_id, step_number, instruction_text, image_url) VALUES
 (12588368, 6, 'Xà lách, khoai, ngô, rau cải mầm cho vào chung , đổ hỗn hợp trên đều khắp rồi trộn đều vơi chút mayonnaise.', NULL),
 (12588368, 7, 'Xếp gà, cà chua bi với trứng lên. Lúc ăn thêm ớt ngọt sốt cà chua tuỳ sở thick nhé.', NULL),
 (16314018, 1, 'Nêm xíu hạt nêm, dầu hào, trứng vào ức gà.', 'https://img-global.cpcdn.com/steps/a309d5376cc2bae5/400x400cq80/photo.jpg'),
@@ -28847,8 +28847,8 @@ INSERT INTO recipe_step (recipe_id, step_number, instruction, image_url) VALUES
 (24601046, 2, 'Hành tây xắt mỏng ngâm nước đá hoặc 1 tsp dấm trộn 1 tsp đường cho bớt hăng. Xà lách rửa sạch để ráo cắt miếng vừa ăn.', 'https://img-global.cpcdn.com/steps/a0cce7eb6a4a17df/400x400cq80/photo.jpg'),
 (24601046, 3, 'Cho xà lách lên đĩa sâu lòng. Thêm hành tây, cà chua dưa leo, bò xào, trứng luộc cắt múi cau. Thêm sốt med rang. Trộn đều rồi thưởng thức.', 'https://img-global.cpcdn.com/steps/9cf23a2c66c9731c/400x400cq80/photo.jpg'),
 (24655374, 1, 'Củ cải khô rửa sạch nhiều lần, ngâm với nước nóng 30 phút rồi rửa lại, để ráo. Hành lá rửa sạch, cắt khúc ngắn, đầu hành cắt nhỏ. Hành tím bóc sạch vỏ, băm nhỏ.', 'https://img-global.cpcdn.com/steps/2e1d6f0378c6e963/400x400cq80/photo.jpg')
-ON CONFLICT (recipe_id, step_number) DO UPDATE SET instruction = EXCLUDED.instruction, image_url = EXCLUDED.image_url;
-INSERT INTO recipe_step (recipe_id, step_number, instruction, image_url) VALUES
+ON CONFLICT (recipe_id, step_number) DO UPDATE SET instruction_text = EXCLUDED.instruction_text, image_url = EXCLUDED.image_url;
+INSERT INTO recipe_step (recipe_id, step_number, instruction_text, image_url) VALUES
 (24655374, 2, 'Thịt rửa sạch, để ráo, cắt mỏng. Cho vô thịt 1Mcf hạt nêm + 1MC nước mắm + 1MC đường, trộn đều rồi để ướp 15 phút.', 'https://img-global.cpcdn.com/steps/497fd98f80853ea7/400x400cq80/photo.jpg'),
 (24655374, 3, 'Cho dầu ăn vô chảo, bắc lên bếp, dầu nóng cho hành tím băm + đầu hành vô phi thơm rồi đổ thịt vô xào cho thịt săn lại.', 'https://img-global.cpcdn.com/steps/64547ab1760de8ed/400x400cq80/photo.jpg'),
 (24655374, 4, 'Thịt săn thì đổ củ cải khô vô đảo đều, cho hạt nêm + nước mắm + đường vô, tiếp tục xào thêm 10 phút để thịt và củ cải chín.', 'https://img-global.cpcdn.com/steps/b28f4708de109016/400x400cq80/photo.jpg'),
@@ -29349,8 +29349,8 @@ INSERT INTO recipe_step (recipe_id, step_number, instruction, image_url) VALUES
 (24779843, 3, 'Phi thơm hành, cho tổ ong vào xào nhanh tay trên lửa lớn cho săn lại rồi tắt bếp. Trút ra để riêng.', 'https://img-global.cpcdn.com/steps/d209944f6a28f5de/400x400cq80/photo.jpg'),
 (24779843, 4, 'Cho nấm vào chảo xào chín, nêm gia vị cho vừa miệng.', 'https://img-global.cpcdn.com/steps/03deced74ea954d8/400x400cq80/photo.jpg'),
 (24779843, 5, 'Chút dạ dày bò và nấm đảo đều nên gia vị rồi cắt hành lá, rau mùi vào.', 'https://img-global.cpcdn.com/steps/a8ad3cc7ad9d8291/400x400cq80/photo.jpg')
-ON CONFLICT (recipe_id, step_number) DO UPDATE SET instruction = EXCLUDED.instruction, image_url = EXCLUDED.image_url;
-INSERT INTO recipe_step (recipe_id, step_number, instruction, image_url) VALUES
+ON CONFLICT (recipe_id, step_number) DO UPDATE SET instruction_text = EXCLUDED.instruction_text, image_url = EXCLUDED.image_url;
+INSERT INTO recipe_step (recipe_id, step_number, instruction_text, image_url) VALUES
 (6427036, 1, 'Thịt sơ chế sạch để ráo, trứng cút luộc chín bóc bỏ vỏ', 'https://img-global.cpcdn.com/steps/084bfc3d86c1c5cd/400x400cq80/photo.jpg'),
 (6427036, 2, 'Thịt cắt khúc lớn vừa, sau đó lấy thịt trụng qua nồi nước sôi cho sạch bọt dơ, tiếp đến cho thịt vào tô cùng với nước cốt tỏi-ớt (ớt bỏ hạt + tỏi cho vào cối nhỏ của máy sinh tố xay nhuyễn, rồi cho vào bao vải nhỏ vắt lấy nước) cùng đường & rượu trắng rồi trộn đều lên đem phơi nắng 1 tiếng cho mỡ được trong', 'https://img-global.cpcdn.com/steps/442d321ff9117fcb/400x400cq80/photo.jpg'),
 (6427036, 3, 'Cho dầu ăn vào chảo cùng đường, thắng cho đường có màu vàng hơi sậm không đen, rồi cho tô thịt vào lật qua lại miếng thịt cho thịt săn lại, sau đó đưa thịt qua nồi sứ (vì chảo lớn quá) xong để nước dừa xiêm vào + cafe nước cốt chanh hoặc miếng thơm để cho thịt mau mềm & mỡ trong săn không bị vỡ cùng với túi vải đựng xác hành tỏi lúc nãy ở bước 2 đã cột chặt. Kho thịt với lửa nhỏ vừa cho đến khi nồi thịt cạn nước (khoảng 1 tiếng)', 'https://img-global.cpcdn.com/steps/d076ecf7d74fd374/400x400cq80/photo.jpg'),
@@ -29851,8 +29851,8 @@ INSERT INTO recipe_step (recipe_id, step_number, instruction, image_url) VALUES
 (17313582, 1, 'Rửa sạch cá ngừ đại dương với nước muối rồi để ráo. Cho chảo lên bếp cho ít dầu ăn vào chảo rồi cho cá vào chiên vàng đều 2 mặt.', 'https://img-global.cpcdn.com/steps/7d93adbc6502019b/400x400cq80/photo.jpg'),
 (17313582, 2, 'Khi cá chín vàng đều 2 mặt thì vớt cá ngừ đại dương ra giấy thấm dầu.', 'https://img-global.cpcdn.com/steps/b05f991b028ade87/400x400cq80/photo.jpg'),
 (17313582, 3, 'Rau sống nhặt và rửa sạch để ráo.Cho ớt tỏi vào chén giã nhỏ rồi cho vào chén 2 muỗng canh nước mắm, 1 muỗng cafe nước cốt chanh, 1 muỗng canh đường khuấy đều rồi nêm nếm lại cho vừa khẩu vị.Xếp cá ngừ đại dương chiên ra đĩa,Rau sống và dưa leo cũng xếp ra đĩa cùng chén nước mắm ngon ngon ăn là "tốn cơm" lắm nha.🥰', 'https://img-global.cpcdn.com/steps/ffd1646ba53dabae/400x400cq80/photo.jpg')
-ON CONFLICT (recipe_id, step_number) DO UPDATE SET instruction = EXCLUDED.instruction, image_url = EXCLUDED.image_url;
-INSERT INTO recipe_step (recipe_id, step_number, instruction, image_url) VALUES
+ON CONFLICT (recipe_id, step_number) DO UPDATE SET instruction_text = EXCLUDED.instruction_text, image_url = EXCLUDED.image_url;
+INSERT INTO recipe_step (recipe_id, step_number, instruction_text, image_url) VALUES
 (16258683, 1, 'Mực mua về làm sạch rửa qua nước muối rồi để ráo - Ngâm bún tàu + nấm mèo bằng nước nóng cho nhanh nở nấm và mềm bún', NULL),
 (16258683, 2, 'Bún và nấm mèo nở băm nhuyển hoặc cắt nhỏ cho vào tô cùng thịt xay và cho vào đó 1 mcf hạt nêm 1 mcf bột ngọt 1 xíu nước mắm 1 xíu tiêu Rồi trộn đều tất cả lên bắt đầu mình nhồi thịt vào mực nhé cho đến hết mình dùng tâm xiên lại để trách rớt nhân ra bên ngoài Dùng tâm đâm xung quang mực cho nhanh chính và rim nhanh thấm', NULL),
 (16258683, 3, 'Hấp mực sơ qua rồi mình chuẩn bị nước sốt nhé - ăn cơm nước mắm - ăn cơm nước lọc - ăn cơm đường - 1 mcf hạt nêm (nếu ăn cay thì bạn cho thêm cơm tương ớt và 1 mcf ớt bột nhé)', NULL),
@@ -30353,8 +30353,8 @@ INSERT INTO recipe_step (recipe_id, step_number, instruction, image_url) VALUES
 (852879, 1, 'Măng rửa sạch, thái hình que. Nước sôi cho măng vào đun 5-7'' rồi vớt ra.', NULL),
 (852879, 2, 'Đun sôi nước rồi cho thịt vào luộc. Chín thì vớt ra thái miếng mỏng hình que.', NULL),
 (852879, 3, 'Tôm luộc chín, bóc vỏ rồi nạn làm đôi.', NULL)
-ON CONFLICT (recipe_id, step_number) DO UPDATE SET instruction = EXCLUDED.instruction, image_url = EXCLUDED.image_url;
-INSERT INTO recipe_step (recipe_id, step_number, instruction, image_url) VALUES
+ON CONFLICT (recipe_id, step_number) DO UPDATE SET instruction_text = EXCLUDED.instruction_text, image_url = EXCLUDED.image_url;
+INSERT INTO recipe_step (recipe_id, step_number, instruction_text, image_url) VALUES
 (852879, 4, 'Cho tôm, măm, thịt vào trộn đều. Rồi cho rau mùi, kinh giới thái rối vào. Rắc lạc lên trên.', NULL),
 (852879, 5, 'Nước sốt theo tỉ lệ 0,8 mắm, 1 đường, 1 dấm, tỏi, ớt sừng băm nhỏ cho vào. Khi nào ăn thì dưới nước sốt lên.', NULL),
 (25305324, 1, 'Gà luộc xé sợi vừa ăn', 'https://img-global.cpcdn.com/steps/1d22405a9cdd2bbe/400x400cq80/photo.jpg'),
@@ -30855,8 +30855,8 @@ INSERT INTO recipe_step (recipe_id, step_number, instruction, image_url) VALUES
 (17094811, 2, 'Bò ướp với tỏi băm, muối, tiêu 10 phút cho thấm. Phi thơm tỏi băm, cho thịt bò vào xào chín tới, thêm chút dầu hào, bò chín để nguội bớt', 'https://img-global.cpcdn.com/steps/a5709d6f85e2a636/400x400cq80/photo.jpg'),
 (17094811, 3, 'Cho tất cả nguyên liệu vào tô lớn, cho nước mắm tỏi ớt vào trộn đều', 'https://img-global.cpcdn.com/steps/59a69c3cf236ea9d/400x400cq80/photo.jpg'),
 (17094811, 4, 'Gắp ra dĩa, thêm tỏi phi và dùng kèm bánh tráng mè', 'https://img-global.cpcdn.com/steps/51bda746c0295d24/400x400cq80/photo.jpg')
-ON CONFLICT (recipe_id, step_number) DO UPDATE SET instruction = EXCLUDED.instruction, image_url = EXCLUDED.image_url;
-INSERT INTO recipe_step (recipe_id, step_number, instruction, image_url) VALUES
+ON CONFLICT (recipe_id, step_number) DO UPDATE SET instruction_text = EXCLUDED.instruction_text, image_url = EXCLUDED.image_url;
+INSERT INTO recipe_step (recipe_id, step_number, instruction_text, image_url) VALUES
 (24637978, 1, 'Chuẩn bị các nguyên liệu sẵn sàng sạch sẽ để ráo.', 'https://img-global.cpcdn.com/steps/fc6f82f5394b994c/400x400cq80/photo.jpg'),
 (24637978, 2, 'Sứa trụng sơ qua nước sôi, vớt ra để ráo.', 'https://img-global.cpcdn.com/steps/69f25ffb47e03ff2/400x400cq80/photo.jpg'),
 (24637978, 3, 'Giã gốc ngò, tỏi, ớt, đường, rồi cho nước cốt chanh vào trộn lên thêm mắm khuấy đều.', 'https://img-global.cpcdn.com/steps/d556a4d73060b417/400x400cq80/photo.jpg'),
@@ -31357,8 +31357,8 @@ INSERT INTO recipe_step (recipe_id, step_number, instruction, image_url) VALUES
 (15322255, 4, 'Trộn các nguyên liệu gà xé xợi, cải bắp, carot hành tây vào tô lớn rồi cho nước mắm chua ngọt đã pha vào trộn cho ngấm đều nhé', NULL),
 (15322255, 5, 'Khi ăn thêm hành phi và rau răm nữa là tuyệt vời rồi. Có lần mình làm chỉ dùng hành tây không cho carot hay bắp cải nhưng cũng ngon lắm', 'https://img-global.cpcdn.com/steps/925916d54226cb65/400x400cq80/photo.jpg'),
 (5663867, 1, 'Gà làm sạch. Bắt nồi to sao cho vừa con gà. Nước sôi đập dập hành tím bỏ vào, cho thêm tí muối bột và bột ngọt. Nước ngập con gà 1 đốt tay. Luộc đến khi nào gà chín, chọc đũa lún vào là đc. K để mềm quá thì gà bị rục đi.', NULL)
-ON CONFLICT (recipe_id, step_number) DO UPDATE SET instruction = EXCLUDED.instruction, image_url = EXCLUDED.image_url;
-INSERT INTO recipe_step (recipe_id, step_number, instruction, image_url) VALUES
+ON CONFLICT (recipe_id, step_number) DO UPDATE SET instruction_text = EXCLUDED.instruction_text, image_url = EXCLUDED.image_url;
+INSERT INTO recipe_step (recipe_id, step_number, instruction_text, image_url) VALUES
 (5663867, 2, 'Trong lúc chờ gà ta chuẩn bị hành tây cắt lát k dầy quá k mỏng quá. Để vào ngăn đá cho hành giòn hoặc đem ngâm nước đá cũng đươc. Rau răm rửa sạch thái cắt đôi lá. Tiêu sọ rang nóng giã mịn với muối và tỏi. Canh lượng muối tầm thôi nhé, khéo mặn.', NULL),
 (5663867, 3, 'Gà chín vớt ra để nguội rồi xé sợi vừa ăn. Mjh xé nguyên con xương xóc bẻ nhỏ lại luôn còn mn k thích xương thì tách ra nhen. Cho gia vị giã nhuyễn vào bóp đều tay, tiếp đó nếm thử vừa chưa, rồi cho hành tây rau răm vào trộn đều lên, lúc này bóp nhẹ tay thui. Bạn đã có ngay món gà thật hấp dẫn nhưng k bị ngán.', 'https://img-global.cpcdn.com/steps/c811cb33d2493e27/400x400cq80/photo.jpg'),
 (6665236, 1, 'Nấm kim cắt bỏ gốc, rửa sạch, đun sôi nước trần qua nấm rồi vớt vào bát nước lạnh cho giòn. Vắt ráo nước.', 'https://img-global.cpcdn.com/steps/b0db991fba1631b3/400x400cq80/photo.jpg'),
@@ -31859,8 +31859,8 @@ INSERT INTO recipe_step (recipe_id, step_number, instruction, image_url) VALUES
 (24638666, 5, 'Cắt thịt luộc thành từng miếng mỏng chấm với nước mắm tỏi ớt hay mắm nêm tuỳ thích. Thịt luộc ăn kèm với cơm nóng, với bún hoặc cuốn bánh tráng rau sống đều ngon 😊', 'https://img-global.cpcdn.com/steps/c57fc0c8833ad8b5/400x400cq80/photo.jpg'),
 (23845662, 1, 'Sơ chế : _ Cá làm sạch, rửa sạch rồi ngâm vô thau nước muối + chanh 10 phút rồi rửa lại với nước sạch, để ráo. _ Gừng gọt sạch vỏ, rửa sạch, cắt sợi _ Hành tây bóc vỏ, rửa sạch, cắt múi cau _ Hành tím bóc vỏ, cắt lát mỏng _ Ớt sừng rửa sạch, bỏ hạt rồi cắt sợi _ Hành lá rửa sạch, cắt khúc _ Rau xà lách, rau thơm, dưa leo rửa sạch, để ráo.', 'https://img-global.cpcdn.com/steps/096f0bbd24410cd9/400x400cq80/photo.jpg'),
 (23845662, 2, 'Cho cá vô đĩa sâu lòng rồi cho vô hạt nêm + dầu hào + nước tương + dầu ăn + gừng + hành tây + hành tím + 1/2 phần ớt sừng.', 'https://img-global.cpcdn.com/steps/ca926fb8ecd68985/400x400cq80/photo.jpg')
-ON CONFLICT (recipe_id, step_number) DO UPDATE SET instruction = EXCLUDED.instruction, image_url = EXCLUDED.image_url;
-INSERT INTO recipe_step (recipe_id, step_number, instruction, image_url) VALUES
+ON CONFLICT (recipe_id, step_number) DO UPDATE SET instruction_text = EXCLUDED.instruction_text, image_url = EXCLUDED.image_url;
+INSERT INTO recipe_step (recipe_id, step_number, instruction_text, image_url) VALUES
 (23845662, 3, 'Nấu sôi nước rồi cho đĩa cá vô hấp 20 - 25 phút cho cá chín.', 'https://img-global.cpcdn.com/steps/f1cd2ca57680be31/400x400cq80/photo.jpg'),
 (23845662, 4, 'Cá chín thì cho hành lá + ớt sừng vô đậy nắp hấp thêm 2 phút rồi tắt bếp, để cho nguội xíu rồi lấy đĩa cá ra.', 'https://img-global.cpcdn.com/steps/427ebbdab2fab823/400x400cq80/photo.jpg'),
 (23845662, 5, 'Mắm nêm: _ Tỏi, ớt giả nhuyễn _ Cho mắm nêm vô tô thơm bằm rồi cho đường + tỏi, ớt vô quậy đều cho tan đường.', 'https://img-global.cpcdn.com/steps/6568dd7b3fbaa60a/400x400cq80/photo.jpg'),
@@ -32361,8 +32361,8 @@ INSERT INTO recipe_step (recipe_id, step_number, instruction, image_url) VALUES
 (13916740, 2, 'Nhồi sả vào bụng gà', 'https://img-global.cpcdn.com/steps/5d269638f20fbdec/400x400cq80/photo.jpg'),
 (13916740, 3, 'Cho muối hột vào chảo, rải cây Sả đập dập vào', 'https://img-global.cpcdn.com/steps/5d37af9be6663b8e/400x400cq80/photo.jpg'),
 (13916740, 4, 'Xếp gà lên chảo, cho lá chanh lên gà (Ở đây mình không thích lá chanh nên không cho vào) + Mở lửa vừa nấu trong 40'', sau đó bớt lửa, để lửa nhỏ thêm 15'' để gà chín đều', 'https://img-global.cpcdn.com/steps/85f162f01c681359/400x400cq80/photo.jpg')
-ON CONFLICT (recipe_id, step_number) DO UPDATE SET instruction = EXCLUDED.instruction, image_url = EXCLUDED.image_url;
-INSERT INTO recipe_step (recipe_id, step_number, instruction, image_url) VALUES
+ON CONFLICT (recipe_id, step_number) DO UPDATE SET instruction_text = EXCLUDED.instruction_text, image_url = EXCLUDED.image_url;
+INSERT INTO recipe_step (recipe_id, step_number, instruction_text, image_url) VALUES
 (13916740, 5, 'Gà chín tắt lửa, mở nắp lấy gà ra đĩa, nhanh tay quét thêm ớp mật ong thật mỏng lên da gà', 'https://img-global.cpcdn.com/steps/4804708900e81f89/400x400cq80/photo.jpg'),
 (13916740, 6, 'Phần muối nướng gà lấy ra một ít vắt chanh vào làm nước chấm. _ Món ăn đạt là khi gà chín mềm, thịt gà vẫn giữ được độ dai nhẹ mà không bị bở. Da gà căng bóng & thịt gà thơm lừng mùi Sả. Chúc cả nhà thành công & ăn thật ngon miệng! 💗', 'https://img-global.cpcdn.com/steps/2f8b0ae098c7d1e3/400x400cq80/photo.jpg'),
 (6577525, 1, 'Rửa chân gà bằng nước muối pha loãng, loại sạch phần màng màu vàng còn sót lại, chặt bỏ móng. Rửa lại ần nữa với dấm, để ráo.', NULL),
@@ -32863,8 +32863,8 @@ INSERT INTO recipe_step (recipe_id, step_number, instruction, image_url) VALUES
 (5843336, 5, 'Cho tất cả vào nồi hấp khoảng 20'' bạn sẽ có sản phẩm vô cùng tuyệt. Có thể dùng chung với bánh mì...', NULL),
 (15283360, 1, 'Thịt heo rửa sạch cho vô nồi ngập nước với xíu muối, miếng gừng đập dập, luộc chín. Để nguội rồi cắt lát mỏng. Giả tỏi ớt đường, chanh pha mắm rò.', 'https://img-global.cpcdn.com/steps/44a5b011f8f217d1/400x400cq80/photo.jpg'),
 (15283360, 2, 'Rau sống rửa sạch', 'https://img-global.cpcdn.com/steps/5c56f4a1f248ecea/400x400cq80/photo.jpg')
-ON CONFLICT (recipe_id, step_number) DO UPDATE SET instruction = EXCLUDED.instruction, image_url = EXCLUDED.image_url;
-INSERT INTO recipe_step (recipe_id, step_number, instruction, image_url) VALUES
+ON CONFLICT (recipe_id, step_number) DO UPDATE SET instruction_text = EXCLUDED.instruction_text, image_url = EXCLUDED.image_url;
+INSERT INTO recipe_step (recipe_id, step_number, instruction_text, image_url) VALUES
 (12615967, 1, 'Rửa sạch cá để ráo, giã ớt sừng và ớt sim, thêm chút muối, đường và bột ngọt cho nhuyễn, ướp cá cho thấm, nhét 1 ít đầu hành vào bụng cá', NULL),
 (12615967, 2, 'Đem hấp cách thuỷ, khi cá gần chín thì thêm đầu hành còn lại vào cho chín là được', NULL),
 (3818724, 1, 'Sơ chế gà sau đó cho gà vài nồi luộc (ai cũng biết nên khỏi cần chỉ luộc gà như thế nào nữa ha.kkk)', NULL),
@@ -33365,8 +33365,8 @@ INSERT INTO recipe_step (recipe_id, step_number, instruction, image_url) VALUES
 (2422534, 1, 'Cánh gà rửa sạch, có thể cắt rời các khớp. Khía vài đường trên cánh để thấm gia vị tốt hơn', NULL),
 (2422534, 2, 'Cho tất cả các nguyên liệu vào bát cánh gà và trộn đều', 'https://img-global.cpcdn.com/steps/b9715d2c2cd3848d/400x400cq80/photo.jpg'),
 (2422534, 3, 'Bọc âu bằng màng bọc thực phẩm. Để ướp 2 tiếng hoặc tốt nhất là qua đêm trong tủ lạnh', 'https://img-global.cpcdn.com/steps/990e8d5d18a02e15/400x400cq80/photo.jpg')
-ON CONFLICT (recipe_id, step_number) DO UPDATE SET instruction = EXCLUDED.instruction, image_url = EXCLUDED.image_url;
-INSERT INTO recipe_step (recipe_id, step_number, instruction, image_url) VALUES
+ON CONFLICT (recipe_id, step_number) DO UPDATE SET instruction_text = EXCLUDED.instruction_text, image_url = EXCLUDED.image_url;
+INSERT INTO recipe_step (recipe_id, step_number, instruction_text, image_url) VALUES
 (2422534, 4, 'Xếp gà ra khay có khe hở', NULL),
 (2422534, 5, 'Nướng gà ở 200 độ trong 20p. Sau đó phết hỗn hợp nước ướp gà lên mặt trên của cánh, nướng thêm 10p. Lật mặt, phết nước ướp, nướng 10-15p đến khi hơi xém', NULL),
 (2422534, 6, 'Dùng nóng 😋', NULL),
@@ -33867,8 +33867,8 @@ INSERT INTO recipe_step (recipe_id, step_number, instruction, image_url) VALUES
 (16307070, 2, 'Ướp thịt với sữa tươi, chao đỏ, đường, hạt nêm và tỏi băm nhuyễn. Để 30p cho thấm.', NULL),
 (16307070, 3, 'Đem thịt nướng bằng lò chiên không dầu cho vàng đều. Gắp ra thấm bớt dầu thừa.', NULL),
 (16307070, 4, 'Lấy 1 ít chao đỏ tán nhuyễn cùng với sữa đặc cho vừa khẩu vị. Rắc thêm chút mè rang lên.', NULL)
-ON CONFLICT (recipe_id, step_number) DO UPDATE SET instruction = EXCLUDED.instruction, image_url = EXCLUDED.image_url;
-INSERT INTO recipe_step (recipe_id, step_number, instruction, image_url) VALUES
+ON CONFLICT (recipe_id, step_number) DO UPDATE SET instruction_text = EXCLUDED.instruction_text, image_url = EXCLUDED.image_url;
+INSERT INTO recipe_step (recipe_id, step_number, instruction_text, image_url) VALUES
 (16307070, 5, 'Xếp lên dĩa, trang trí lá tía tô và ngò rí. Khi ăn chấm kèm với xốt chao đỏ.', NULL),
 (12990400, 1, 'Gà rửa sạch, để ráo nước', NULL),
 (12990400, 2, 'Cho gà vào hộp, cho ói bột vào. Đậy nắp và lắc đều để áo bột đều hết gà', NULL),
@@ -34369,8 +34369,8 @@ INSERT INTO recipe_step (recipe_id, step_number, instruction, image_url) VALUES
 (17294513, 4, 'Phi thơm tỏi, cho tất cả rau củ và đậu hũ vào chảo. Cho sốt teriyaki vào đảo đều trong hai phút. Sau đó nhấc ra rắc hành lá xắt nhỏ và mè rang.', 'https://img-global.cpcdn.com/steps/42c1e7a286af9943/400x400cq80/photo.jpg'),
 (561741, 1, 'Thịt sườn bò rửa sạch cắt quân cờ, lăn sơ qua bột mỳ. Cần tây, hành tây băm nhuyễn để riêng. Hành tỏi băm nhuyễn. Làm nóng dầu cho hành tỏi vào xào thơm thì cho cà chua đậm đặc vào xào.', 'https://img-global.cpcdn.com/steps/ee495a2e058da130/400x400cq80/photo.jpg'),
 (561741, 2, 'Tiếp đến cho hỗn hợp cần tây, hành tây băm nhuyễn vào xào thơm thì cho thịt bò vào xào. Nêm muối, bột nêm rau củ, lá rosemary, thyme, vào xào nhỏ lửa đến khi thịt săn lại.', 'https://img-global.cpcdn.com/steps/59ef5f1f444b1ebc/400x400cq80/photo.jpg')
-ON CONFLICT (recipe_id, step_number) DO UPDATE SET instruction = EXCLUDED.instruction, image_url = EXCLUDED.image_url;
-INSERT INTO recipe_step (recipe_id, step_number, instruction, image_url) VALUES
+ON CONFLICT (recipe_id, step_number) DO UPDATE SET instruction_text = EXCLUDED.instruction_text, image_url = EXCLUDED.image_url;
+INSERT INTO recipe_step (recipe_id, step_number, instruction_text, image_url) VALUES
 (561741, 3, 'Tiếp đến cho nửa ly vang đỏ vào nồi thịt đun lớn lửa cho rượu bay hơi', 'https://img-global.cpcdn.com/steps/2284f187fc7c062c/400x400cq80/photo.jpg'),
 (561741, 4, 'Thêm nước đun nhỏ lửa. Thêm lá nguyệt quế, đậy nắp tiếp tục đun. Khi thịt hơi mềm thì cho cà rốt cắt quân cờ và đậu Hà Lan vào tiếp tục đun. Món này ăn sệt không loãng giống bò kho Việt. Nếu thấy hơi cạn thì thêm ít nước. Ăn kèm bánh mỳ hoặc kem khoai tây.', 'https://img-global.cpcdn.com/steps/646a361c565dfc83/400x400cq80/photo.jpg'),
 (15306421, 1, 'Thịt xay trộn với súp nước mắm, súp đường, hạt nêm cùng hành tỏi xay, dùng tay bóp đều cho thấm gia vị và nặn thành từng viên tròn', NULL),
@@ -34871,8 +34871,8 @@ INSERT INTO recipe_step (recipe_id, step_number, instruction, image_url) VALUES
 (13220099, 2, 'Nấm đông cô ngâm nở rửa sạch rồi vẩy ráo. Nhồi hỗn hợp đậu hũ vô nấm rồi đem hấp cách thủy cho vừa chín. Phi thơm dầu ăn với hành tím băm cho sốt cà chua lên, nêm muối, đường, bột ngọt cho vừa ăn rồi cho nấm vừa hấp lên nấu lửa nhỏ.', 'https://img-global.cpcdn.com/steps/cb2ea0a71bc7f117/400x400cq80/photo.jpg'),
 (885134, 1, 'Sườn non rửa sạch trần qua cho bớt hôi. _ Hành tây và ớt xanh rửa sạch cắt khúc như trong hình. _ Pha nước chua ngọt như sau: lấy đầy (bát ăn cơm nhé) lọc me bỏ cái, r cho các nguyên liệu gia vị đã chuẩn bị vào khuấy đều. _ Sườn cho vào chảo rán kĩ rồi vởt ra. _ Cho đường vào chảo trưng lên thấy đường cô vào chuyển màu đen thì đổ bát nước chua ngọt mình đã pha sẵn vào khuấy đều, sau đó đổ sườn vào luôn. _ Đun nhỏ lửa liu diu cho sườn vừa ngấm vừa chín đều khoảng 30'', đừng để cạn nc nhé, thấy sườn ngấm đều thì cho hành tây và ớt xanh vào đảo úc khoảng 3''. _ Lấy bát cho bột sắn và nước hoà tan r đổ vào chảo sườn đảo đều tay cho chín là ok r đấy!', NULL),
 (11836864, 1, 'Cá rửa sạch, cắt đôi để ráo nước. Cà chua và hành tây rửa sạch, cắt dọc. Hành Tây gọt vỏ và thái mỏng', 'https://img-global.cpcdn.com/steps/9002dbbf7e868d43/400x400cq80/photo.jpg')
-ON CONFLICT (recipe_id, step_number) DO UPDATE SET instruction = EXCLUDED.instruction, image_url = EXCLUDED.image_url;
-INSERT INTO recipe_step (recipe_id, step_number, instruction, image_url) VALUES
+ON CONFLICT (recipe_id, step_number) DO UPDATE SET instruction_text = EXCLUDED.instruction_text, image_url = EXCLUDED.image_url;
+INSERT INTO recipe_step (recipe_id, step_number, instruction_text, image_url) VALUES
 (11836864, 2, 'Bắt chảo lên bếp cho dầu ăn và hành khô lên phi cho thơm. Cho cà chua vào xào chung, nấu mềm 1 chút thì cho thêm hành tây vào. Sau đó cho ít nước vào đun sôi.', 'https://img-global.cpcdn.com/steps/0a94a114b2fc640d/400x400cq80/photo.jpg'),
 (11836864, 3, 'Sau khi sôi bạn cho tất cả gia vị bên trên vào, riêng ớt thì cắt nhỏ cho thơm cay nhé. Bạn cho cá vào nấu lửa vừa và chờ hơi cạn nước thế là xong.', 'https://img-global.cpcdn.com/steps/4a93e5679ff7918d/400x400cq80/photo.jpg'),
 (11378157, 1, 'Cá về sơ chế bỏ vảy rửa thật sạch cắt khúc. Mình mua con cá cắt 4, nấu 3 khúc đủ cho cả nhà. Cá chiên sơ 2 mặt làm giảm bớt mùi tanh và chắc cá hơn khi nấu. Dưa cải rửa vài lần nước cho bớt mặn, cắt miếng, món này ngon 1 phần do dưa cải muối ngon nữa. Cà chua cắt múi cam.', 'https://img-global.cpcdn.com/steps/c13b5659893a3f8b/400x400cq80/photo.jpg'),
@@ -35080,7 +35080,7 @@ INSERT INTO recipe_step (recipe_id, step_number, instruction, image_url) VALUES
 (6251629, 2, 'Tàu hũ cắt đôi bỏ ít ruột ở trong nhồi thịt vào cho đầy. Đem chiên sơ vớt ra (tàu hũ sẽ để tủ lạnh được lâu kg bị chua). phi thơm hành tím băm cho cà chua vào xào cho nhừ, thêm ít nước vào nêm hạt nêm và đường vào, cho tàu hũ vào ninh lửa vừa. Nước rút còn hơi sệt thì cho hành ngò vào tắt bếp.', NULL),
 (11869873, 1, 'Ngâm nấm vào nước muối pha loãng khoảng 10 phút, rửa lại với nước sạch rồi vớt ra để ráo. Cắt nấm thành lát dày tầm nửa phân hoặc bổ 4 theo chiều dọc. Đậu hũ rửa sơ qua, sau đó cắt nhỏ (đừng cắt nhỏ quá, đậu hũ sẽ bị nát trong quá trình nấu). Bóc vỏ tỏi và gừng, rồi băm nhuyễn. Cà chua trái để vào tô dầm ra (mình dùng cà chua trái trong hộp sẵn nên rất mềm).', NULL),
 (11869873, 2, 'Đặt nồi lên bếp, cho ít dầu vào đun nóng rồi cho tỏi, gừng vào phi thơm. Đổ thịt heo xay vào, đảo đều. Sau đó mình bỏ cà chua vào xào, đổ thêm ít nước. Lúc này, mình nêm nếm vừa ăn, đường, hạt nêm, muối, tiêu, dầu hào, 1 ít ketchup và tương ớt (nếu bạn thích ăn cay nhiều mình nghĩ bạn nên thêm ớt từ lúc đầu để xào chung với gừng, tỏi, hoặc bạn có thể thêm dầu sa tế). Cuối cùng bạn đổ nấm và đậu hũ vào, đợi bếp sôi lên, thêm hành lá và tắt bếp. Mời các bạn thưởng thức.', 'https://img-global.cpcdn.com/steps/cc5a5a6ae3389c20/400x400cq80/photo.jpg')
-ON CONFLICT (recipe_id, step_number) DO UPDATE SET instruction = EXCLUDED.instruction, image_url = EXCLUDED.image_url;
+ON CONFLICT (recipe_id, step_number) DO UPDATE SET instruction_text = EXCLUDED.instruction_text, image_url = EXCLUDED.image_url;
 
 -- 13. RECIPE_INGREDIENT (Nguyên liệu trong từng công thức)
 INSERT INTO recipe_ingredient (recipe_id, ingredient_id, quantity, unit) VALUES
@@ -52287,7 +52287,7 @@ ON CONFLICT (recipe_id, ingredient_id) DO UPDATE SET quantity = EXCLUDED.quantit
 
 INSERT INTO favorite_recipe (user_id, recipe_id) VALUES
 (2, 25001058),
-(2, 25001059)
+(2, 25663369)
 ON CONFLICT (user_id, recipe_id) DO NOTHING;
 
 

@@ -43,14 +43,14 @@ DISH_TYPES = [
 
 # Cooking Methods Definition
 COOKING_METHODS = [
-    (1, "braised", "Kho / Rim (Đậm đà, nấu cạn nước)"),
-    (2, "boiled_soup", "Nấu canh / Hầm (Nhiều nước, lửa vừa)"),
-    (3, "boiled_steamed", "Luộc / Hấp (Giữ trọn vị ngọt tự nhiên)"),
-    (4, "stir_fried", "Xào (Lửa to, đảo nhanh)"),
-    (5, "pan_fried", "Rán / Chiên (Ngập dầu hoặc áp chảo vàng giòn)"),
-    (6, "stewed", "Hầm nhừ / Tiềm (Lửa nhỏ thời gian dài)"),
-    (7, "grilled", "Nướng (Nướng than, nồi chiên không dầu)"),
-    (8, "tossed_salad", "Nộm / Trộn / Gỏi (Không dùng nhiệt, thanh mát)")
+    (1, "braised", "Kho / Rim", "Kho / Rim (Đậm đà, nấu cạn nước)"),
+    (2, "boiled_soup", "Nấu canh / Hầm", "Nấu canh / Hầm (Nhiều nước, lửa vừa)"),
+    (3, "boiled_steamed", "Luộc / Hấp", "Luộc / Hấp (Giữ trọn vị ngọt tự nhiên)"),
+    (4, "stir_fried", "Xào", "Xào (Lửa to, đảo nhanh)"),
+    (5, "pan_fried", "Rán / Chiên", "Rán / Chiên (Ngập dầu hoặc áp chảo vàng giòn)"),
+    (6, "stewed", "Hầm nhừ / Tiềm", "Hầm nhừ / Tiềm (Lửa nhỏ thời gian dài)"),
+    (7, "grilled", "Nướng", "Nướng (Nướng than, nồi chiên không dầu)"),
+    (8, "tossed_salad", "Nộm / Trộn / Gỏi", "Nộm / Trộn / Gỏi (Không dùng nhiệt, thanh mát)")
 ]
 
 # Market Stall Classification Logic
@@ -185,9 +185,9 @@ ON CONFLICT (profile_id) DO NOTHING;
 
     cooking_method_id_map = {}
     sql_lines.append("\n-- 7. COOKING_METHOD")
-    for cm_id, cm_name, cm_desc in COOKING_METHODS:
-        cooking_method_id_map[cm_name] = cm_id
-        sql_lines.append(f"INSERT INTO cooking_method (cooking_method_id, method_name) VALUES ({cm_id}, {sql_escape(cm_name)}) ON CONFLICT (cooking_method_id) DO NOTHING;")
+    for cm_id, cm_code, cm_name, cm_desc in COOKING_METHODS:
+        cooking_method_id_map[cm_code] = cm_id
+        sql_lines.append(f"INSERT INTO cooking_method (cooking_method_id, method_code, method_name, description) VALUES ({cm_id}, {sql_escape(cm_code)}, {sql_escape(cm_name)}, {sql_escape(cm_desc)}) ON CONFLICT (cooking_method_id) DO NOTHING;")
 
     # 3. NUTRIENTS & INGREDIENTS
     print("3. Đang đọc và sinh Nutrients & Ingredients từ CSV...")
@@ -259,7 +259,7 @@ ON CONFLICT (profile_id) DO NOTHING;
     chunk_size = 500
     for i in range(0, len(batch_in), chunk_size):
         chunk = batch_in[i:i + chunk_size]
-        sql_lines.append(f"INSERT INTO ingredient_nutrient (ingredient_id, nutrient_id, amount) VALUES\n" + ",\n".join(chunk) + "\nON CONFLICT (ingredient_id, nutrient_id) DO UPDATE SET amount = EXCLUDED.amount;")
+        sql_lines.append(f"INSERT INTO ingredient_nutrient (ingredient_id, nutrient_id, nutrient_amount) VALUES\n" + ",\n".join(chunk) + "\nON CONFLICT (ingredient_id, nutrient_id) DO UPDATE SET nutrient_amount = EXCLUDED.nutrient_amount;")
 
     # 4. RECIPES, RECIPE_INGREDIENT, RECIPE_STEP
     print("5. Đang đọc và sinh 2,496 Recipes, Recipe Steps và Recipe Ingredients...")
@@ -365,8 +365,8 @@ ON CONFLICT (profile_id) DO NOTHING;
     for i in range(0, len(recipe_step_inserts), 500):
         chunk = recipe_step_inserts[i:i + 500]
         sql_lines.append(
-            f"INSERT INTO recipe_step (recipe_id, step_number, instruction, image_url) VALUES\n"
-            + ",\n".join(chunk) + "\nON CONFLICT (recipe_id, step_number) DO UPDATE SET instruction = EXCLUDED.instruction, image_url = EXCLUDED.image_url;"
+            f"INSERT INTO recipe_step (recipe_id, step_number, instruction_text, image_url) VALUES\n"
+            + ",\n".join(chunk) + "\nON CONFLICT (recipe_id, step_number) DO UPDATE SET instruction_text = EXCLUDED.instruction_text, image_url = EXCLUDED.image_url;"
         )
 
     # Output Recipe Ingredients
@@ -379,11 +379,13 @@ ON CONFLICT (profile_id) DO NOTHING;
         )
 
     # 5. SAMPLE FAVORITES & REFRIGERATOR DATA
+    fav_id1 = catalog_recipes[0]['recipe_id'] if len(catalog_recipes) > 0 else 25001058
+    fav_id2 = catalog_recipes[1]['recipe_id'] if len(catalog_recipes) > 1 else 25663369
     sql_lines.append("\n-- 14. FAVORITE_RECIPE (Dữ liệu mẫu món yêu thích)")
-    sql_lines.append("""
+    sql_lines.append(f"""
 INSERT INTO favorite_recipe (user_id, recipe_id) VALUES
-(2, 25001058),
-(2, 25001059)
+(2, {fav_id1}),
+(2, {fav_id2})
 ON CONFLICT (user_id, recipe_id) DO NOTHING;
 """)
 
