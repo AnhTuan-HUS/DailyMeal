@@ -379,8 +379,8 @@ ON CONFLICT (profile_id) DO NOTHING;
         )
 
     # 5. SAMPLE FAVORITES & REFRIGERATOR DATA
-    fav_id1 = catalog_recipes[0]['recipe_id'] if len(catalog_recipes) > 0 else 25001058
-    fav_id2 = catalog_recipes[1]['recipe_id'] if len(catalog_recipes) > 1 else 25663369
+    fav_id1 = catalog_recipes[0]['recipe_id'] if len(catalog_recipes) > 0 else 1
+    fav_id2 = catalog_recipes[1]['recipe_id'] if len(catalog_recipes) > 1 else 2
     sql_lines.append("\n-- 14. FAVORITE_RECIPE (Dữ liệu mẫu món yêu thích)")
     sql_lines.append(f"""
 INSERT INTO favorite_recipe (user_id, recipe_id) VALUES
