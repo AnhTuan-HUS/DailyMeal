@@ -1,51 +1,98 @@
+from app.schemas.common import (
+    PaginationMeta,
+    ResponseEnvelope,
+    ErrorDetail,
+    ErrorEnvelope,
+)
+from app.schemas.role_permission import (
+    RoleBase,
+    RoleCreate,
+    RoleUpdate,
+    RoleOut,
+    PermissionBase,
+    PermissionCreate,
+    PermissionUpdate,
+    PermissionOut,
+    RolePermissionsAssignRequest,
+    RoleWithPermissionsOut,
+)
+from app.schemas.auth import (
+    UserRegisterRequest,
+    UserLoginRequest,
+    UserBasicOut,
+    TokenResponse,
+    ForgotPasswordRequest,
+    ResetPasswordRequest,
+    ChangePasswordRequest,
+)
+from app.schemas.user import (
+    UserProfileUpdate,
+    UserRoleUpdate,
+    UserOut,
+)
+from app.schemas.eating_profile import (
+    RestrictionItemCreate,
+    RestrictionItemOut,
+    EatingProfileBase,
+    EatingProfileCreate,
+    EatingProfileUpdate,
+    EatingProfileOut,
+)
+from app.schemas.ingredient import (
+    NutrientBase,
+    NutrientOut,
+    IngredientNutrientInput,
+    IngredientBase,
+    IngredientCreate,
+    IngredientUpdate,
+    IngredientOut,
+)
+from app.schemas.recipe import (
+    DishTypeBase,
+    DishTypeOut,
+    RecipeIngredientItem,
+    RecipeIngredientOut,
+    RecipeStep,
+    RecipeBase,
+    RecipeCreate,
+    RecipeUpdate,
+    RecipeOut,
+)
+from app.schemas.recommendation import (
+    DishRecommendationFilter,
+    DishRecommendationOut,
+    DishSelectRequest,
+    DishSelectResponse,
+    MealSetRecommendationFilter,
+    MealSetItemDetail,
+    MealSetComboOut,
+    MealSetDetailRequest,
+    MealSetSelectRequest,
+)
+from app.schemas.available_ingredient import (
+    AvailableIngredientBase,
+    AvailableIngredientCreate,
+    AvailableIngredientUpdate,
+    AvailableIngredientOut,
+)
+from app.schemas.shopping_list import (
+    ShoppingListItemCreate,
+    ShoppingListItemUpdate,
+    PurchaseStatusUpdate,
+    ShoppingListItemOut,
+    ShoppingListCreate,
+    ShoppingListOut,
+    ShoppingListDetailOut,
+)
+
+# -----------------------------
+# Legacy / AI Schemas for compatibility
+# -----------------------------
 from pydantic import BaseModel, ConfigDict
 from typing import List, Optional
 from datetime import datetime
 
 
-# -----------------------------
-# Ingredient Schemas
-# -----------------------------
-class IngredientBase(BaseModel):
-    name: str
-    category: str
-    stall: str
-    default_unit: str = "g"
-    estimated_price_per_unit: float = 0.0
-    shelf_life_days: int = 7
-
-
-class IngredientOut(IngredientBase):
-    id: int
-    model_config = ConfigDict(from_attributes=True)
-
-
-# -----------------------------
-# Recipe Schemas
-# -----------------------------
-class RecipeBase(BaseModel):
-    title: str
-    dish_type: str
-    emoji: str = "🍲"
-    description: Optional[str] = None
-    cook_time_minutes: int = 20
-    kcal: int = 300
-    protein_g: float = 20.0
-    carb_g: float = 30.0
-    fat_g: float = 10.0
-    sodium_note: Optional[str] = None
-    branch_baby_tip: Optional[str] = None
-    branch_adult_tip: Optional[str] = None
-
-
-class RecipeOut(RecipeBase):
-    id: int
-    model_config = ConfigDict(from_attributes=True)
-
-
-# -----------------------------
-# Meal Combo Schemas
-# -----------------------------
 class MealComboDishDetail(BaseModel):
     name: str
     emoji: str
@@ -73,7 +120,6 @@ class GroceryItemOut(BaseModel):
     price: float
     isHave: bool = False
     isBought: bool = False
-
     model_config = ConfigDict(from_attributes=True)
 
 
@@ -101,13 +147,9 @@ class MealComboOut(BaseModel):
     branchTip: MealBranchTip
     groceryItems: List[GroceryItemOut] = []
     timeline: List[CookingTimelineStep] = []
-
     model_config = ConfigDict(from_attributes=True)
 
 
-# -----------------------------
-# Fridge Item Schemas
-# -----------------------------
 class FridgeItemCreate(BaseModel):
     name: str
     quantity: float = 1.0
@@ -123,13 +165,9 @@ class FridgeItemOut(BaseModel):
     expiry_date: datetime
     status: str
     created_at: datetime
-
     model_config = ConfigDict(from_attributes=True)
 
 
-# -----------------------------
-# AI Request & Response Schemas
-# -----------------------------
 class AIRecommendationRequest(BaseModel):
     cook_time: int = 30
     budget: float = 120000
