@@ -52,7 +52,7 @@ export default function App() {
               />
             )}
             {page === 'plan' && (
-              <PlanPage onShowRecipe={showRecipe} />
+              <PlanPage onShowRecipe={showRecipe} onNavigate={navigate} />
             )}
             {page === 'shopping' && (
               <ShoppingPage />
