@@ -1,3 +1,7 @@
+import { useAuth } from '@/context/AuthContext'
+import { ROLE_LABELS } from '@/services/authApi'
+import { getInitials } from '@/utils/user'
+
 const NAV_ITEMS = [
   { page: 'home',     ico: '⌂', label: 'Trang chủ' },
   { page: 'recipes',  ico: '⌕', label: 'Khám phá món ăn' },
@@ -9,14 +13,16 @@ const NAV_ITEMS = [
 ]
 
 const NAV_SECONDARY = [
-  { page: 'account', ico: '⚙', label: 'Cài đặt' },
-  { page: 'account', ico: 'ⓘ', label: 'Hướng dẫn sử dụng' },
-  { page: 'account', ico: '◉', label: 'Điều khoản sử dụng' },
-  { page: 'account', ico: '♧', label: 'Quyền riêng tư' },
-  { page: 'account', ico: '✉', label: 'Liên hệ' },
+  { page: 'settings', ico: '⚙', label: 'Cài đặt' },
+  { page: 'guide',    ico: 'ⓘ', label: 'Hướng dẫn sử dụng' },
+  { page: 'account',  ico: '◉', label: 'Điều khoản sử dụng' },
+  { page: 'account',  ico: '♧', label: 'Quyền riêng tư' },
+  { page: 'account',  ico: '✉', label: 'Liên hệ' },
 ]
 
 export default function Sidebar({ activePage, onNavigate }) {
+  const { user, isAuthenticated } = useAuth()
+
   return (
     <aside className="sidebar">
       {/* Brand */}
@@ -50,7 +56,7 @@ export default function Sidebar({ activePage, onNavigate }) {
         <div className="nav-label">Khác</div>
         <nav className="nav" aria-label="Điều hướng phụ">
           {NAV_SECONDARY.map((item, i) => (
-            <button key={i} onClick={() => onNavigate(item.page)}>
+            <button key={i} className={activePage === item.page && i < 2 ? 'active' : ''} onClick={() => onNavigate(item.page)}>
               <span className="ico">{item.ico}</span>
               {item.label}
             </button>
@@ -58,14 +64,16 @@ export default function Sidebar({ activePage, onNavigate }) {
         </nav>
       </div>
 
-      {/* User profile */}
-      <div className="sidebar-bottom">
-        <div className="avatar">VA</div>
-        <div>
-          <div className="user-name">Nguyễn Văn An</div>
-          <div className="user-role">Thành viên gia đình</div>
+      {/* User profile - chi hien khi da dang nhap */}
+      {isAuthenticated && (
+        <div className="sidebar-bottom">
+          <div className="avatar">{getInitials(user.fullName)}</div>
+          <div>
+            <div className="user-name">{user.fullName}</div>
+            <div className="user-role">{ROLE_LABELS[user.role]}</div>
+          </div>
         </div>
-      </div>
+      )}
     </aside>
   )
 }

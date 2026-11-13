@@ -1,5 +1,5 @@
-import { useApp } from '../../context/AppContext'
-import { useToast } from '../../context/ToastContext'
+import { useApp } from '@/context/AppContext'
+import { useToast } from '@/context/ToastContext'
 
 export default function RecipeCard({ dish, onShowRecipe }) {
   const { saved, toggleSave } = useApp()
