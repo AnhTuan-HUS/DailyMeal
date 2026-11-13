@@ -1151,19 +1151,726 @@ li { padding: 3px 0; }
 .account-row .arrow { color: var(--muted); }
 
 /* ============================================================
-   Recipe detail (cook page)
+   Recipe detail & Cooking Page (Vào bếp)
    ============================================================ */
-.recipe-detail-grid {
+.cook-page {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  flex: 1;
+}
+
+/* Toolbar trên cùng */
+.cook-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 8px 16px;
+  flex-wrap: wrap;
+}
+.cook-nav-tabs {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.cook-tab-btn {
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all .15s;
+}
+.cook-tab-btn:hover {
+  background: var(--sand);
+  color: var(--ink);
+}
+.cook-tab-btn.active {
+  background: var(--wine);
+  color: #fff;
+}
+
+.btn-cook-handsfree {
+  background: #fff;
+  border: 1.5px solid var(--line);
+  border-radius: 8px;
+  padding: 7px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all .15s;
+}
+.btn-cook-handsfree:hover {
+  background: var(--sand);
+  border-color: var(--wine3);
+}
+.btn-cook-handsfree.active {
+  background: var(--sand);
+  border-color: var(--wine);
+  color: var(--wine);
+}
+
+/* Chế độ chữ lớn (Hands-free view) */
+.cook-page.is-large-text .cook-dish-name { font-size: 28px !important; }
+.cook-page.is-large-text .cook-ing-item { font-size: 16px !important; padding: 4px 0; }
+.cook-page.is-large-text .step-header { font-size: 16px !important; }
+.cook-page.is-large-text .step-body { font-size: 16px !important; line-height: 1.65 !important; }
+.cook-page.is-large-text .timer-digits { font-size: 56px !important; }
+
+/* ── TAB 1: Nấu theo món ── */
+.cook-recipe-view {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Dải chọn món nhanh */
+.cook-dish-selector {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 8px 14px;
+  overflow-x: auto;
+}
+.selector-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--muted);
+  white-space: nowrap;
+}
+.selector-chips {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.dish-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--sand);
+  border: 1px solid transparent;
+  border-radius: 99px;
+  padding: 5px 12px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all .15s;
+}
+.dish-chip:hover {
+  border-color: var(--wine3);
+  color: var(--wine);
+}
+.dish-chip.active {
+  background: var(--wine);
+  color: #fff;
+}
+.chip-name {
+  font-size: 12px;
+  font-weight: 600;
+}
+.chip-time {
+  font-size: 10px;
+  opacity: .8;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Khối chính 2 cột */
+.cook-main-card {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr);
-  gap: 22px;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
+  gap: 18px;
   align-items: start;
 }
-.recipe-detail-grid img {
-  width: 100%;
-  height: 260px;
-  object-fit: cover;
+
+/* Cột trái */
+.cook-left-col {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.cook-media-wrap {
+  position: relative;
+  height: 220px;
   border-radius: 14px;
+  overflow: hidden;
+  background: #e9d9c7;
+}
+.cook-dish-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.cook-cat-pill {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: rgba(255, 253, 248, 0.95);
+  color: var(--wine);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .6px;
+  text-transform: uppercase;
+  padding: 4px 9px;
+  border-radius: 6px;
+  border: 1px solid rgba(100, 37, 44, 0.12);
+  backdrop-filter: blur(4px);
+}
+
+.cook-dish-meta-box {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 16px;
+}
+.cook-dish-name {
+  font-family: var(--font-serif);
+  font-size: 23px;
+  font-weight: 700;
+  color: var(--ink);
+  margin: 0;
+}
+.cook-dish-desc {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.5;
+  margin: 4px 0 0;
+}
+.cook-chips-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 12px;
+}
+.cook-info-chip {
+  font-size: 11.5px;
+  color: var(--muted);
+  background: var(--sand);
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-variant-numeric: tabular-nums;
+}
+.cook-info-chip strong {
+  color: var(--ink);
+}
+
+/* Bộ đếm giờ Timer */
+.cook-timer-panel {
+  background: #fffdf8;
+  border: 1.5px solid var(--line);
+  border-radius: 14px;
+  padding: 16px;
+  text-align: center;
+}
+.timer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+.timer-title {
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: var(--muted);
+}
+.timer-status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ccc;
+  transition: background .15s;
+}
+.timer-status-dot.is-ticking {
+  background: #22c55e;
+  box-shadow: 0 0 8px rgba(34, 197, 94, 0.6);
+}
+.timer-digits {
+  font-size: 42px;
+  font-weight: 700;
+  color: var(--wine);
+  font-variant-numeric: tabular-nums;
+  margin: 4px 0 10px;
+  font-family: var(--font-sans);
+}
+.timer-controls {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+.btn-timer-toggle {
+  background: var(--wine);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 22px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .15s;
+}
+.btn-timer-toggle:hover { background: var(--wine2); }
+.btn-timer-toggle.is-running {
+  background: #b45309;
+}
+.btn-timer-reset {
+  background: none;
+  border: 1px solid var(--line);
+  color: var(--muted);
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all .15s;
+}
+.btn-timer-reset:hover {
+  color: var(--rust);
+  border-color: var(--rust);
+}
+.timer-preset-btns {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 10px;
+}
+.timer-preset-btns button {
+  background: var(--sand);
+  border: none;
+  padding: 3px 10px;
+  border-radius: 6px;
+  font-size: 11px;
+  color: var(--ink);
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .12s;
+}
+.timer-preset-btns button:hover { background: #ede3d2; }
+
+/* Cột phải */
+.cook-right-col {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.cook-section-box {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 18px;
+}
+.section-title-wrap {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 10px;
+  margin-bottom: 12px;
+}
+.section-title {
+  font-family: var(--font-serif);
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--ink);
+  margin: 0;
+}
+.section-count {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted);
+  background: var(--sand);
+  padding: 2px 7px;
+  border-radius: 99px;
+  font-variant-numeric: tabular-nums;
+}
+
+.cook-ing-list {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px 14px;
+}
+.cook-ing-item {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 13.5px;
+  color: var(--ink);
+}
+.ing-bullet {
+  color: var(--wine);
+  font-weight: 700;
+}
+
+.cook-steps-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.cook-step-card {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 12px 14px;
+  border: 1.5px solid var(--line);
+  border-radius: 12px;
+  background: #fff;
+  cursor: pointer;
+  transition: all .15s;
+}
+.cook-step-card:hover {
+  border-color: var(--wine3);
+  box-shadow: 0 2px 8px rgba(100, 37, 44, 0.05);
+}
+.cook-step-card.is-done {
+  background: #faf8f5;
+  border-color: #e5ded4;
+  opacity: .7;
+}
+.step-num-badge {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--wine);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  transition: background .15s;
+}
+.cook-step-card.is-done .step-num-badge {
+  background: var(--green);
+}
+.step-content { flex: 1; }
+.step-header {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink);
+  display: block;
+  margin-bottom: 2px;
+}
+.step-body {
+  font-size: 13px;
+  color: var(--ink);
+  line-height: 1.5;
+  margin: 0;
+}
+.cook-step-card.is-done .step-body {
+  text-decoration: line-through;
+  color: var(--muted);
+}
+
+/* ── TAB 2: ĐIỀU PHỐI 2 BẾP (GANTT 30 PHÚT) ── */
+.cook-timeline-view {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.timeline-intro-card {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 18px 22px;
+}
+.intro-badge {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: var(--wine);
+  background: var(--sand);
+  padding: 3px 8px;
+  border-radius: 6px;
+  text-transform: uppercase;
+  display: inline-block;
+  margin-bottom: 6px;
+}
+.timeline-intro-card h3 {
+  font-family: var(--font-serif);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--ink);
+  margin: 0 0 4px;
+}
+.timeline-intro-card p {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Gantt Chart */
+.gantt-container {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 20px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.gantt-axis {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 10px 8px 120px;
+  border-bottom: 1.5px dashed var(--line);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+.gantt-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.gantt-row-head {
+  width: 104px;
+  flex-shrink: 0;
+}
+.gantt-row-head strong {
+  display: block;
+  font-size: 13px;
+  color: var(--ink);
+}
+.gantt-row-head small {
+  display: block;
+  font-size: 10.5px;
+  color: var(--muted);
+}
+
+.gantt-track {
+  flex: 1;
+  height: 38px;
+  background: #f8f4ee;
+  border-radius: 8px;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.gantt-bar {
+  position: absolute;
+  height: 82%;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+}
+.bar-rice { background: #a67c1e; }
+.bar-prep { background: #5a7b50; }
+.bar-main { background: #b84c30; }
+.bar-soup { background: #236594; }
+.bar-veg  { background: #447209; }
+.bar-done { background: #64252c; }
+
+.gantt-branch-marker {
+  position: absolute;
+  top: -8px;
+  bottom: -8px;
+  width: 2px;
+  background: #dc2626;
+  z-index: 3;
+}
+.branch-flag {
+  position: absolute;
+  top: -24px;
+  left: -65px;
+  background: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #f87171;
+  font-size: 9.5px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+/* 4 Chặng chi tiết */
+.timeline-stages-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+.stage-card {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 14px;
+}
+.stage-step-tag {
+  font-size: 9.5px;
+  font-weight: 700;
+  color: var(--wine);
+  background: var(--sand);
+  padding: 2px 6px;
+  border-radius: 4px;
+  display: inline-block;
+  margin-bottom: 6px;
+}
+.stage-card h4 {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink);
+  margin: 0 0 4px;
+}
+.stage-card p {
+  font-size: 11.5px;
+  color: var(--muted);
+  line-height: 1.45;
+  margin: 0;
+}
+
+/* ── TAB 3: CỨU MÓN LỠ TAY ── */
+.cook-rescue-view {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.rescue-intro-card {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 18px 22px;
+}
+.rescue-intro-card h3 {
+  font-family: var(--font-serif);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--ink);
+  margin: 0 0 4px;
+}
+.rescue-intro-card p {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.rescue-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+.rescue-card {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.rescue-card-top {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.rescue-badge {
+  font-size: 9.5px;
+  font-weight: 700;
+  color: var(--rust);
+  background: #fdf3ef;
+  padding: 2px 7px;
+  border-radius: 5px;
+  align-self: flex-start;
+}
+.rescue-title {
+  font-family: var(--font-serif);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--ink);
+  margin: 2px 0 0;
+}
+.rescue-cause {
+  font-size: 11.5px;
+  color: var(--muted);
+  line-height: 1.45;
+  margin: 0;
+}
+.rescue-solution-box {
+  background: #fbf8f3;
+  border-radius: 10px;
+  padding: 12px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--ink);
+  margin-top: auto;
+}
+.rescue-solution-box strong {
+  display: block;
+  font-size: 11px;
+  color: var(--wine);
+  margin-bottom: 5px;
+}
+.rescue-solution-box ul {
+  padding-left: 1.1em;
+  margin: 0;
+}
+.rescue-solution-box li {
+  padding: 2px 0;
+}
+
+/* Bảng quy đổi đơn vị */
+.unit-conversion-card {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 18px 22px;
+}
+.unit-conversion-card h4 {
+  font-family: var(--font-serif);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--ink);
+  margin: 0 0 12px;
+}
+.unit-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 10px;
+}
+.unit-item {
+  background: #fffdf8;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 10px 8px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.unit-name {
+  font-size: 11px;
+  color: var(--ink);
+}
+.unit-val {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--wine);
+  font-variant-numeric: tabular-nums;
+}
+.unit-note {
+  font-size: 9.5px;
+  color: var(--muted);
 }
 
 /* ============================================================
@@ -1252,6 +1959,12 @@ li { padding: 3px 0; }
   .plan-week-grid { grid-template-columns: repeat(3, 1fr); }
   .plan-header { flex-direction: column; }
   .plan-detail { padding: 16px; }
+  .cook-main-card { grid-template-columns: 1fr; }
+  .timeline-stages-grid { grid-template-columns: repeat(2, 1fr); }
+  .rescue-cards-grid { grid-template-columns: 1fr; }
+  .unit-grid { grid-template-columns: repeat(3, 1fr); }
+  .gantt-axis { padding-left: 85px; }
+  .gantt-row-head { width: 75px; }
   .mobile-nav {
     display: flex;
     position: fixed;
@@ -1304,6 +2017,14 @@ li { padding: 3px 0; }
   .plan-day-strip { gap: 3px; padding: 5px; }
   .plan-day-time { display: none; }
   .plan-detail-head { flex-direction: column; }
+  .cook-ing-list { grid-template-columns: 1fr; }
+  .timeline-stages-grid { grid-template-columns: 1fr; }
+  .unit-grid { grid-template-columns: repeat(2, 1fr); }
+  .gantt-row { flex-direction: column; align-items: flex-start; gap: 4px; }
+  .gantt-row-head { width: auto; }
+  .gantt-track { width: 100%; }
+  .gantt-axis { padding-left: 0; }
+  .timer-digits { font-size: 34px; }
 }
 
 /* ============================================================
