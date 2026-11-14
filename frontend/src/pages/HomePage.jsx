@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { dishes, familyMembers } from '../data/dishes'
+import { dishes } from '../data/dishes'
+import { roleOf, prefLabel } from '../utils/family'
 import { useApp } from '../context/AppContext'
 import { useToast } from '../context/ToastContext'
 import RecipeCard from '../components/RecipeCard'
@@ -17,7 +18,7 @@ const TODAY_MEALS = [
 
 export default function HomePage({ onNavigate, onShowRecipe }) {
   const toast = useToast()
-  const { ingredients, checked, checkIngredient } = useApp()
+  const { ingredients, checked, checkIngredient, members } = useApp()
   const [activeDay, setActiveDay] = useState(2)
   const [heroQuery, setHeroQuery] = useState('')
 
@@ -200,13 +201,13 @@ export default function HomePage({ onNavigate, onShowRecipe }) {
             <button className="text-link" onClick={() => onNavigate('family')}>Quản lý →</button>
           </div>
           <div className="family-grid">
-            {familyMembers.map((m, i) => (
-              <div key={i} className="family-member">
-                <div className="avatar" style={{ fontSize: 18 }}>{m.emoji}</div>
+            {members.map(m => (
+              <div key={m.id} className="family-member">
+                <div className="avatar" style={{ fontSize: 18 }}>{roleOf(m.role).emoji}</div>
                 <div>
                   <strong>{m.name}</strong>
-                  <small>{m.age}</small>
-                  <small>{m.pref}</small>
+                  <small>{m.age} tuổi</small>
+                  <small>{prefLabel(m)}</small>
                 </div>
               </div>
             ))}

@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useCallback } from 'react'
-import { initialIngredients } from '../data/dishes'
+import { initialIngredients, familyMembers, initialMealProfile, initialHistory } from '../data/dishes'
 
 const AppContext = createContext(null)
 
@@ -7,6 +7,9 @@ export function AppProvider({ children }) {
   const [saved, setSaved] = useState(new Set([2, 4]))
   const [ingredients, setIngredients] = useState(initialIngredients)
   const [checked, setChecked] = useState(new Set())
+  const [members, setMembers] = useState(familyMembers)
+  const [mealProfile, setMealProfile] = useState(initialMealProfile)
+  const [history, setHistory] = useState(initialHistory)
 
   const toggleSave = useCallback((id) => {
     setSaved(prev => {
@@ -24,8 +27,8 @@ export function AppProvider({ children }) {
     })
   }, [])
 
-  const addIngredient = useCallback((name) => {
-    setIngredients(prev => [...prev, [name, '1 phần']])
+  const addIngredient = useCallback((name, qty = '1 phần') => {
+    setIngredients(prev => [...prev, [name, qty]])
   }, [])
 
   const removeIngredient = useCallback((idx) => {
@@ -42,8 +45,43 @@ export function AppProvider({ children }) {
     setChecked(new Set())
   }, [checked])
 
+  // ---- Gia đình ----
+  const addMember = useCallback((data) => {
+    setMembers(prev => [...prev, { ...data, id: Date.now() }])
+  }, [])
+
+  const updateMember = useCallback((id, data) => {
+    setMembers(prev => prev.map(m => (m.id === id ? { ...m, ...data } : m)))
+  }, [])
+
+  const removeMember = useCallback((id) => {
+    setMembers(prev => prev.filter(m => m.id !== id))
+  }, [])
+
+  const updateMealProfile = useCallback((patch) => {
+    setMealProfile(prev => ({ ...prev, ...patch }))
+  }, [])
+
+  const setHistoryStatus = useCallback((daysAgo, status, swappedTo) => {
+    setHistory(prev =>
+      prev.map(h =>
+        h.daysAgo === daysAgo
+          ? { ...h, status, swappedTo: status === 'swapped' ? swappedTo : undefined }
+          : h
+      )
+    )
+  }, [])
+
   return (
-    <AppContext.Provider value={{ saved, toggleSave, ingredients, checked, checkIngredient, addIngredient, removeIngredient, clearChecked }}>
+    <AppContext.Provider
+      value={{
+        saved, toggleSave,
+        ingredients, checked, checkIngredient, addIngredient, removeIngredient, clearChecked,
+        members, addMember, updateMember, removeMember,
+        mealProfile, updateMealProfile,
+        history, setHistoryStatus,
+      }}
+    >
       {children}
     </AppContext.Provider>
   )

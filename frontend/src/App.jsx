@@ -61,10 +61,10 @@ export default function App() {
               <CookPage activeRecipeId={activeRecipeId} onShowRecipe={showRecipe} />
             )}
             {page === 'family' && (
-              <FamilyPage />
+              <FamilyPage onShowRecipe={showRecipe} />
             )}
             {page === 'saved' && (
-              <SavedPage onShowRecipe={showRecipe} />
+              <SavedPage onShowRecipe={showRecipe} onNavigate={navigate} />
             )}
             {page === 'account' && (
               <AccountPage />
