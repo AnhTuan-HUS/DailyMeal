@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useCallback } from 'react'
-import { initialIngredients } from '../data/dishes'
+import { initialIngredients } from '@/data/dishes'
 
 const AppContext = createContext(null)
 
@@ -11,7 +11,8 @@ export function AppProvider({ children }) {
   const toggleSave = useCallback((id) => {
     setSaved(prev => {
       const next = new Set(prev)
-      next.has(id) ? next.delete(id) : next.add(id)
+      if (next.has(id)) next.delete(id)
+      else next.add(id)
       return next
     })
   }, [])
@@ -19,7 +20,8 @@ export function AppProvider({ children }) {
   const checkIngredient = useCallback((idx, val) => {
     setChecked(prev => {
       const next = new Set(prev)
-      val ? next.add(idx) : next.delete(idx)
+      if (val) next.add(idx)
+      else next.delete(idx)
       return next
     })
   }, [])
@@ -49,6 +51,7 @@ export function AppProvider({ children }) {
   )
 }
 
+// oxlint-disable-next-line react/only-export-components
 export function useApp() {
   return useContext(AppContext)
 }

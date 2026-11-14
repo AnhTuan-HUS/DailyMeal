@@ -1,6 +1,5 @@
-import { useState } from 'react'
-import { dishes } from '../data/dishes'
-import RecipeCard from '../components/RecipeCard'
+import { dishes } from '@/data/dishes'
+import RecipeCard from '@/components/recipe/RecipeCard'
 
 export default function CookPage({ activeRecipeId, onShowRecipe }) {
   const activeRecipe = dishes.find(d => d.id === activeRecipeId)

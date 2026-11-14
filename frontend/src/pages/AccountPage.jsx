@@ -1,4 +1,6 @@
-import { useToast } from '../context/ToastContext'
+import { useToast } from '@/context/ToastContext'
+import { useAuth } from '@/context/AuthContext'
+import { getInitials } from '@/utils/user'
 
 const ACCOUNT_ROWS = [
   { ico: '♙', label: 'Thông tin cá nhân' },
@@ -10,6 +12,15 @@ const ACCOUNT_ROWS = [
 
 export default function AccountPage() {
   const toast = useToast()
+  const { user, isAuthenticated, openAuth } = useAuth()
+
+  if (!isAuthenticated) {
+    return (
+      <div className="panel">
+        Vui lòng <button className="link-btn" onClick={() => openAuth('login')}>đăng nhập</button> để xem tài khoản.
+      </div>
+    )
+  }
 
   return (
     <section id="page-account">
@@ -22,16 +33,11 @@ export default function AccountPage() {
 
       {/* Profile card */}
       <div className="panel" style={{ display: 'flex', alignItems: 'center', gap: 15, marginBottom: 18 }}>
-        <div className="avatar" style={{ width: 60, height: 60, fontSize: 18 }}>VA</div>
+        <div className="avatar" style={{ width: 60, height: 60, fontSize: 18 }}>{getInitials(user.fullName)}</div>
         <div style={{ flex: 1 }}>
-          <h3 style={{ fontFamily: 'var(--font-sans)', fontSize: 16, marginBottom: 4 }}>Nguyễn Văn An</h3>
-          <p className="panel-sub" style={{ marginBottom: 0 }}>
-            an.nguyen@example.com · Thành viên từ 2025
-          </p>
+          <strong>{user.fullName}</strong>
+          <div className="pf-muted">{user.email}</div>
         </div>
-        <button className="mini-btn" onClick={() => toast('Đã mở thông tin cá nhân')}>
-          Chỉnh sửa
-        </button>
       </div>
 
       {/* Settings rows */}

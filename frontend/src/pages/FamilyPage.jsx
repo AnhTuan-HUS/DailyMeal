@@ -1,5 +1,5 @@
-import { familyMembers } from '../data/dishes'
-import { useToast } from '../context/ToastContext'
+import { familyMembers } from '@/data/dishes'
+import { useToast } from '@/context/ToastContext'
 
 export default function FamilyPage() {
   const toast = useToast()
