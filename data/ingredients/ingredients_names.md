@@ -456,3 +456,31 @@
 | 452 | 14010 | Rượu cam, chanh (cồn 24,2 g) | Liqueur, orange flavor |
 | 453 | 14011 | Rượu nếp (80g/24ml, cồn 5g) | Rice glutinous (Alcohol fermentation rice 80 g water 24 ml) |
 | 454 | 14012 | Rượu trắng (cồn 39 g) | Vodka |
+
+| 455 | 1024 | Nui / Mì ống | Macaroni / Pasta |
+| 456 | 4126 | Sả tươi | Lemongrass |
+| 457 | 4127 | Nấm đùi gà | King oyster mushroom |
+| 458 | 4128 | Rau càng cua | Peperomia pellucida |
+| 459 | 4129 | Rong biển / Rong sụn | Seaweed |
+| 460 | 4130 | Rau mầm | Sprouts |
+| 461 | 4131 | Kim chi | Kimchi |
+| 462 | 4132 | Khoai mỡ | Purple yam |
+| 463 | 4133 | Bông atiso | Artichoke |
+| 464 | 8062 | Sứa biển | Jellyfish |
+| 465 | 9012 | Lòng đỏ trứng muối | Salted egg yolk |
+| 466 | 12027 | Mật mía | Molasses / Sugar cane syrup |
+| 467 | 13024 | Hạt nêm / Bột nêm | Seasoning powder |
+| 468 | 13025 | Bột canh / Muối tiêu gia vị | Spice salt mix |
+| 469 | 13026 | Giấm ăn | Vinegar |
+| 470 | 13027 | Dầu hào | Oyster sauce |
+| 471 | 13028 | Tương cà | Ketchup |
+| 472 | 13029 | Hành boa-rô | Leek |
+| 473 | 13030 | Hoa hồi / Vị thảo mộc | Star anise |
+| 474 | 13031 | Rau thơm tổng hợp | Mixed aromatic herbs |
+| 475 | 13032 | Kỷ tử | Goji berries |
+| 476 | 13033 | Rượu nấu ăn / Rượu trắng | Cooking wine |
+| 477 | 13034 | Mù tạt | Mustard |
+| 478 | 13035 | Nước sốt trộn / Sốt ướp | Salad dressing / Marinade sauce |
+| 479 | 13036 | Bột chiên giòn / Bột chiên xù | Crispy frying batter |
+| 480 | 13037 | Sa tế / Ớt chưng | Satay chili paste |
+| 481 | 13038 | Tương đen / Tương ngọt | Hoisin sauce |

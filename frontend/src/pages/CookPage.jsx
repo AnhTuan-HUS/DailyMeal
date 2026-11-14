@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
-import { dishes } from '../data/dishes'
-import { useToast } from '../context/ToastContext'
+import { dishes } from '@/data/dishes'
+import { useToast } from '@/context/ToastContext'
 
 // Danh mục cẩm nang cứu món
 const RESCUE_TIPS = [

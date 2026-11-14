@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react'
-import { dishes } from '../data/dishes'
-import { useApp } from '../context/AppContext'
-import { useToast } from '../context/ToastContext'
+import { dishes } from '@/data/dishes'
+import { useApp } from '@/context/AppContext'
+import { useToast } from '@/context/ToastContext'
 
 /* ── Cấu hình các bữa ăn trong ngày ── */
 const MEAL_TYPES = [
@@ -79,7 +79,7 @@ function getDayStats(dayMeals) {
 export default function PlanPage({ onShowRecipe, onNavigate }) {
   const toast = useToast()
   const { addIngredient } = useApp()
-  const dates = useMemo(getCurrentWeekDates, [])
+  const dates = useMemo(() => getCurrentWeekDates(), [])
 
   const [plan, setPlan] = useState(() => generateWeekPlan())
   const [activeDay, setActiveDay] = useState(() => {

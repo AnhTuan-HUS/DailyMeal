@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { useApp } from '../context/AppContext'
-import { useToast } from '../context/ToastContext'
+import { useApp } from '@/context/AppContext'
+import { useToast } from '@/context/ToastContext'
 import MemberModal from '../components/family/MemberModal'
 import MembersTab from '../components/family/MembersTab'
 import ProfileTab from '../components/family/ProfileTab'

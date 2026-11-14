@@ -1,9 +1,9 @@
 import { useState } from 'react'
-import { dishes } from '../data/dishes'
+import { dishes } from '@/data/dishes'
 import { roleOf, prefLabel } from '../utils/family'
-import { useApp } from '../context/AppContext'
-import { useToast } from '../context/ToastContext'
-import RecipeCard from '../components/RecipeCard'
+import { useApp } from '@/context/AppContext'
+import { useToast } from '@/context/ToastContext'
+import RecipeCard from '@/components/recipe/RecipeCard'
 
 const DAYS = [
   ['T2', '21'], ['T3', '22'], ['T4', '23'],

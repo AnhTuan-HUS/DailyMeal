@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { dishes } from '../data/dishes'
-import RecipeCard from '../components/RecipeCard'
+import { dishes } from '@/data/dishes'
+import RecipeCard from '@/components/recipe/RecipeCard'
 
 export default function RecipesPage({ onShowRecipe, initialQuery = '' }) {
   const [query, setQuery] = useState(initialQuery)

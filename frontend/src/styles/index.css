@@ -3091,3 +3091,102 @@ li { padding: 3px 0; }
 .swap-select { white-space: nowrap; }
 .swap-select select { min-width: 0; }
 .saved-warn { margin-bottom: 11px; }
+
+/* ============ AUTH ============ */
+.top-actions { display: flex; align-items: center; gap: 10px; }
+.btn-auth-outline, .btn-auth-solid {
+  font: 600 14px var(--font-sans); padding: 10px 20px; border-radius: 12px; cursor: pointer;
+  border: 1.5px solid var(--wine); transition: .15s;
+}
+.btn-auth-outline { background: var(--paper); color: var(--wine); }
+.btn-auth-outline:hover { background: var(--sand); }
+.btn-auth-solid { background: var(--wine); color: #fff; box-shadow: var(--shadow-card); }
+.btn-auth-solid:hover { background: var(--wine2); }
+
+.user-menu { position: relative; }
+.user-dropdown {
+  position: absolute; right: 0; top: calc(100% + 10px); width: 270px; z-index: 60;
+  background: var(--paper); border: 1px solid var(--line); border-radius: 16px;
+  box-shadow: var(--shadow-hover); padding: 8px;
+}
+.ud-head { display: flex; gap: 12px; align-items: center; padding: 10px; border-bottom: 1px solid var(--line); margin-bottom: 6px; }
+.ud-name { font-weight: 700; font-size: 14px; color: var(--ink); }
+.ud-email { font-size: 12px; color: var(--muted); }
+.ud-item {
+  display: flex; align-items: center; gap: 12px; width: 100%; text-align: left;
+  background: none; border: 0; padding: 10px; border-radius: 10px; cursor: pointer;
+  font: 500 14px var(--font-sans); color: var(--ink);
+}
+.ud-item:hover { background: var(--sand); }
+.ud-logout { color: var(--rust); border-top: 1px solid var(--line); border-radius: 0 0 10px 10px; margin-top: 6px; }
+
+html.modal-open, body.modal-open { overflow: hidden; height: 100vh; }
+body.modal-open .sidebar { overflow: hidden; }
+
+.auth-overlay {
+  position: fixed; inset: 0; z-index: 100; background: #261411;
+  display: flex; align-items: center; justify-content: center; padding: 16px;
+  overflow: hidden; overscroll-behavior: none;
+}
+.auth-bg {
+  position: absolute; inset: 0; z-index: 0;
+  background-size: cover; background-position: center;
+}
+.auth-bg::after {
+  content: ''; position: absolute; inset: 0;
+  background: rgba(86, 30, 34, .22);
+}
+.auth-modal {
+  position: relative; z-index: 1; width: 100%; max-width: 410px; background: var(--paper);
+  border-radius: 22px; padding: 30px 28px 26px;
+  box-shadow: 0 24px 56px rgba(18, 7, 5, .48);
+}
+.auth-close {
+  position: absolute; top: 14px; right: 18px; font-size: 24px;
+  background: none; border: 0; cursor: pointer; color: var(--muted); line-height: 1;
+}
+.auth-close:hover { color: var(--wine); }
+.auth-title { font: 700 26px var(--font-serif); color: var(--wine); margin: 0; }
+.auth-sub { color: var(--muted); font-size: 14px; margin: 4px 0 18px; }
+.auth-field { display: block; font-size: 13px; font-weight: 600; color: var(--ink); margin-bottom: 14px; }
+.auth-field input {
+  display: block; width: 100%; margin-top: 6px; padding: 11px 14px; border-radius: 12px;
+  border: 1.5px solid var(--line); background: var(--cream); font: 400 14px var(--font-sans); color: var(--ink);
+}
+.auth-field input:focus { outline: none; border-color: var(--wine3); }
+.auth-error { background: #fdecea; color: #a8321f; border-radius: 10px; padding: 10px 12px; font-size: 13px; margin-bottom: 12px; }
+.auth-submit {
+  width: 100%; padding: 12px; border: 0; border-radius: 12px; background: var(--wine); color: #fff;
+  font: 600 15px var(--font-sans); cursor: pointer;
+}
+.auth-submit:hover { background: var(--wine2); }
+.auth-submit:disabled { opacity: .6; cursor: wait; }
+.auth-switch { text-align: center; font-size: 13px; color: var(--muted); margin: 14px 0 0; }
+.auth-switch button { background: none; border: 0; color: var(--rust); font-weight: 700; cursor: pointer; }
+@media (max-width: 600px) { .btn-auth-outline { display: none; } .btn-auth-solid { padding: 9px 14px; } }
+/* ============ PROFILE / SETTINGS / ADMIN ============ */
+.pf-muted { font-size: 12px; color: var(--muted); }
+.pf-card { display: flex; align-items: center; gap: 16px; margin-bottom: 16px; }
+.pf-avatar { width: 60px; height: 60px; font-size: 18px; }
+.pf-form { margin-bottom: 16px; max-width: 520px; }
+.pf-form h4 { margin: 0 0 12px; font: 700 16px var(--font-serif); color: var(--wine); }
+.pf-btn { max-width: 220px; }
+.role-badge { display: inline-block; margin-top: 6px; padding: 3px 10px; border-radius: 99px; background: var(--sand); color: var(--wine); font-size: 12px; font-weight: 700; }
+.perm-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { display: inline-block; padding: 3px 10px; border-radius: 99px; background: var(--sand); font-size: 12px; color: var(--ink); }
+.link-btn { background: none; border: 0; color: var(--rust); font-weight: 700; cursor: pointer; font: inherit; }
+
+.switch { width: 46px; height: 26px; border-radius: 99px; border: 0; background: var(--line); position: relative; cursor: pointer; transition: .2s; }
+.switch i { position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; border-radius: 50%; background: #fff; transition: .2s; }
+.switch.on { background: var(--green); }
+.switch.on i { left: 23px; }
+
+.tabs { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+.tabs button { padding: 9px 16px; border-radius: 99px; border: 1.5px solid var(--line); background: var(--paper); cursor: pointer; font: 600 13px var(--font-sans); color: var(--ink); }
+.tabs button.active { background: var(--wine); color: #fff; border-color: var(--wine); }
+.admin-table { width: 100%; border-collapse: collapse; background: var(--paper); border-radius: 14px; overflow: hidden; box-shadow: var(--shadow-card); margin-bottom: 16px; }
+.admin-table th, .admin-table td { padding: 12px 14px; text-align: left; border-bottom: 1px solid var(--line); font-size: 13px; }
+.admin-table th { background: var(--sand); color: var(--wine); }
+.admin-table select { padding: 7px 10px; border-radius: 10px; border: 1.5px solid var(--line); background: var(--cream); font: 500 13px var(--font-sans); }
+.admin-add { display: grid; gap: 10px; max-width: 520px; }
+.admin-add input { padding: 11px 14px; border-radius: 12px; border: 1.5px solid var(--line); background: var(--cream); font: 400 14px var(--font-sans); }
