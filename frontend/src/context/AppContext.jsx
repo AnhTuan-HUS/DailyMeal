@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useCallback } from 'react'
-import { initialIngredients } from '../data/dishes'
+import { initialIngredients } from '@/data/dishes'
 
 const AppContext = createContext(null)
 

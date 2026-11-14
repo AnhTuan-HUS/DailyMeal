@@ -1,6 +1,6 @@
-import { dishes } from '../data/dishes'
-import { useApp } from '../context/AppContext'
-import RecipeCard from '../components/RecipeCard'
+import { dishes } from '@/data/dishes'
+import { useApp } from '@/context/AppContext'
+import RecipeCard from '@/components/recipe/RecipeCard'
 
 export default function SavedPage({ onShowRecipe }) {
   const { saved } = useApp()

@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react'
-import { dishes } from '../data/dishes'
-import { useApp } from '../context/AppContext'
-import { useToast } from '../context/ToastContext'
+import { dishes } from '@/data/dishes'
+import { useApp } from '@/context/AppContext'
+import { useToast } from '@/context/ToastContext'
 
 /* ── Cấu hình các bữa ăn trong ngày ── */
 const MEAL_TYPES = [
