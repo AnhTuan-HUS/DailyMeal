@@ -3048,6 +3048,107 @@ li { padding: 3px 0; }
 .saved-actions .primary { flex: 1; padding: 9px 12px; font-size: 12px; }
 .saved-actions .mini-btn { padding: 10px 12px; }
 
+/* Dải nguyên liệu tiêu biểu trong thẻ món đã lưu */
+.saved-ings {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 9px;
+  margin-bottom: 2px;
+}
+.saved-ing-tag {
+  background: var(--sand);
+  color: var(--muted);
+  font-size: 11px;
+  padding: 3px 8px;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+.saved-ing-more {
+  background: #f0e6dc;
+  color: var(--wine);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 6px;
+  border-radius: 6px;
+  align-self: center;
+}
+
+/* Gợi ý món khi bộ sưu tập trống */
+.saved-suggestions {
+  margin-top: 28px;
+  width: 100%;
+  max-width: 640px;
+  text-align: left;
+}
+.saved-suggestions-title {
+  font-family: var(--font-serif);
+  font-size: 16px;
+  color: var(--wine);
+  margin-bottom: 12px;
+}
+.saved-suggestions-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+.saved-suggestion-card {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding: 8px;
+  gap: 8px;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.saved-suggestion-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(72, 46, 42, 0.08);
+}
+.saved-suggestion-card img {
+  width: 100%;
+  height: 90px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+.saved-suggestion-info h6 {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink);
+  margin: 0 0 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.saved-suggestion-info span {
+  font-size: 11px;
+  color: var(--muted);
+}
+.btn-quick-save {
+  margin-top: auto;
+  border: 1px solid var(--line);
+  background: #fffaf3;
+  color: var(--wine);
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.btn-quick-save:hover {
+  background: var(--wine);
+  color: #fff;
+  border-color: var(--wine);
+}
+@media (max-width: 600px) {
+  .saved-suggestions-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* ============================================================
    Responsive — Gia đình & Món đã lưu
    ============================================================ */
