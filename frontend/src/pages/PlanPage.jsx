@@ -79,7 +79,7 @@ function getDayStats(dayMeals) {
 export default function PlanPage({ onShowRecipe, onNavigate }) {
   const toast = useToast()
   const { addIngredient } = useApp()
-  const dates = useMemo(getCurrentWeekDates, [])
+  const dates = useMemo(() => getCurrentWeekDates(), [])
 
   const [plan, setPlan] = useState(() => generateWeekPlan())
   const [activeDay, setActiveDay] = useState(() => {

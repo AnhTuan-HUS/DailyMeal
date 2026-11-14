@@ -64,5 +64,3 @@ export default function Topbar({ activePage, onNavigate }) {
     </header>
   )
 }
-
-export { PAGE_TITLES }
