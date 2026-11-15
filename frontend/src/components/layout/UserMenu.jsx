@@ -3,10 +3,12 @@ import { useAuth } from '@/context/AuthContext'
 import { useToast } from '@/context/ToastContext'
 import { getInitials } from '@/utils/user'
 
-const ITEMS = [
+const BASE_ITEMS = [
   { ico: '👤', label: 'Hồ sơ cá nhân', page: 'profile' },
-  { ico: '⚙', label: 'Cài đặt', page: 'settings' },
-  { ico: 'ⓘ', label: 'Hướng dẫn', page: 'guide' },
+  { ico: '⚙', label: 'Cài đặt tài khoản', page: 'settings' },
+  { ico: 'ⓘ', label: 'Hướng dẫn sử dụng', page: 'guide' },
+  { ico: '◉', label: 'Điều khoản & Quyền riêng tư', page: 'account' },
+  { ico: '✉', label: 'Hỗ trợ & Liên hệ', action: 'contact' },
 ]
 const ADMIN_PERMS = ['user:manage', 'role:manage', 'permission:manage']
 
@@ -17,8 +19,8 @@ export default function UserMenu({ onNavigate }) {
   const ref = useRef(null)
 
   const items = ADMIN_PERMS.some(hasPermission)
-    ? [...ITEMS, { ico: '🛡', label: 'Quản trị hệ thống', page: 'admin' }]
-    : ITEMS
+    ? [...BASE_ITEMS.slice(0, 3), { ico: '🛡', label: 'Quản trị hệ thống', page: 'admin' }, ...BASE_ITEMS.slice(3)]
+    : BASE_ITEMS
 
   // Dong menu khi bam ra ngoai hoac nhan Esc
   useEffect(() => {
@@ -40,27 +42,57 @@ export default function UserMenu({ onNavigate }) {
     toast('Bạn đã đăng xuất')
   }
 
+  function handleItemClick(item) {
+    setOpen(false)
+    if (item.action === 'contact') {
+      toast('Hotline hỗ trợ: 1900 8888 • Email: hotro@dailymeal.vn')
+      return
+    }
+    if (item.page) {
+      onNavigate(item.page)
+    }
+  }
+
   return (
     <div className="user-menu" ref={ref}>
-      <button id="btn-account" className="icon-btn" aria-label="Tài khoản" aria-expanded={open} onClick={() => setOpen(o => !o)}>
-        👤
+      <button
+        id="btn-account"
+        className="icon-btn user-btn-avatar"
+        aria-label="Tài khoản"
+        aria-expanded={open}
+        onClick={() => setOpen(o => !o)}
+        title={user?.fullName || 'Tài khoản'}
+      >
+        <span className="btn-user-initials">{getInitials(user.fullName)}</span>
       </button>
+
       {open && (
         <div className="user-dropdown" role="menu">
-          <div className="ud-head">
+          <div className="ud-head" onClick={() => { setOpen(false); onNavigate('profile') }} style={{ cursor: 'pointer' }} title="Mở hồ sơ cá nhân">
             <div className="avatar">{getInitials(user.fullName)}</div>
             <div>
               <div className="ud-name">{user.fullName}</div>
               <div className="ud-email">{user.email}</div>
             </div>
           </div>
-          {items.map(it => (
-            <button key={it.page} role="menuitem" className="ud-item" onClick={() => { setOpen(false); onNavigate(it.page) }}>
-              <span>{it.ico}</span>{it.label}
-            </button>
-          ))}
+
+          <div className="ud-list">
+            {items.map((it, idx) => (
+              <button
+                key={it.page || it.action || idx}
+                role="menuitem"
+                className="ud-item"
+                onClick={() => handleItemClick(it)}
+              >
+                <span className="ud-ico">{it.ico}</span>
+                <span className="ud-text">{it.label}</span>
+              </button>
+            ))}
+          </div>
+
           <button id="btn-logout" role="menuitem" className="ud-item ud-logout" onClick={handleLogout}>
-            <span>⊘</span>Đăng xuất
+            <span className="ud-ico">⊘</span>
+            <span className="ud-text">Đăng xuất</span>
           </button>
         </div>
       )}

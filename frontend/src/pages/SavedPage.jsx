@@ -129,7 +129,11 @@ export default function SavedPage({ onShowRecipe, onNavigate }) {
       {/* ── Thống kê tổng quan bộ sưu tập ── */}
       <div className="fam-stats saved-stats">
         <div className="fam-stat">
-          <div className="fam-stat-ico">♥</div>
+          <div className="fam-stat-ico" aria-hidden="true">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+            </svg>
+          </div>
           <div>
             <strong>{stats.total} món</strong>
             <small>Đã lưu vào bộ sưu tập</small>
@@ -137,7 +141,12 @@ export default function SavedPage({ onShowRecipe, onNavigate }) {
         </div>
 
         <div className="fam-stat">
-          <div className="fam-stat-ico ok">◷</div>
+          <div className="fam-stat-ico ok" aria-hidden="true">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <polyline points="12 6 12 12 16 14"/>
+            </svg>
+          </div>
           <div>
             <strong>~{stats.avgTime} phút</strong>
             <small>Nhanh nhất: {stats.minTime > 0 ? `${stats.minTime}p` : '0p'}</small>
@@ -145,7 +154,11 @@ export default function SavedPage({ onShowRecipe, onNavigate }) {
         </div>
 
         <div className="fam-stat">
-          <div className="fam-stat-ico warn">⚡</div>
+          <div className="fam-stat-ico warn" aria-hidden="true">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/>
+            </svg>
+          </div>
           <div>
             <strong>~{stats.avgCal} kcal</strong>
             <small>Trung bình mỗi khẩu phần</small>
@@ -266,7 +279,7 @@ export default function SavedPage({ onShowRecipe, onNavigate }) {
                   {/* Cảnh báo khẩu vị gia đình nếu có */}
                   {warnings.length > 0 && (
                     <div className="saved-warn" title="Khẩu vị gia đình">
-                      ⚠ {warnings.join(' • ')}
+                      Lưu ý: {warnings.join(' • ')}
                     </div>
                   )}
 
@@ -295,7 +308,7 @@ export default function SavedPage({ onShowRecipe, onNavigate }) {
                       className="primary"
                       onClick={() => onShowRecipe && onShowRecipe(dish.id)}
                     >
-                      🍳 Vào bếp nấu
+                      Vào bếp nấu →
                     </button>
                     <button
                       type="button"
@@ -314,7 +327,12 @@ export default function SavedPage({ onShowRecipe, onNavigate }) {
       ) : allSavedDishes.length > 0 ? (
         /* Trạng thái tìm kiếm không có kết quả */
         <div className="saved-empty">
-          <div className="saved-empty-ico">🔍</div>
+          <div className="saved-empty-ico" aria-hidden="true">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="11" cy="11" r="8"/>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+          </div>
           <h4>Không tìm thấy món ăn phù hợp</h4>
           <p>Không có món nào trong bộ sưu tập khớp với từ khóa "{searchQuery}" hoặc bộ lọc được chọn.</p>
           <div style={{ display: 'flex', gap: 10, marginTop: 8 }}>
@@ -330,7 +348,11 @@ export default function SavedPage({ onShowRecipe, onNavigate }) {
       ) : (
         /* Trạng thái chưa lưu món nào (Empty collection) */
         <div className="saved-empty">
-          <div className="saved-empty-ico">♡</div>
+          <div className="saved-empty-ico" aria-hidden="true">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+            </svg>
+          </div>
           <h4>Bộ sưu tập món ăn đang trống</h4>
           <p>
             Lưu lại những công thức yêu thích bằng cách bấm vào biểu tượng trái tim để dễ dàng
