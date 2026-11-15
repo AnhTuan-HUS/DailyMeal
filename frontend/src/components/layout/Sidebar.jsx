@@ -12,21 +12,13 @@ const NAV_ITEMS = [
   { page: 'saved',    ico: '♡', label: 'Món đã lưu' },
 ]
 
-const NAV_SECONDARY = [
-  { page: 'settings', ico: '⚙', label: 'Cài đặt' },
-  { page: 'guide',    ico: 'ⓘ', label: 'Hướng dẫn sử dụng' },
-  { page: 'account',  ico: '◉', label: 'Điều khoản sử dụng' },
-  { page: 'account',  ico: '♧', label: 'Quyền riêng tư' },
-  { page: 'account',  ico: '✉', label: 'Liên hệ' },
-]
-
 export default function Sidebar({ activePage, onNavigate }) {
-  const { user, isAuthenticated } = useAuth()
+  const { user, isAuthenticated, openAuth } = useAuth()
 
   return (
     <aside className="sidebar">
       {/* Brand */}
-      <div className="brand">
+      <div className="brand" role="button" tabIndex={0} onClick={() => onNavigate('home')} style={{ cursor: 'pointer' }}>
         <div className="brand-mark">♨</div>
         <div>
           <div className="brand-name">DailyMeal</div>
@@ -34,8 +26,8 @@ export default function Sidebar({ activePage, onNavigate }) {
         </div>
       </div>
 
-      {/* Primary nav */}
-      <div>
+      {/* Điều hướng chính */}
+      <div className="nav-group">
         <div className="nav-label">Không gian của bạn</div>
         <nav className="nav" aria-label="Điều hướng chính">
           {NAV_ITEMS.map(item => (
@@ -45,33 +37,42 @@ export default function Sidebar({ activePage, onNavigate }) {
               onClick={() => onNavigate(item.page)}
             >
               <span className="ico">{item.ico}</span>
-              {item.label}
+              <span className="nav-text">{item.label}</span>
             </button>
           ))}
         </nav>
       </div>
 
-      {/* Secondary nav */}
-      <div>
-        <div className="nav-label">Khác</div>
-        <nav className="nav" aria-label="Điều hướng phụ">
-          {NAV_SECONDARY.map((item, i) => (
-            <button key={i} className={activePage === item.page && i < 2 ? 'active' : ''} onClick={() => onNavigate(item.page)}>
-              <span className="ico">{item.ico}</span>
-              {item.label}
-            </button>
-          ))}
-        </nav>
-      </div>
-
-      {/* User profile - chi hien khi da dang nhap */}
-      {isAuthenticated && (
-        <div className="sidebar-bottom">
+      {/* Thông tin User ở chân Sidebar - bấm vào để chuyển tới Hồ sơ & Cài đặt */}
+      {isAuthenticated ? (
+        <div
+          className="sidebar-bottom"
+          role="button"
+          tabIndex={0}
+          onClick={() => onNavigate('profile')}
+          title="Bấm để mở hồ sơ cá nhân và cài đặt"
+        >
           <div className="avatar">{getInitials(user.fullName)}</div>
-          <div>
+          <div className="user-info">
             <div className="user-name">{user.fullName}</div>
-            <div className="user-role">{ROLE_LABELS[user.role]}</div>
+            <div className="user-role">{ROLE_LABELS[user.role] || 'Thành viên'}</div>
           </div>
+          <span className="sidebar-user-arrow" aria-hidden="true">›</span>
+        </div>
+      ) : (
+        <div
+          className="sidebar-bottom sidebar-guest"
+          role="button"
+          tabIndex={0}
+          onClick={() => openAuth('login')}
+          title="Bấm để đăng nhập hoặc đăng ký"
+        >
+          <div className="avatar">DM</div>
+          <div className="user-info">
+            <div className="user-name">Đăng nhập</div>
+            <div className="user-role">Đồng bộ dữ liệu của bạn</div>
+          </div>
+          <span className="sidebar-user-arrow" aria-hidden="true">›</span>
         </div>
       )}
     </aside>

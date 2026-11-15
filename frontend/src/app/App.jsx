@@ -66,8 +66,8 @@ function Shell() {
           {current === 'shopping' && <ShoppingPage />}
           {current === 'cook' && <CookPage activeRecipeId={activeRecipeId} onShowRecipe={showRecipe} />}
           {current === 'family' && <FamilyPage />}
-          {current === 'saved' && <SavedPage onShowRecipe={showRecipe} />}
-          {current === 'account' && <AccountPage />}
+          {current === 'saved' && <SavedPage onShowRecipe={showRecipe} onNavigate={navigate} />}
+          {current === 'account' && <AccountPage onNavigate={navigate} />}
           {current === 'profile' && <ProfilePage />}
           {current === 'settings' && <SettingsPage />}
           {current === 'guide' && <GuidePage />}
