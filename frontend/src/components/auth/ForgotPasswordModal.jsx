@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
-import { authApi } from '@/services/authApi'
+import { Eye, EyeOff } from 'lucide-react'
+import { authApi, PASSWORD_HINT, validateStrongPassword } from '@/services/authApi'
 import { useToast } from '@/context/ToastContext'
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -11,6 +12,8 @@ export default function ForgotPasswordModal({ open = true, defaultEmail = '', on
   const [otpDigits, setOtpDigits] = useState(['', '', '', '', '', ''])
   const [demoOtp, setDemoOtp] = useState('')
   const [passwords, setPasswords] = useState({ newPassword: '', confirmPassword: '' })
+  const [showNewPw, setShowNewPw] = useState(false)
+  const [pwFieldErr, setPwFieldErr] = useState({ newPassword: '', confirmPassword: '' })
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
 
@@ -125,17 +128,26 @@ export default function ForgotPasswordModal({ open = true, defaultEmail = '', on
   // Bước 3: Đặt lại mật khẩu mới
   async function handleResetPassword(e) {
     e.preventDefault()
-    if (!passwords.newPassword || passwords.newPassword.length < 6) {
-      return setError('Mật khẩu mới phải có ít nhất 6 ký tự')
-    }
-    if (passwords.newPassword !== passwords.confirmPassword) {
-      return setError('Mật khẩu xác nhận không khớp')
+    const cleanedNew = passwords.newPassword.trim()
+    const cleanedConfirm = passwords.confirmPassword.trim()
+
+    const strongErr = validateStrongPassword(cleanedNew)
+    const confirmErr = !cleanedConfirm
+      ? 'Vui lòng xác nhận mật khẩu mới'
+      : cleanedNew !== cleanedConfirm
+        ? 'Mật khẩu xác nhận không khớp'
+        : ''
+
+    if (strongErr || confirmErr) {
+      setPwFieldErr({ newPassword: strongErr, confirmPassword: confirmErr })
+      return
     }
 
+    setPwFieldErr({ newPassword: '', confirmPassword: '' })
     setError('')
     setLoading(true)
     try {
-      await authApi.resetPasswordWithOtp(email, otpValue, passwords.newPassword)
+      await authApi.resetPasswordWithOtp(email, otpValue, cleanedNew)
       toast('Khôi phục mật khẩu thành công!')
       onClose()
     } catch (ex) {
@@ -194,6 +206,7 @@ export default function ForgotPasswordModal({ open = true, defaultEmail = '', on
               <input
                 id="fp-email"
                 type="email"
+                className={error ? 'is-invalid' : ''}
                 value={email}
                 onChange={e => {
                   setEmail(e.target.value)
@@ -242,7 +255,7 @@ export default function ForgotPasswordModal({ open = true, defaultEmail = '', on
                     type="text"
                     inputMode="numeric"
                     maxLength={1}
-                    className="fp-otp-box"
+                    className={`fp-otp-box ${error ? 'is-invalid' : ''}`}
                     value={digit}
                     onChange={e => handleOtpChange(idx, e.target.value)}
                     onKeyDown={e => handleOtpKeyDown(idx, e)}
@@ -292,18 +305,53 @@ export default function ForgotPasswordModal({ open = true, defaultEmail = '', on
           <form onSubmit={handleResetPassword} className="fp-form" noValidate>
             <div className="pf-field">
               <label htmlFor="fp-new-password">Mật khẩu mới</label>
-              <input
-                id="fp-new-password"
-                type="password"
-                placeholder="Tối thiểu 6 ký tự"
-                value={passwords.newPassword}
-                onChange={e => {
-                  setPasswords(p => ({ ...p, newPassword: e.target.value }))
-                  setError('')
-                }}
-                autoFocus
-                required
-              />
+              <div className="pf-pw-input-wrap">
+                <input
+                  id="fp-new-password"
+                  type={showNewPw ? 'text' : 'password'}
+                  className={pwFieldErr.newPassword ? 'is-invalid' : ''}
+                  placeholder="Từ 8-32 ký tự (vd: DailyMeal@2026)"
+                  minLength={8}
+                  maxLength={32}
+                  value={passwords.newPassword}
+                  onChange={e => {
+                    const val = e.target.value
+                    setPasswords(p => ({ ...p, newPassword: val }))
+                    setError('')
+                    if (pwFieldErr.newPassword) {
+                      setPwFieldErr(err => ({
+                        ...err,
+                        newPassword: val.trim() ? validateStrongPassword(val) : '',
+                      }))
+                    }
+                  }}
+                  onBlur={() => {
+                    if (passwords.newPassword) {
+                      setPwFieldErr(err => ({
+                        ...err,
+                        newPassword: validateStrongPassword(passwords.newPassword),
+                      }))
+                    }
+                  }}
+                  autoFocus
+                  required
+                />
+                <button
+                  type="button"
+                  className="pf-pw-toggle"
+                  onClick={() => setShowNewPw(v => !v)}
+                  aria-label={showNewPw ? 'Ẩn mật khẩu mới' : 'Hiện mật khẩu mới'}
+                  title={showNewPw ? 'Ẩn mật khẩu' : 'Xem mật khẩu'}
+                >
+                  {showNewPw ? <EyeOff size={18} strokeWidth={2} /> : <Eye size={18} strokeWidth={2} />}
+                </button>
+              </div>
+              <span className="pf-hint">{PASSWORD_HINT}</span>
+              {pwFieldErr.newPassword && (
+                <span className="pf-field-error" role="alert">
+                  {pwFieldErr.newPassword}
+                </span>
+              )}
             </div>
 
             <div className="pf-field">
@@ -311,14 +359,34 @@ export default function ForgotPasswordModal({ open = true, defaultEmail = '', on
               <input
                 id="fp-confirm-password"
                 type="password"
+                className={pwFieldErr.confirmPassword ? 'is-invalid' : ''}
                 placeholder="Nhập lại mật khẩu mới"
+                minLength={8}
+                maxLength={32}
                 value={passwords.confirmPassword}
                 onChange={e => {
                   setPasswords(p => ({ ...p, confirmPassword: e.target.value }))
                   setError('')
+                  if (pwFieldErr.confirmPassword) {
+                    setPwFieldErr(err => ({ ...err, confirmPassword: '' }))
+                  }
+                }}
+                onBlur={() => {
+                  if (passwords.confirmPassword) {
+                    const match = passwords.newPassword.trim() === passwords.confirmPassword.trim()
+                    setPwFieldErr(err => ({
+                      ...err,
+                      confirmPassword: match ? '' : 'Mật khẩu xác nhận không khớp',
+                    }))
+                  }
                 }}
                 required
               />
+              {pwFieldErr.confirmPassword && (
+                <span className="pf-field-error" role="alert">
+                  {pwFieldErr.confirmPassword}
+                </span>
+              )}
             </div>
 
             {error && (
