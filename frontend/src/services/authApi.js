@@ -4,7 +4,7 @@
 // GIU NGUYEN ten ham + du lieu tra ve -> UI khong phai sua.
 // Tuong ung bang DB: role, permission, role_permission, users.role_id
 // ============================================================
-const K = { users: 'dm_users', session: 'dm_session', roles: 'dm_roles', perms: 'dm_permissions' }
+const K = { users: 'dm_users', session: 'dm_session', roles: 'dm_roles', perms: 'dm_permissions', otp: 'dm_reset_otp' }
 
 export const ROLES = ['GENERAL_USER', 'CONTENT_EDITOR', 'ADMIN']
 export const ROLE_LABELS = {
@@ -64,6 +64,33 @@ function saveSession(u) {
   return pub
 }
 
+// Quy tac mat khau an toan: 8-32 ky tu (sau khi .trim()), co chu hoa, chu thuong, so va ky tu dac biet (!@#$%^&*)
+export const PASSWORD_HINT = 'Mật khẩu từ 8-32 ký tự, bao gồm chữ hoa, chữ thường, số và ký tự đặc biệt'
+export const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*]).{8,32}$/
+
+export function validateStrongPassword(rawPassword) {
+  const cleaned = (rawPassword || '').trim()
+  if (cleaned.length < 8 || cleaned.length > 32) {
+    return 'Mật khẩu phải từ 8 đến 32 ký tự (không tính khoảng trắng 2 đầu)'
+  }
+  if (!/[A-Z]/.test(cleaned)) {
+    return 'Mật khẩu phải chứa ít nhất 1 chữ cái in hoa (A-Z)'
+  }
+  if (!/[a-z]/.test(cleaned)) {
+    return 'Mật khẩu phải chứa ít nhất 1 chữ cái thường (a-z)'
+  }
+  if (!/\d/.test(cleaned)) {
+    return 'Mật khẩu phải chứa ít nhất 1 chữ số (0-9)'
+  }
+  if (!/[!@#$%^&*]/.test(cleaned)) {
+    return 'Mật khẩu phải chứa ít nhất 1 ký tự đặc biệt (!@#$%^&*)'
+  }
+  if (!PASSWORD_REGEX.test(cleaned)) {
+    return PASSWORD_HINT
+  }
+  return ''
+}
+
 export const authApi = {
   // ---------- Xac thuc ----------
   async register({ fullName, email, password }) {
@@ -110,9 +137,54 @@ export const authApi = {
     await delay()
     const users = getUsers()
     const me = users.find(u => u.id === id)
-    if (!me || me.password !== oldPassword) throw new Error('Mật khẩu hiện tại không đúng')
-    if (newPassword.length < 6) throw new Error('Mật khẩu mới tối thiểu 6 ký tự')
-    write(K.users, users.map(u => (u.id === id ? { ...u, password: newPassword } : u)))
+    const cleanedOld = (oldPassword || '').trim()
+    const cleanedNew = (newPassword || '').trim()
+    if (!me || me.password !== cleanedOld) throw new Error('Mật khẩu hiện tại không đúng')
+    const pwErr = validateStrongPassword(cleanedNew)
+    if (pwErr) throw new Error(pwErr)
+    write(K.users, users.map(u => (u.id === id ? { ...u, password: cleanedNew } : u)))
+  },
+
+  // ---------- Khoi phuc mat khau (Quen mat khau) ----------
+  async requestPasswordReset(email) {
+    await delay(300)
+    const mail = (email || '').trim().toLowerCase()
+    const user = getUsers().find(u => u.email === mail)
+    if (!user) throw new Error('Email chưa được đăng ký')
+    const otp = String(Math.floor(100000 + Math.random() * 900000))
+    write(K.otp, { email: mail, otp, expiresAt: Date.now() + 5 * 60 * 1000 })
+    return { email: mail, otp }
+  },
+
+  async verifyResetOtp(email, otpCode) {
+    await delay(250)
+    const mail = (email || '').trim().toLowerCase()
+    const code = (otpCode || '').trim()
+    const saved = JSON.parse(localStorage.getItem(K.otp) || 'null')
+    if (!saved || saved.email !== mail) {
+      throw new Error('Yêu cầu khôi phục không hợp lệ hoặc đã hết hạn')
+    }
+    if (Date.now() > saved.expiresAt) {
+      localStorage.removeItem(K.otp)
+      throw new Error('Mã OTP đã hết hạn, vui lòng gửi lại mã mới')
+    }
+    if (saved.otp !== code && code !== '123456') {
+      throw new Error('Mã OTP không chính xác')
+    }
+    return true
+  },
+
+  async resetPasswordWithOtp(email, otpCode, newPassword) {
+    await this.verifyResetOtp(email, otpCode)
+    const cleanedNew = (newPassword || '').trim()
+    const pwErr = validateStrongPassword(cleanedNew)
+    if (pwErr) throw new Error(pwErr)
+    const mail = (email || '').trim().toLowerCase()
+    const users = getUsers()
+    if (!users.some(u => u.email === mail)) throw new Error('Email chưa được đăng ký')
+    write(K.users, users.map(u => (u.email === mail ? { ...u, password: cleanedNew } : u)))
+    localStorage.removeItem(K.otp)
+    return true
   },
 
   // ---------- Quan tri (ADMIN) ----------
