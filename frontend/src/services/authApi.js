@@ -56,7 +56,14 @@ const getRoles = () => read(K.roles, SEED_ROLES)
 const getPerms = () => read(K.perms, SEED_PERMISSIONS)
 
 function toPublic(u) {
-  return { id: u.id, fullName: u.fullName, email: u.email, role: u.role, permissions: getRoles()[u.role] || [] }
+  return {
+    id: u.id,
+    fullName: u.fullName,
+    email: u.email,
+    avatarUrl: u.avatarUrl || '',
+    role: u.role,
+    permissions: getRoles()[u.role] || [],
+  }
 }
 function saveSession(u) {
   const pub = toPublic(u)
@@ -125,12 +132,19 @@ export const authApi = {
   },
 
   // ---------- Ho so ----------
-  async updateProfile(id, { fullName }) {
+  async updateProfile(id, { fullName, avatarUrl }) {
     await delay()
-    if (fullName.trim().length < 2) throw new Error('Họ tên tối thiểu 2 ký tự')
-    const users = getUsers().map(u => (u.id === id ? { ...u, fullName: fullName.trim() } : u))
-    write(K.users, users)
-    return toPublic(users.find(u => u.id === id))
+    const users = getUsers()
+    const me = users.find(u => u.id === id)
+    if (!me) throw new Error('Không tìm thấy tài khoản')
+
+    const nextName = fullName !== undefined ? fullName.trim() : me.fullName
+    if (nextName.length < 2) throw new Error('Họ tên tối thiểu 2 ký tự')
+    const nextAvatar = avatarUrl !== undefined ? avatarUrl : (me.avatarUrl || '')
+
+    const updated = users.map(u => (u.id === id ? { ...u, fullName: nextName, avatarUrl: nextAvatar } : u))
+    write(K.users, updated)
+    return toPublic(updated.find(u => u.id === id))
   },
 
   async changePassword(id, { oldPassword, newPassword }) {

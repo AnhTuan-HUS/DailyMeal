@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { Settings } from 'lucide-react'
 import { useAuth } from '@/context/AuthContext'
 import { useToast } from '@/context/ToastContext'
 import { getInitials } from '@/utils/user'
@@ -57,19 +58,21 @@ export default function UserMenu({ onNavigate }) {
     <div className="user-menu" ref={ref}>
       <button
         id="btn-account"
-        className="icon-btn user-btn-avatar"
-        aria-label="Tài khoản"
+        className="icon-btn"
+        aria-label="Cài đặt & Tài khoản"
         aria-expanded={open}
         onClick={() => setOpen(o => !o)}
-        title={user?.fullName || 'Tài khoản'}
+        title="Cài đặt & Tài khoản"
       >
-        <span className="btn-user-initials">{getInitials(user.fullName)}</span>
+        <Settings size={18} strokeWidth={2} />
       </button>
 
       {open && (
         <div className="user-dropdown" role="menu">
           <div className="ud-head" onClick={() => { setOpen(false); onNavigate('profile') }} style={{ cursor: 'pointer' }} title="Mở hồ sơ cá nhân">
-            <div className="avatar">{getInitials(user.fullName)}</div>
+            <div className="avatar">
+              {user.avatarUrl ? <img src={user.avatarUrl} alt={user.fullName} className="avatar-img" /> : getInitials(user.fullName)}
+            </div>
             <div>
               <div className="ud-name">{user.fullName}</div>
               <div className="ud-email">{user.email}</div>

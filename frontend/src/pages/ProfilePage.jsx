@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { Eye, EyeOff } from 'lucide-react'
+import { useRef, useState } from 'react'
+import { Camera, Check, Eye, EyeOff, Lock, User } from 'lucide-react'
 import { useAuth } from '@/context/AuthContext'
 import { useToast } from '@/context/ToastContext'
 import { authApi, PASSWORD_HINT, validateStrongPassword } from '@/services/authApi'
@@ -9,14 +9,56 @@ import ForgotPasswordModal from '@/components/auth/ForgotPasswordModal'
 export default function ProfilePage() {
   const { user, refreshUser } = useAuth()
   const toast = useToast()
+  const fileInputRef = useRef(null)
 
   const [name, setName] = useState(user.fullName)
   const [pw, setPw] = useState({ oldPassword: '', newPassword: '', confirm: '' })
-  const [showNewPw, setShowNewPw] = useState(false)
+  const [showPw, setShowPw] = useState({ old: false, new: false, confirm: false })
   const [loadingProfile, setLoadingProfile] = useState(false)
+  const [loadingAvatar, setLoadingAvatar] = useState(false)
   const [loadingPw, setLoadingPw] = useState(false)
   const [err, setErr] = useState({ profile: '', oldPassword: '', newPassword: '', confirm: '', pwForm: '' })
   const [showForgotModal, setShowForgotModal] = useState(false)
+
+  function triggerAvatarUpload() {
+    if (!loadingAvatar) fileInputRef.current?.click()
+  }
+
+  function handleAvatarFileChange(e) {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    if (!file.type.startsWith('image/')) {
+      toast('Vui lòng chọn tệp hình ảnh hợp lệ (JPG, PNG, WEBP)')
+      e.target.value = ''
+      return
+    }
+    if (file.size > 3 * 1024 * 1024) {
+      toast('Kích thước ảnh tối đa là 3MB')
+      e.target.value = ''
+      return
+    }
+
+    setLoadingAvatar(true)
+    const reader = new FileReader()
+    reader.onload = async () => {
+      try {
+        await authApi.updateProfile(user.id, { avatarUrl: String(reader.result || '') })
+        refreshUser()
+        toast('Đã cập nhật ảnh đại diện thành công!')
+      } catch (ex) {
+        toast(ex.message || 'Không thể tải ảnh đại diện lên')
+      } finally {
+        setLoadingAvatar(false)
+        e.target.value = ''
+      }
+    }
+    reader.onerror = () => {
+      setLoadingAvatar(false)
+      toast('Không thể đọc tệp ảnh, vui lòng thử lại')
+    }
+    reader.readAsDataURL(file)
+  }
 
   async function saveProfile(e) {
     e.preventDefault()
@@ -114,28 +156,70 @@ export default function ProfilePage() {
 
   return (
     <section id="page-profile" className="pf-page">
-      {/* ── Thẻ đại diện người dùng (Hero Profile Card) ── */}
+      {/* ── Thẻ đại diện người dùng (Hero Profile Card - Hình 3) ── */}
       <div className="pf-hero">
         <div className="pf-hero-main">
-          <div className="avatar pf-avatar-large">
-            {getInitials(user.fullName)}
+          <div className="pf-avatar-wrap">
+            <div className="avatar pf-avatar-large" onClick={triggerAvatarUpload} title="Bấm để đổi ảnh đại diện">
+              {user.avatarUrl ? (
+                <img src={user.avatarUrl} alt={user.fullName} className="avatar-img" />
+              ) : (
+                getInitials(user.fullName)
+              )}
+            </div>
+            <button
+              type="button"
+              className="pf-avatar-cam-btn"
+              onClick={triggerAvatarUpload}
+              aria-label="Đổi ảnh đại diện"
+              title="Đổi ảnh đại diện"
+            >
+              <Camera size={14} strokeWidth={2.2} />
+            </button>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              className="pf-avatar-file-input"
+              onChange={handleAvatarFileChange}
+            />
           </div>
+
           <div className="pf-hero-info">
             <h3>{user.fullName}</h3>
-            <div className="pf-hero-email">{user.email}</div>
+            <div className="pf-hero-email-row">
+              <span className="pf-hero-email">{user.email}</span>
+              <span className="badge-verified">
+                <Check size={13} strokeWidth={2.6} />
+                Đã xác thực
+              </span>
+            </div>
           </div>
+        </div>
+
+        <div className="pf-hero-actions">
+          <button
+            type="button"
+            id="btn-upload-avatar"
+            className="pf-upload-btn"
+            onClick={triggerAvatarUpload}
+            disabled={loadingAvatar}
+          >
+            {loadingAvatar ? 'Đang tải...' : 'Tải ảnh lên'}
+          </button>
         </div>
       </div>
 
       {/* ── Lưới 2 cột biểu mẫu cập nhật thông tin & mật khẩu cân đối ── */}
       <div className="pf-grid">
-        {/* Cột 1: Thông tin cơ bản */}
+        {/* Cột 1: Thông tin cơ bản (Hình 1 - không có nút Đổi email) */}
         <form className="pf-card-form" onSubmit={saveProfile} noValidate>
           <div className="pf-header">
-            <div className="pf-header-icon" aria-hidden="true">👤</div>
+            <div className="pf-header-icon" aria-hidden="true">
+              <User size={20} strokeWidth={2} />
+            </div>
             <div>
               <h4>Thông tin cơ bản</h4>
-              <p>Cập nhật họ tên hiển thị và thông tin tài khoản của bạn</p>
             </div>
           </div>
 
@@ -158,28 +242,25 @@ export default function ProfilePage() {
               {err.profile ? (
                 <span className="pf-field-error" role="alert">{err.profile}</span>
               ) : (
-                <span className="pf-hint">Tên này sẽ hiển thị trên thanh điều hướng và không gian gia đình.</span>
+                <span className="pf-hint">Hiển thị trên thanh điều hướng và trong không gian gia đình.</span>
               )}
             </div>
 
             <div className="pf-field">
-              <label htmlFor="pf-email">Địa chỉ Email đăng nhập</label>
-              <input
-                id="pf-email"
-                type="email"
-                value={user.email}
-                disabled
-                title="Email dùng để đăng nhập và không thể thay đổi"
-              />
-              <span className="pf-hint">Email cố định dùng để xác thực tài khoản và nhận mã OTP bảo mật.</span>
-            </div>
-
-            <div className="pf-info-callout">
-              <span className="pf-callout-ico" aria-hidden="true">🛡</span>
-              <div>
-                <strong>Bảo mật tài khoản DailyMeal</strong>
-                <p>Thông tin cá nhân và thực đơn dinh dưỡng của gia đình bạn luôn được đồng bộ và bảo vệ an toàn.</p>
+              <label htmlFor="pf-email">Email đăng nhập</label>
+              <div className="pf-pw-input-wrap">
+                <input
+                  id="pf-email"
+                  type="email"
+                  value={user.email}
+                  disabled
+                  title="Email dùng để đăng nhập và nhận mã OTP"
+                />
+                <span className="pf-input-lock-ico" aria-hidden="true">
+                  <Lock size={17} strokeWidth={1.9} />
+                </span>
               </div>
+              <span className="pf-hint">Dùng để đăng nhập và nhận mã OTP.</span>
             </div>
           </div>
 
@@ -190,13 +271,14 @@ export default function ProfilePage() {
           </div>
         </form>
 
-        {/* Cột 2: Đổi mật khẩu & Bảo mật */}
+        {/* Cột 2: Đổi mật khẩu (Hình 2 - có icon mắt cho cả 3 ô mật khẩu) */}
         <form className="pf-card-form" onSubmit={savePassword} noValidate>
           <div className="pf-header">
-            <div className="pf-header-icon" aria-hidden="true">🔒</div>
+            <div className="pf-header-icon" aria-hidden="true">
+              <Lock size={20} strokeWidth={2} />
+            </div>
             <div>
-              <h4>Đổi mật khẩu & Bảo mật</h4>
-              <p>Nên sử dụng mật khẩu mạnh kết hợp chữ, số và ký tự đặc biệt</p>
+              <h4>Đổi mật khẩu</h4>
             </div>
           </div>
 
@@ -205,17 +287,28 @@ export default function ProfilePage() {
               <div className="pf-label-row">
                 <label htmlFor="pf-oldPassword">Mật khẩu hiện tại</label>
               </div>
-              <input
-                id="pf-oldPassword"
-                type="password"
-                className={err.oldPassword ? 'is-invalid' : ''}
-                placeholder="••••••••"
-                value={pw.oldPassword}
-                onChange={e => {
-                  setPw(p => ({ ...p, oldPassword: e.target.value }))
-                  if (err.oldPassword) setErr(x => ({ ...x, oldPassword: '' }))
-                }}
-              />
+              <div className="pf-pw-input-wrap">
+                <input
+                  id="pf-oldPassword"
+                  type={showPw.old ? 'text' : 'password'}
+                  className={err.oldPassword ? 'is-invalid' : ''}
+                  placeholder="Nhập mật khẩu hiện tại"
+                  value={pw.oldPassword}
+                  onChange={e => {
+                    setPw(p => ({ ...p, oldPassword: e.target.value }))
+                    if (err.oldPassword) setErr(x => ({ ...x, oldPassword: '' }))
+                  }}
+                />
+                <button
+                  type="button"
+                  className="pf-pw-toggle"
+                  onClick={() => setShowPw(s => ({ ...s, old: !s.old }))}
+                  aria-label={showPw.old ? 'Ẩn mật khẩu hiện tại' : 'Hiện mật khẩu hiện tại'}
+                  title={showPw.old ? 'Ẩn mật khẩu' : 'Xem mật khẩu'}
+                >
+                  {showPw.old ? <EyeOff size={18} strokeWidth={2} /> : <Eye size={18} strokeWidth={2} />}
+                </button>
+              </div>
               {err.oldPassword && (
                 <span className="pf-field-error" role="alert">{err.oldPassword}</span>
               )}
@@ -236,9 +329,9 @@ export default function ProfilePage() {
               <div className="pf-pw-input-wrap">
                 <input
                   id="pf-newPassword"
-                  type={showNewPw ? 'text' : 'password'}
+                  type={showPw.new ? 'text' : 'password'}
                   className={err.newPassword ? 'is-invalid' : ''}
-                  placeholder="Từ 8-32 ký tự (vd: DailyMeal@2026)"
+                  placeholder="Nhập mật khẩu mới"
                   minLength={8}
                   maxLength={32}
                   value={pw.newPassword}
@@ -249,11 +342,11 @@ export default function ProfilePage() {
                 <button
                   type="button"
                   className="pf-pw-toggle"
-                  onClick={() => setShowNewPw(v => !v)}
-                  aria-label={showNewPw ? 'Ẩn mật khẩu mới' : 'Hiện mật khẩu mới'}
-                  title={showNewPw ? 'Ẩn mật khẩu' : 'Xem mật khẩu'}
+                  onClick={() => setShowPw(s => ({ ...s, new: !s.new }))}
+                  aria-label={showPw.new ? 'Ẩn mật khẩu mới' : 'Hiện mật khẩu mới'}
+                  title={showPw.new ? 'Ẩn mật khẩu' : 'Xem mật khẩu'}
                 >
-                  {showNewPw ? <EyeOff size={18} strokeWidth={2} /> : <Eye size={18} strokeWidth={2} />}
+                  {showPw.new ? <EyeOff size={18} strokeWidth={2} /> : <Eye size={18} strokeWidth={2} />}
                 </button>
               </div>
               <span id="pf-newPassword-hint" className="pf-hint">
@@ -266,20 +359,31 @@ export default function ProfilePage() {
 
             <div className="pf-field">
               <label htmlFor="pf-confirm">Xác nhận mật khẩu mới</label>
-              <input
-                id="pf-confirm"
-                type="password"
-                className={err.confirm ? 'is-invalid' : ''}
-                placeholder="Nhập lại mật khẩu mới"
-                minLength={8}
-                maxLength={32}
-                value={pw.confirm}
-                onChange={e => {
-                  setPw(p => ({ ...p, confirm: e.target.value }))
-                  if (err.confirm) setErr(x => ({ ...x, confirm: '' }))
-                }}
-                onBlur={handleConfirmBlur}
-              />
+              <div className="pf-pw-input-wrap">
+                <input
+                  id="pf-confirm"
+                  type={showPw.confirm ? 'text' : 'password'}
+                  className={err.confirm ? 'is-invalid' : ''}
+                  placeholder="Nhập lại mật khẩu mới"
+                  minLength={8}
+                  maxLength={32}
+                  value={pw.confirm}
+                  onChange={e => {
+                    setPw(p => ({ ...p, confirm: e.target.value }))
+                    if (err.confirm) setErr(x => ({ ...x, confirm: '' }))
+                  }}
+                  onBlur={handleConfirmBlur}
+                />
+                <button
+                  type="button"
+                  className="pf-pw-toggle"
+                  onClick={() => setShowPw(s => ({ ...s, confirm: !s.confirm }))}
+                  aria-label={showPw.confirm ? 'Ẩn mật khẩu xác nhận' : 'Hiện mật khẩu xác nhận'}
+                  title={showPw.confirm ? 'Ẩn mật khẩu' : 'Xem mật khẩu'}
+                >
+                  {showPw.confirm ? <EyeOff size={18} strokeWidth={2} /> : <Eye size={18} strokeWidth={2} />}
+                </button>
+              </div>
               {err.confirm && (
                 <span className="pf-field-error" role="alert">{err.confirm}</span>
               )}

@@ -39,7 +39,9 @@ export default function AccountPage({ onNavigate }) {
         onClick={() => onNavigate && onNavigate('profile')}
         title="Bấm để chỉnh sửa hồ sơ cá nhân"
       >
-        <div className="avatar" style={{ width: 56, height: 56, fontSize: 18 }}>{getInitials(user.fullName)}</div>
+        <div className="avatar" style={{ width: 56, height: 56, fontSize: 18 }}>
+          {user.avatarUrl ? <img src={user.avatarUrl} alt={user.fullName} className="avatar-img" /> : getInitials(user.fullName)}
+        </div>
         <div style={{ flex: 1 }}>
           <strong style={{ fontSize: 16 }}>{user.fullName}</strong>
           <div className="pf-muted">{user.email}</div>

@@ -13,6 +13,7 @@ export default function ForgotPasswordModal({ open = true, defaultEmail = '', on
   const [demoOtp, setDemoOtp] = useState('')
   const [passwords, setPasswords] = useState({ newPassword: '', confirmPassword: '' })
   const [showNewPw, setShowNewPw] = useState(false)
+  const [showConfirmPw, setShowConfirmPw] = useState(false)
   const [pwFieldErr, setPwFieldErr] = useState({ newPassword: '', confirmPassword: '' })
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
@@ -310,7 +311,7 @@ export default function ForgotPasswordModal({ open = true, defaultEmail = '', on
                   id="fp-new-password"
                   type={showNewPw ? 'text' : 'password'}
                   className={pwFieldErr.newPassword ? 'is-invalid' : ''}
-                  placeholder="Từ 8-32 ký tự (vd: DailyMeal@2026)"
+                  placeholder="Nhập mật khẩu mới"
                   minLength={8}
                   maxLength={32}
                   value={passwords.newPassword}
@@ -356,32 +357,43 @@ export default function ForgotPasswordModal({ open = true, defaultEmail = '', on
 
             <div className="pf-field">
               <label htmlFor="fp-confirm-password">Xác nhận mật khẩu</label>
-              <input
-                id="fp-confirm-password"
-                type="password"
-                className={pwFieldErr.confirmPassword ? 'is-invalid' : ''}
-                placeholder="Nhập lại mật khẩu mới"
-                minLength={8}
-                maxLength={32}
-                value={passwords.confirmPassword}
-                onChange={e => {
-                  setPasswords(p => ({ ...p, confirmPassword: e.target.value }))
-                  setError('')
-                  if (pwFieldErr.confirmPassword) {
-                    setPwFieldErr(err => ({ ...err, confirmPassword: '' }))
-                  }
-                }}
-                onBlur={() => {
-                  if (passwords.confirmPassword) {
-                    const match = passwords.newPassword.trim() === passwords.confirmPassword.trim()
-                    setPwFieldErr(err => ({
-                      ...err,
-                      confirmPassword: match ? '' : 'Mật khẩu xác nhận không khớp',
-                    }))
-                  }
-                }}
-                required
-              />
+              <div className="pf-pw-input-wrap">
+                <input
+                  id="fp-confirm-password"
+                  type={showConfirmPw ? 'text' : 'password'}
+                  className={pwFieldErr.confirmPassword ? 'is-invalid' : ''}
+                  placeholder="Nhập lại mật khẩu mới"
+                  minLength={8}
+                  maxLength={32}
+                  value={passwords.confirmPassword}
+                  onChange={e => {
+                    setPasswords(p => ({ ...p, confirmPassword: e.target.value }))
+                    setError('')
+                    if (pwFieldErr.confirmPassword) {
+                      setPwFieldErr(err => ({ ...err, confirmPassword: '' }))
+                    }
+                  }}
+                  onBlur={() => {
+                    if (passwords.confirmPassword) {
+                      const match = passwords.newPassword.trim() === passwords.confirmPassword.trim()
+                      setPwFieldErr(err => ({
+                        ...err,
+                        confirmPassword: match ? '' : 'Mật khẩu xác nhận không khớp',
+                      }))
+                    }
+                  }}
+                  required
+                />
+                <button
+                  type="button"
+                  className="pf-pw-toggle"
+                  onClick={() => setShowConfirmPw(v => !v)}
+                  aria-label={showConfirmPw ? 'Ẩn mật khẩu xác nhận' : 'Hiện mật khẩu xác nhận'}
+                  title={showConfirmPw ? 'Ẩn mật khẩu' : 'Xem mật khẩu'}
+                >
+                  {showConfirmPw ? <EyeOff size={18} strokeWidth={2} /> : <Eye size={18} strokeWidth={2} />}
+                </button>
+              </div>
               {pwFieldErr.confirmPassword && (
                 <span className="pf-field-error" role="alert">
                   {pwFieldErr.confirmPassword}

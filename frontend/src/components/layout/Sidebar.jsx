@@ -52,7 +52,9 @@ export default function Sidebar({ activePage, onNavigate }) {
           onClick={() => onNavigate('profile')}
           title="Bấm để mở hồ sơ cá nhân và cài đặt"
         >
-          <div className="avatar">{getInitials(user.fullName)}</div>
+          <div className="avatar">
+            {user.avatarUrl ? <img src={user.avatarUrl} alt={user.fullName} className="avatar-img" /> : getInitials(user.fullName)}
+          </div>
           <div className="user-info">
             <div className="user-name">{user.fullName}</div>
             <div className="user-role">{ROLE_LABELS[user.role] || 'Thành viên'}</div>
