@@ -1,8 +1,15 @@
 from fastapi import HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
+from app.core.security import create_access_token
+from app.core.config import settings
 import hashlib
 
-from app.schemas.auth import UserRegisterRequest, UserBasicOut
+from app.schemas.auth import (
+    UserRegisterRequest,
+    UserLoginRequest,
+    UserBasicOut,
+    TokenResponse,
+)
 from app.schemas.role_permission import RoleOut
 from app.repositories import user_repo
 
@@ -68,4 +75,59 @@ async def register_user(db: AsyncSession, user_in: UserRegisterRequest) -> UserB
         created_at=new_user.created_at,
         role=RoleOut.model_validate(role_obj) if role_obj else None,
         permissions=permission_names,
+    )
+
+
+# login user
+
+
+async def user_login(db: AsyncSession, user_in: UserLoginRequest) -> TokenResponse:
+    """
+    User login
+    Args:
+        db (AsyncSession): connection
+        user_in (UserLoginRequest): du lieu nguoi dung
+
+    Raises:
+        HTTPException: Trang thai HTTP
+
+    Returns:
+        TokenResponse: token
+    """
+    user = await user_repo.get_user_by_email(db, user_in.email)
+    password_in_hash = hash_password(user_in.password)
+    # check password after hash
+    if not user or user.password_hash != password_in_hash:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Email or password incorrect!",
+        )
+
+    role = await user_repo.get_role_by_id(db, user.role_id)
+    permissions = await user_repo.get_permission_by_role_id(db, user.role_id)
+
+    # tao jwt payload
+    jwt_payload = {
+        "sub": str(user.user_id),
+        "email": user.email,
+        "role": role.role_name if role else "GENERAL_USER",
+    }
+
+    token_str = create_access_token(jwt_payload)
+
+    user_basic = UserBasicOut(
+        user_id=user.user_id,
+        email=user.email,
+        user_name=user.user_name,
+        avatar_url=user.avatar_url,
+        created_at=user.created_at,
+        role=RoleOut.model_validate(role) if role else None,
+        permissions=permissions,
+    )
+
+    return TokenResponse(
+        access_token=token_str,
+        token_type="Bearer",
+        expires_in=settings.ACCESS_TOKEN_EXPIRE_MINUTES * 60,  # Đổi ra giây
+        user=user_basic,
     )

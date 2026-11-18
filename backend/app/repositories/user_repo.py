@@ -24,6 +24,25 @@ async def check_mail_exits(db: AsyncSession, email: str) -> bool:
     return result.scalar_one_or_none() is not None
 
 
+# get user by email
+async def get_user_by_email(db: AsyncSession, email: str) -> Optional[User]:
+    """
+    Get user by email
+
+    Args:
+        - db : AsyncSession
+        - email : str
+
+    Return:
+        - user: Optional[User]
+    """
+
+    stmt = select(User).where(User.email == email.strip().lower())
+    result = await db.execute(stmt)
+
+    return result.scalar_one_or_none()
+
+
 async def get_role_id_by_name(db: AsyncSession, role_name: str) -> Optional[int]:
     """
     Get role id from role_name
