@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
+import { Eye, EyeOff } from 'lucide-react'
 import { useAuth } from '@/context/AuthContext'
 import { useToast } from '@/context/ToastContext'
+import ForgotPasswordModal from '@/components/auth/ForgotPasswordModal'
 import authBg from '@/assets/auth-bg.jpg'
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -9,6 +11,9 @@ export default function AuthModal() {
   const { authModal, openAuth, closeAuth, login, register } = useAuth()
   const toast = useToast()
   const [form, setForm] = useState({ fullName: '', email: '', password: '', confirm: '' })
+  const [showPw, setShowPw] = useState(false)
+  const [showConfirmPw, setShowConfirmPw] = useState(false)
+  const [showForgotModal, setShowForgotModal] = useState(false)
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
 
@@ -29,6 +34,8 @@ export default function AuthModal() {
 
   function switchTo(mode) {
     setError('')
+    setShowPw(false)
+    setShowConfirmPw(false)
     openAuth(mode)
   }
 
@@ -74,13 +81,63 @@ export default function AuthModal() {
         <label className="auth-field">Email
           <input id="auth-email" type="email" value={form.email} onChange={set('email')} placeholder="ban@example.com" autoComplete="email" />
         </label>
-        <label className="auth-field">Mật khẩu
-          <input id="auth-password" type="password" value={form.password} onChange={set('password')} placeholder="••••••" autoComplete={isRegister ? 'new-password' : 'current-password'} />
-        </label>
+        <div className="auth-field">
+          <label htmlFor="auth-password">Mật khẩu</label>
+          <div className="pf-pw-input-wrap">
+            <input
+              id="auth-password"
+              type={showPw ? 'text' : 'password'}
+              value={form.password}
+              onChange={set('password')}
+              placeholder="••••••"
+              autoComplete={isRegister ? 'new-password' : 'current-password'}
+            />
+            <button
+              type="button"
+              className="pf-pw-toggle"
+              onClick={() => setShowPw(v => !v)}
+              aria-label={showPw ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'}
+              title={showPw ? 'Ẩn mật khẩu' : 'Xem mật khẩu'}
+            >
+              {showPw ? <EyeOff size={18} strokeWidth={2} /> : <Eye size={18} strokeWidth={2} />}
+            </button>
+          </div>
+          {!isRegister && (
+            <div className="auth-forgot-wrap">
+              <button
+                type="button"
+                id="btn-auth-forgot-password"
+                className="fp-forgot-link"
+                onClick={() => setShowForgotModal(true)}
+              >
+                Quên mật khẩu?
+              </button>
+            </div>
+          )}
+        </div>
         {isRegister && (
-          <label className="auth-field">Xác nhận mật khẩu
-            <input id="auth-confirm" type="password" value={form.confirm} onChange={set('confirm')} placeholder="••••••" autoComplete="new-password" />
-          </label>
+          <div className="auth-field">
+            <label htmlFor="auth-confirm">Xác nhận mật khẩu</label>
+            <div className="pf-pw-input-wrap">
+              <input
+                id="auth-confirm"
+                type={showConfirmPw ? 'text' : 'password'}
+                value={form.confirm}
+                onChange={set('confirm')}
+                placeholder="••••••"
+                autoComplete="new-password"
+              />
+              <button
+                type="button"
+                className="pf-pw-toggle"
+                onClick={() => setShowConfirmPw(v => !v)}
+                aria-label={showConfirmPw ? 'Ẩn mật khẩu xác nhận' : 'Hiện mật khẩu xác nhận'}
+                title={showConfirmPw ? 'Ẩn mật khẩu' : 'Xem mật khẩu'}
+              >
+                {showConfirmPw ? <EyeOff size={18} strokeWidth={2} /> : <Eye size={18} strokeWidth={2} />}
+              </button>
+            </div>
+          </div>
         )}
 
         {error && <div className="auth-error" role="alert">{error}</div>}
@@ -96,6 +153,17 @@ export default function AuthModal() {
           </button>
         </p>
       </form>
+
+      {/* Modal Khôi phục mật khẩu 3 bước mở từ màn hình Đăng nhập */}
+      {showForgotModal && (
+        <ForgotPasswordModal
+          defaultEmail={form.email.trim()}
+          onClose={() => {
+            setShowForgotModal(false)
+            setError('')
+          }}
+        />
+      )}
     </div>
   )
 }

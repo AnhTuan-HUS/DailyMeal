@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { Eye, EyeOff } from 'lucide-react'
 import { authApi, PASSWORD_HINT, validateStrongPassword } from '@/services/authApi'
 import { useToast } from '@/context/ToastContext'
@@ -19,13 +19,6 @@ export default function ForgotPasswordModal({ open = true, defaultEmail = '', on
   const [loading, setLoading] = useState(false)
 
   const otpRefs = useRef([])
-
-  useEffect(() => {
-    if (!open) return
-    const onKey = e => e.key === 'Escape' && onClose()
-    document.addEventListener('keydown', onKey)
-    return () => document.removeEventListener('keydown', onKey)
-  }, [open, onClose])
 
   if (!open) return null
 
@@ -159,13 +152,12 @@ export default function ForgotPasswordModal({ open = true, defaultEmail = '', on
   }
 
   return (
-    <div className="modal-backdrop" onClick={onClose}>
+    <div className="modal-backdrop">
       <div
         className="modal fp-modal"
         role="dialog"
         aria-modal="true"
         aria-labelledby="fp-modal-title"
-        onClick={e => e.stopPropagation()}
       >
         <div className="modal-head">
           <div>
@@ -179,24 +171,6 @@ export default function ForgotPasswordModal({ open = true, defaultEmail = '', on
           <button type="button" className="modal-close" aria-label="Đóng" onClick={onClose}>
             ×
           </button>
-        </div>
-
-        {/* Thanh tiến trình 3 bước */}
-        <div className="fp-steps" aria-label="Các bước khôi phục mật khẩu">
-          <div className={`fp-step-item ${step >= 1 ? 'active' : ''} ${step > 1 ? 'done' : ''}`}>
-            <span className="fp-step-num">{step > 1 ? '✓' : '1'}</span>
-            <span className="fp-step-label">Nhập Email</span>
-          </div>
-          <div className={`fp-step-line ${step >= 2 ? 'active' : ''}`} />
-          <div className={`fp-step-item ${step >= 2 ? 'active' : ''} ${step > 2 ? 'done' : ''}`}>
-            <span className="fp-step-num">{step > 2 ? '✓' : '2'}</span>
-            <span className="fp-step-label">Nhập OTP</span>
-          </div>
-          <div className={`fp-step-line ${step >= 3 ? 'active' : ''}`} />
-          <div className={`fp-step-item ${step >= 3 ? 'active' : ''}`}>
-            <span className="fp-step-num">3</span>
-            <span className="fp-step-label">Đặt lại mật khẩu</span>
-          </div>
         </div>
 
         {/* Bước 1 - Nhập Email */}
@@ -213,7 +187,7 @@ export default function ForgotPasswordModal({ open = true, defaultEmail = '', on
                   setEmail(e.target.value)
                   setError('')
                 }}
-                placeholder="Nhập email đã đăng ký (vd: an.nguyen@example.com)"
+                placeholder="Nhập email đã đăng ký"
                 autoFocus
                 required
               />

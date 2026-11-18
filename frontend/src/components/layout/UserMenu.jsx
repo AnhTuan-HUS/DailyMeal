@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { Settings } from 'lucide-react'
+import { LogOut, Settings } from 'lucide-react'
 import { useAuth } from '@/context/AuthContext'
 import { useToast } from '@/context/ToastContext'
 import { getInitials } from '@/utils/user'
@@ -94,7 +94,9 @@ export default function UserMenu({ onNavigate }) {
           </div>
 
           <button id="btn-logout" role="menuitem" className="ud-item ud-logout" onClick={handleLogout}>
-            <span className="ud-ico">⊘</span>
+            <span className="ud-ico" style={{ display: 'grid', placeItems: 'center' }}>
+              <LogOut size={16} strokeWidth={2.2} />
+            </span>
             <span className="ud-text">Đăng xuất</span>
           </button>
         </div>
