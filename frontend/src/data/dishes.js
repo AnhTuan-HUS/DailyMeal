@@ -3,6 +3,7 @@ export const dishes = [
     id: 1,
     name: 'Thịt kho tàu',
     category: 'Món truyền thống',
+    type: 'man',
     time: 45,
     servings: 4,
     cal: '420 kcal',
@@ -19,6 +20,7 @@ export const dishes = [
     id: 2,
     name: 'Canh chua cá',
     category: 'Thanh mát',
+    type: 'canh',
     time: 30,
     servings: 3,
     cal: '210 kcal',
@@ -35,6 +37,7 @@ export const dishes = [
     id: 3,
     name: 'Rau muống xào tỏi',
     category: 'Dễ làm',
+    type: 'rau',
     time: 15,
     servings: 2,
     cal: '95 kcal',
@@ -51,6 +54,7 @@ export const dishes = [
     id: 4,
     name: 'Cá hồi áp chảo',
     category: 'Bổ dưỡng',
+    type: 'man',
     time: 20,
     servings: 2,
     cal: '350 kcal',
@@ -67,6 +71,7 @@ export const dishes = [
     id: 5,
     name: 'Phở bò',
     category: 'Món truyền thống',
+    type: 'man',
     time: 45,
     servings: 4,
     cal: '390 kcal',
@@ -83,6 +88,7 @@ export const dishes = [
     id: 6,
     name: 'Gà rang gừng',
     category: 'Món truyền thống',
+    type: 'man',
     time: 40,
     servings: 4,
     cal: '330 kcal',
@@ -99,6 +105,7 @@ export const dishes = [
     id: 7,
     name: 'Bánh cuốn',
     category: 'Dễ làm',
+    type: 'man',
     time: 25,
     servings: 3,
     cal: '280 kcal',
@@ -115,6 +122,7 @@ export const dishes = [
     id: 8,
     name: 'Bún chả',
     category: 'Món truyền thống',
+    type: 'man',
     time: 45,
     servings: 4,
     cal: '460 kcal',
@@ -131,6 +139,7 @@ export const dishes = [
     id: 9,
     name: 'Salad rau củ',
     category: 'Thanh mát',
+    type: 'rau',
     time: 15,
     servings: 2,
     cal: '160 kcal',
@@ -156,9 +165,48 @@ export const initialIngredients = [
   ['Gừng', '50g'],
 ];
 
+// Loại món (dùng cho chip lọc ở trang Món đã lưu)
+export const dishTypes = [
+  { id: 'man',  label: 'Món mặn' },
+  { id: 'canh', label: 'Canh' },
+  { id: 'rau',  label: 'Rau' },
+]
+
+// Vai trò trong gia đình -> emoji đại diện
+export const memberRoles = [
+  { id: 'bo',       label: 'Bố',       emoji: '👨🏻' },
+  { id: 'me',       label: 'Mẹ',       emoji: '👩🏻' },
+  { id: 'con-trai', label: 'Con trai', emoji: '👦🏻' },
+  { id: 'con-gai',  label: 'Con gái',  emoji: '👧🏻' },
+  { id: 'ong',      label: 'Ông',      emoji: '👴🏻' },
+  { id: 'ba',       label: 'Bà',       emoji: '👵🏻' },
+  { id: 'khac',     label: 'Khác',     emoji: '🧑🏻' },
+]
+
 export const familyMembers = [
-  { emoji: '👨🏻', name: 'Bố', age: '35 tuổi', pref: 'Thích: Thịt, cá, rau xanh' },
-  { emoji: '👩🏻', name: 'Mẹ', age: '32 tuổi', pref: 'Thích: Rau củ, canh thanh mát' },
-  { emoji: '👦🏻', name: 'Con trai', age: '8 tuổi', pref: 'Thích: Thịt, trứng' },
-  { emoji: '👧🏻', name: 'Con gái', age: '5 tuổi', pref: 'Thích: Cá, súp, trái cây' },
-];
+  { id: 1, role: 'bo',       name: 'Bố',       age: 35, likes: ['Thịt', 'Cá', 'Rau xanh'],        allergies: [] },
+  { id: 2, role: 'me',       name: 'Mẹ',       age: 32, likes: ['Rau củ', 'Canh thanh mát'],     allergies: ['Hải sản có vỏ'] },
+  { id: 3, role: 'con-trai', name: 'Con trai', age: 8,  likes: ['Thịt', 'Trứng'],                allergies: [] },
+  { id: 4, role: 'con-gai',  name: 'Con gái',  age: 5,  likes: ['Cá', 'Súp', 'Trái cây'],        allergies: ['Đậu phộng'] },
+]
+
+// Hồ sơ bữa ăn mặc định của cả nhà
+export const initialMealProfile = {
+  soft: true,          // Mềm
+  lowSalt: true,       // Ít mặn
+  noSpicy: false,      // Không cay
+  lowSugar: false,     // Ít ngọt
+  excluded: ['Hành sống', 'Nội tạng', 'Dứa'],
+  defaultServings: 4,
+}
+
+// Lịch sử 7 ngày gần nhất (0 = hôm qua). status: cooked | skipped | swapped
+export const initialHistory = [
+  { daysAgo: 1, dishId: 2, status: null },
+  { daysAgo: 2, dishId: 1, status: 'cooked' },
+  { daysAgo: 3, dishId: 3, status: 'cooked' },
+  { daysAgo: 4, dishId: 8, status: 'swapped', swappedTo: 'Bánh cuốn' },
+  { daysAgo: 5, dishId: 6, status: 'skipped' },
+  { daysAgo: 6, dishId: 1, status: 'cooked' },
+  { daysAgo: 7, dishId: 4, status: 'cooked' },
+]
