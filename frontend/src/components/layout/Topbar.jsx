@@ -1,5 +1,5 @@
-import { useToast } from '@/context/ToastContext'
 import { useAuth } from '@/context/AuthContext'
+import NotificationMenu from '@/components/layout/NotificationMenu'
 import UserMenu from '@/components/layout/UserMenu'
 
 const PAGE_TITLES = {
@@ -25,7 +25,6 @@ function getGreeting() {
 }
 
 export default function Topbar({ activePage, onNavigate }) {
-  const toast = useToast()
   const { user, isAuthenticated, openAuth } = useAuth()
 
   let [eyebrow, title] = PAGE_TITLES[activePage] || PAGE_TITLES.home
@@ -43,14 +42,7 @@ export default function Topbar({ activePage, onNavigate }) {
         <h1 className="page-title">{title}</h1>
       </div>
       <div className="top-actions">
-        <button
-          id="btn-notifications"
-          className="icon-btn"
-          aria-label="Thông báo"
-          onClick={() => toast('Bạn đã xem thông báo mới nhất')}
-        >
-          ♧<i className="dot" />
-        </button>
+        <NotificationMenu onNavigate={onNavigate} />
 
         {isAuthenticated ? (
           <UserMenu onNavigate={onNavigate} />
