@@ -1,8 +1,10 @@
 from fastapi import APIRouter, status, HTTPException, Depends
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.database import get_db
 from app.services import user_service
 from sqlalchemy import text
+from typing import Any
 from app.schemas.common import ResponseEnvelope
 from app.schemas.auth import (
     UserRegisterRequest,
@@ -11,7 +13,10 @@ from app.schemas.auth import (
     TokenResponse,
 )
 
+from app.services.redis_service import redis_service
+
 router = APIRouter()
+security = HTTPBearer()
 
 
 @router.post(
@@ -60,3 +65,11 @@ async def login_user(
         message="Đăng nhập thành công",
         data=token_response,
     )
+
+
+@router.post(
+    "/logout", response_model=ResponseEnvelope[Any], summary="Đăng xuất tài khoản"
+)
+async def logout(credentials: HTTPAuthorizationCredentials = Depends(security)):
+    await user_service.user_logout(token=credentials.credentials)
+    return {"message": "Đăng xuất thành công"}

@@ -1,8 +1,9 @@
 from fastapi import HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.core.security import create_access_token
+from app.core.security import create_access_token, decode_access_token
 from app.core.config import settings
 import hashlib
+import time
 
 from app.schemas.auth import (
     UserRegisterRequest,
@@ -12,6 +13,8 @@ from app.schemas.auth import (
 )
 from app.schemas.role_permission import RoleOut
 from app.repositories import user_repo
+
+from app.services.redis_service import redis_service
 
 
 # bam mat khau
@@ -79,8 +82,6 @@ async def register_user(db: AsyncSession, user_in: UserRegisterRequest) -> UserB
 
 
 # login user
-
-
 async def user_login(db: AsyncSession, user_in: UserLoginRequest) -> TokenResponse:
     """
     User login
@@ -131,3 +132,30 @@ async def user_login(db: AsyncSession, user_in: UserLoginRequest) -> TokenRespon
         expires_in=settings.ACCESS_TOKEN_EXPIRE_MINUTES * 60,  # Đổi ra giây
         user=user_basic,
     )
+
+
+async def user_logout(token: str):
+    """
+    Phương thức đăng xuất và add token vào blacklist
+
+    Args:
+        token (str): token access
+    """
+    # dencode token
+    payload = decode_access_token(token=token)
+
+    if not payload:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Token không hợp lệ hoặc đã hết hạn",
+        )
+
+    if redis_service.is_token_blacklisted(payload["jti"]):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Token này đã được đăng xuất trước đó",
+        )
+
+    # save token vao blacklist
+    ttl = int(payload["exp"] - time.time())
+    await redis_service.add_token_to_blacklist(jti=payload["jti"], ttl_seconds=ttl)
