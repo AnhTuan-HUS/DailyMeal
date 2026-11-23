@@ -40,7 +40,7 @@ class User(Base):
     password_hash = Column(String(255), nullable=False)
     user_name = Column(String(100), nullable=False)
     avatar_url = Column(Text, nullable=True)
-    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc), nullable=False)
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
     role_id = Column(Integer, ForeignKey("role.role_id"), nullable=False)
 
     role = relationship("Role", back_populates="users")
@@ -59,7 +59,7 @@ class EatingProfile(Base):
     is_child = Column(Boolean, default=False, nullable=False)
     is_elderly = Column(Boolean, default=False, nullable=False)
     spice_level = Column(Integer, default=2, nullable=False)
-    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc), nullable=False)
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
     user_id = Column(Integer, ForeignKey("users.user_id", ondelete="CASCADE"), nullable=False)
 
     user = relationship("User", back_populates="eating_profiles")
@@ -157,7 +157,7 @@ class ShoppingList(Base):
 
     shopping_list_id = Column(Integer, primary_key=True, index=True)
     list_name = Column(String(150), nullable=False)
-    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc), nullable=False)
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
     user_id = Column(Integer, ForeignKey("users.user_id", ondelete="CASCADE"), nullable=False)
 
     user = relationship("User", back_populates="shopping_lists")
@@ -265,7 +265,7 @@ class AvailableIngredient(Base):
     quantity = Column(Numeric(10, 2), nullable=False)
     unit = Column(String(30), nullable=False)
     expiry_date = Column(DateTime, nullable=True)
-    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc), nullable=False)
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
 
     user = relationship("User", back_populates="available_ingredients")
     ingredient = relationship("Ingredient", back_populates="available_in")
@@ -307,7 +307,7 @@ class FavoriteRecipe(Base):
 
     user_id = Column(Integer, ForeignKey("users.user_id", ondelete="CASCADE"), primary_key=True)
     recipe_id = Column(Integer, ForeignKey("recipe.recipe_id", ondelete="CASCADE"), primary_key=True)
-    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc), nullable=False)
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
 
     user = relationship("User", back_populates="favorites")
     recipe = relationship("Recipe", back_populates="favorited_by")
