@@ -150,7 +150,7 @@ async def user_logout(token: str):
             detail="Token không hợp lệ hoặc đã hết hạn",
         )
 
-    if redis_service.is_token_blacklisted(payload["jti"]):
+    if await redis_service.is_token_blacklisted(payload["jti"]):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Token này đã được đăng xuất trước đó",
