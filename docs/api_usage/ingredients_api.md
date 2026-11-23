@@ -2,8 +2,8 @@
 
 Tài liệu này hướng dẫn chi tiết cách gọi, truyền tham số và xử lý kết quả cho **5 API** thuộc phân hệ **Danh mục Nguyên liệu (`/api/v1/ingredients`)**.
 
-- **Base URL (môi trường local):** `http://localhost:8000/api/v1/ingredients`
-- **Giao diện test trực tiếp (Swagger UI):** `http://localhost:8000/docs`
+- **Base URL (môi trường local):** `http://localhost:18000/api/v1/ingredients`
+- **Giao diện test trực tiếp (Swagger UI):** `http://localhost:18000/docs`
 - **Định dạng dữ liệu:** `application/json` (UTF-8)
 - **Mã nguồn liên quan:**
   - Endpoint: `backend/app/api/v1/endpoints/ingredients.py`
@@ -71,7 +71,7 @@ Tạo mới một nguyên liệu trong bảng `ingredient` và tự động chè
 #### Ví dụ gọi bằng `curl`
 
 ```bash
-curl -X POST "http://localhost:8000/api/v1/ingredients" \
+curl -X POST "http://localhost:18000/api/v1/ingredients" \
   -H "Content-Type: application/json" \
   -d '{
     "code": "THIT_BA_CHI",
@@ -141,7 +141,7 @@ Hỗ trợ tìm kiếm không phân biệt hoa thường (`ILIKE`) trên cả `i
 
 ```bash
 # Lấy trang 1, 10 nguyên liệu có chữ "thịt" thuộc nhóm "Thịt"
-curl -X GET "http://localhost:8000/api/v1/ingredients?q=th%E1%BB%8Bt&food_group=Th%E1%BB%8Bt&page=1&limit=10"
+curl -X GET "http://localhost:18000/api/v1/ingredients?q=th%E1%BB%8Bt&food_group=Th%E1%BB%8Bt&page=1&limit=10"
 ```
 
 #### Ví dụ gọi bằng JavaScript (`fetch`)
@@ -154,7 +154,7 @@ const params = new URLSearchParams({
   limit: "10",
 });
 
-const res = await fetch(`http://localhost:8000/api/v1/ingredients?${params}`);
+const res = await fetch(`http://localhost:18000/api/v1/ingredients?${params}`);
 const json = await res.json();
 console.log(json.data, json.meta);
 ```
@@ -171,7 +171,7 @@ Trả về đầy đủ thông tin của 1 nguyên liệu cùng danh sách thàn
 #### Ví dụ gọi bằng `curl`
 
 ```bash
-curl -X GET "http://localhost:8000/api/v1/ingredients/1"
+curl -X GET "http://localhost:18000/api/v1/ingredients/1"
 ```
 
 ---
@@ -188,7 +188,7 @@ Cho phép **cập nhật từng phần (partial update)**: chỉ truyền nhữn
 #### Ví dụ gọi bằng `curl` (chỉ sửa tỷ lệ thải bỏ và giữ nguyên dinh dưỡng)
 
 ```bash
-curl -X PUT "http://localhost:8000/api/v1/ingredients/101" \
+curl -X PUT "http://localhost:18000/api/v1/ingredients/101" \
   -H "Content-Type: application/json" \
   -d '{
     "waste_rate_percent": 8.5,
@@ -199,7 +199,7 @@ curl -X PUT "http://localhost:8000/api/v1/ingredients/101" \
 #### Ví dụ gọi bằng `curl` (thay thế lại danh sách dinh dưỡng)
 
 ```bash
-curl -X PUT "http://localhost:8000/api/v1/ingredients/101" \
+curl -X PUT "http://localhost:18000/api/v1/ingredients/101" \
   -H "Content-Type: application/json" \
   -d '{
     "nutrients": [
@@ -219,7 +219,7 @@ Xóa một nguyên liệu khỏi bảng `ingredient`. Các bản ghi dinh dưỡ
 #### Ví dụ gọi bằng `curl`
 
 ```bash
-curl -X DELETE "http://localhost:8000/api/v1/ingredients/101"
+curl -X DELETE "http://localhost:18000/api/v1/ingredients/101"
 ```
 
 #### Ví dụ phản hồi thành công (`200 OK`)
