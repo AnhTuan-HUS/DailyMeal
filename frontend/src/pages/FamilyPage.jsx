@@ -7,9 +7,42 @@ import ProfileTab from '../components/family/ProfileTab'
 import HistoryTab from '../components/family/HistoryTab'
 
 const TABS = [
-  { id: 'members', label: 'Thành viên', ico: '♧' },
-  { id: 'profile', label: 'Hồ sơ bữa ăn', ico: '☰' },
-  { id: 'history', label: 'Lịch sử 7 ngày', ico: '◷' },
+  {
+    id: 'members',
+    label: 'Thành viên',
+    icon: (
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+        <circle cx="9" cy="7" r="4" />
+        <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+      </svg>
+    ),
+  },
+  {
+    id: 'profile',
+    label: 'Hồ sơ khẩu vị',
+    icon: (
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <line x1="8" y1="6" x2="21" y2="6" />
+        <line x1="8" y1="12" x2="21" y2="12" />
+        <line x1="8" y1="18" x2="21" y2="18" />
+        <line x1="3" y1="6" x2="3.01" y2="6" />
+        <line x1="3" y1="12" x2="3.01" y2="12" />
+        <line x1="3" y1="18" x2="3.01" y2="18" />
+      </svg>
+    ),
+  },
+  {
+    id: 'history',
+    label: 'Lịch sử 7 ngày',
+    icon: (
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <circle cx="12" cy="12" r="10" />
+        <polyline points="12 6 12 12 16 14" />
+      </svg>
+    ),
+  },
 ]
 
 export default function FamilyPage({ onShowRecipe }) {
@@ -45,16 +78,27 @@ export default function FamilyPage({ onShowRecipe }) {
   }
 
   return (
-    <section id="page-family">
-      <div className="section-head">
-        <p>Ghi nhớ sở thích để DailyMeal gợi ý bữa ăn phù hợp.</p>
+    <section id="page-family" className="fam-page-container">
+      {/* Header khu vực với mô tả editorial */}
+      <div className="section-head fam-head-row">
+        <div>
+          <p className="fam-lead-text">
+            Ghi nhớ khẩu vị, chế độ ăn và dị ứng của từng thành viên để mỗi bữa cơm gia đình đều trọn vẹn.
+          </p>
+        </div>
         {tab === 'members' && (
-          <button className="primary" onClick={() => setModal({ member: null })}>
-            + Thêm thành viên
+          <button
+            type="button"
+            className="primary fam-add-btn-primary"
+            onClick={() => setModal({ member: null })}
+          >
+            <span aria-hidden="true">+</span>
+            <span>Thêm thành viên</span>
           </button>
         )}
       </div>
 
+      {/* Tabs điều hướng tinh tế */}
       <div className="fam-tabs" role="tablist" aria-label="Quản lý gia đình">
         {TABS.map(t => (
           <button
@@ -64,13 +108,16 @@ export default function FamilyPage({ onShowRecipe }) {
             className={`fam-tab${tab === t.id ? ' active' : ''}`}
             onClick={() => setTab(t.id)}
           >
-            <span>{t.ico}</span>
-            {t.label}
-            {t.id === 'members' && <em className="fam-tab-count">{members.length}</em>}
+            <span className="fam-tab-icon" aria-hidden="true">{t.icon}</span>
+            <span className="fam-tab-label">{t.label}</span>
+            {t.id === 'members' && (
+              <span className="fam-tab-count">{members.length}</span>
+            )}
           </button>
         ))}
       </div>
 
+      {/* Nội dung Tab */}
       {tab === 'members' && (
         <MembersTab
           members={members}

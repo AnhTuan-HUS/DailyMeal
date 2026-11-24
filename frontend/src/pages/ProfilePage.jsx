@@ -64,45 +64,29 @@ export default function ProfilePage() {
 
   return (
     <section id="page-profile" className="pf-page">
-      {/* ── Thẻ đại diện người dùng (Hero Profile Card) ── */}
+      {/* Hero card */}
       <div className="pf-hero">
         <div className="pf-hero-main">
-          <div className="avatar pf-avatar-large">
-            {getInitials(user.fullName)}
-          </div>
+          <div className="avatar pf-avatar-large">{getInitials(user.fullName)}</div>
           <div className="pf-hero-info">
             <h3>{user.fullName}</h3>
             <div className="pf-hero-email">{user.email}</div>
             <div className="pf-badges">
               <span className="badge-role">
-                ★ {ROLE_LABELS[user.role] || 'Thành viên gia đình'}
-              </span>
-              <span className="badge-verified">
-                ✓ Tài khoản đã xác thực
+                {ROLE_LABELS[user.role] || 'Thành viên gia đình'} &middot; {user.role}
               </span>
             </div>
           </div>
         </div>
-
-        <div className="pf-hero-meta">
-          <div className="pf-meta-box">
-            <small>Mã tài khoản</small>
-            <strong>#DM-{user.id || '2026'}</strong>
-          </div>
-          <div className="pf-meta-box">
-            <small>Trạng thái</small>
-            <strong style={{ color: '#3b6b35' }}>Đang hoạt động</strong>
-          </div>
-        </div>
       </div>
 
-      {/* ── Lưới 2 cột biểu mẫu cập nhật thông tin & mật khẩu ── */}
+      {/* Grid 2 cột */}
       <div className="pf-grid">
-        {/* Cột 1: Thông tin cá nhân */}
+        {/* Thông tin cá nhân */}
         <form className="pf-card-form" onSubmit={saveProfile}>
           <div className="pf-header">
-            <h4>👤 Thông tin cơ bản</h4>
-            <p>Cập nhật họ tên hiển thị và thông tin tài khoản của bạn</p>
+            <h4>Thông tin cá nhân</h4>
+            <p>Cập nhật họ tên và thông tin tài khoản</p>
           </div>
 
           <div className="pf-field">
@@ -112,25 +96,23 @@ export default function ProfilePage() {
               type="text"
               value={name}
               onChange={e => setName(e.target.value)}
-              placeholder="Nhập họ và tên đầy đủ"
+              placeholder="Nhập họ và tên"
               required
             />
           </div>
 
           <div className="pf-field">
-            <label htmlFor="pf-email">Địa chỉ Email</label>
+            <label htmlFor="pf-email">Email (không thể đổi)</label>
             <input
               id="pf-email"
               type="email"
               value={user.email}
               disabled
-              title="Email dùng để đăng nhập và không thể thay đổi"
             />
-            <span className="pf-hint">Email cố định dùng để xác thực và nhận thông báo quan trọng.</span>
           </div>
 
           <div className="pf-field">
-            <label>Vai trò hệ thống</label>
+            <label>Vai trò</label>
             <input
               type="text"
               value={ROLE_LABELS[user.role] || 'Thành viên gia đình'}
@@ -138,18 +120,18 @@ export default function ProfilePage() {
             />
           </div>
 
-          {err.profile && <div className="auth-error" style={{ marginBottom: 14 }}>{err.profile}</div>}
+          {err.profile && <div className="pf-error">{err.profile}</div>}
 
           <button id="pf-save" type="submit" className="pf-submit-btn" disabled={loadingProfile}>
-            {loadingProfile ? 'Đang lưu...' : 'Lưu thông tin'}
+            {loadingProfile ? 'Đang lưu...' : 'Lưu thay đổi'}
           </button>
         </form>
 
-        {/* Cột 2: Đổi mật khẩu */}
+        {/* Đổi mật khẩu */}
         <form className="pf-card-form" onSubmit={savePassword}>
           <div className="pf-header">
-            <h4>🔒 Đổi mật khẩu & Bảo mật</h4>
-            <p>Nên sử dụng mật khẩu mạnh kết hợp chữ, số và ký tự đặc biệt</p>
+            <h4>Đổi mật khẩu</h4>
+            <p>Mật khẩu nên có ít nhất 6 ký tự, kết hợp chữ và số</p>
           </div>
 
           <div className="pf-field">
@@ -157,7 +139,7 @@ export default function ProfilePage() {
             <input
               id="pf-oldPassword"
               type="password"
-              placeholder="••••••••"
+              placeholder="Nhập mật khẩu hiện tại"
               value={pw.oldPassword}
               onChange={e => setPw(p => ({ ...p, oldPassword: e.target.value }))}
             />
@@ -185,7 +167,7 @@ export default function ProfilePage() {
             />
           </div>
 
-          {err.pw && <div className="auth-error" style={{ marginBottom: 14 }}>{err.pw}</div>}
+          {err.pw && <div className="pf-error">{err.pw}</div>}
 
           <button id="pf-change-pw" type="submit" className="pf-submit-btn" disabled={loadingPw}>
             {loadingPw ? 'Đang cập nhật...' : 'Cập nhật mật khẩu'}
@@ -193,52 +175,52 @@ export default function ProfilePage() {
         </form>
       </div>
 
-      {/* ── Thẻ quyền hạn & Tính năng tài khoản ── */}
+      {/* Tính năng tài khoản */}
       <div className="pf-permissions-card">
         <div className="pf-header">
-          <h4>🛡 Tính năng & Quyền hạn khả dụng</h4>
-          <p>Các quyền và đặc quyền đã được phân bổ cho tài khoản của bạn</p>
+          <h4>Tính năng khả dụng</h4>
+          <p>Các quyền đã được phân bổ cho tài khoản của bạn</p>
         </div>
 
         <div className="pf-features-list">
           <div className="pf-feature-item">
-            <span className="pf-feature-icon">✓</span>
+            <span className="pf-feature-icon">&#10003;</span>
             <div>
-              <strong>Lên thực đơn tuần thông minh</strong>
-              <div style={{ fontSize: 12, color: '#5e4c41' }}>Tự động phân bổ món ăn 7 ngày và cân bằng calo</div>
+              <strong>Lên thực đơn tuần</strong>
+              <div className="pf-feature-desc">Phân bổ món ăn 7 ngày, cân bằng calo</div>
             </div>
           </div>
 
           <div className="pf-feature-item">
-            <span className="pf-feature-icon">✓</span>
+            <span className="pf-feature-icon">&#10003;</span>
             <div>
               <strong>Quản lý giỏ đi chợ</strong>
-              <div style={{ fontSize: 12, color: '#5e4c41' }}>Gom nguyên liệu theo từng quầy mua sắm tiện lợi</div>
+              <div className="pf-feature-desc">Gom nguyên liệu theo quầy mua sắm</div>
             </div>
           </div>
 
           <div className="pf-feature-item">
-            <span className="pf-feature-icon">✓</span>
+            <span className="pf-feature-icon">&#10003;</span>
             <div>
-              <strong>Sổ tay nấu ăn & Vào bếp</strong>
-              <div style={{ fontSize: 12, color: '#5e4c41' }}>Hướng dẫn nấu ăn trực quan kèm chế độ 2 bếp và hẹn giờ</div>
+              <strong>Sổ tay nấu ăn</strong>
+              <div className="pf-feature-desc">Hướng dẫn nấu ăn trực quan, hẹn giờ</div>
             </div>
           </div>
 
           <div className="pf-feature-item">
-            <span className="pf-feature-icon">✓</span>
+            <span className="pf-feature-icon">&#10003;</span>
             <div>
-              <strong>Hồ sơ khẩu vị gia đình</strong>
-              <div style={{ fontSize: 12, color: '#5e4c41' }}>Quản lý dị ứng, độ mặn/nhạt của từng thành viên</div>
+              <strong>Hồ sơ khẩu vị</strong>
+              <div className="pf-feature-desc">Quản lý dị ứng, khẩu vị từng thành viên</div>
             </div>
           </div>
 
           {isAdmin && (
-            <div className="pf-feature-item" style={{ gridColumn: '1 / -1', background: '#faeee9', borderColor: '#f0cebe' }}>
-              <span className="pf-feature-icon" style={{ background: '#f5ded4', color: '#9c361c' }}>★</span>
+            <div className="pf-feature-item pf-feature-admin">
+              <span className="pf-feature-icon pf-feature-icon-admin">&#9733;</span>
               <div>
-                <strong style={{ color: '#9c361c' }}>Quyền Quản trị viên hệ thống (Admin)</strong>
-                <div style={{ fontSize: 12, color: '#6e4f45' }}>Toàn quyền quản lý tài khoản người dùng, phân quyền vai trò và dữ liệu hệ thống</div>
+                <strong>Quyền quản trị viên</strong>
+                <div className="pf-feature-desc">Quản lý tài khoản, phân quyền, dữ liệu hệ thống</div>
               </div>
             </div>
           )}
