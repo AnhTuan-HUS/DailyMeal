@@ -1,15 +1,12 @@
-import os
-from typing import List, Union
+from typing import List, Union, Optional
 from pydantic import AnyHttpUrl, field_validator
+
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
-        env_file=".env",
-        env_file_encoding="utf-8",
-        case_sensitive=True,
-        extra="ignore"
+        env_file=".env", env_file_encoding="utf-8", case_sensitive=True, extra="ignore"
     )
 
     PROJECT_NAME: str = "DailyMeal API"
@@ -42,9 +39,32 @@ class Settings(BaseSettings):
         "http://127.0.0.1:13000",
         "http://localhost:5173",
         "http://127.0.0.1:5173",
-        "*"
+        "*",
     ]
+
+    # Redis Settings
+    REDIS_HOST: str = "127.0.0.1"
+    REDIS_PORT: int = 6379
+    REDIS_PASSWORD: Optional[str] = None
+    REDIS_DB: int = 0
+    REDIS_URL: Optional[str] = None
+
+    @field_validator("REDIS_URL", mode="before")
+    @classmethod
+    def assemble_redis_url(cls, v: Optional[str], info) -> str:
+        if v:
+            return v
+        data = info.data
+        host = data.get("REDIS_HOST", "127.0.0.1")
+        port = data.get("REDIS_PORT", 6379)
+        db = data.get("REDIS_DB", 0)
+        password = data.get("REDIS_PASSWORD")
+        if password:
+            return f"redis://:{password}@{host}:{port}/{db}"
+        return f"redis://{host}:{port}/{db}"
+
 
 
 settings = Settings()
+
 
