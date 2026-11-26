@@ -51,7 +51,7 @@ li { padding: 3px 0; }
    App shell
    ============================================================ */
 .app {
-  min-height: 100vh;
+  min-height: calc(100vh / var(--ui-zoom, 1));
   display: grid;
   grid-template-columns: 248px minmax(0, 1fr);
 }
@@ -66,10 +66,10 @@ li { padding: 3px 0; }
   display: flex;
   flex-direction: column;
   gap: 28px;
-  min-height: 100vh;
+  min-height: calc(100vh / var(--ui-zoom, 1));
   position: sticky;
   top: 0;
-  height: 100vh;
+  height: calc(100vh / var(--ui-zoom, 1));
   overflow-y: auto;
 }
 
@@ -213,7 +213,7 @@ li { padding: 3px 0; }
   align-self: stretch;
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  min-height: calc(100vh / var(--ui-zoom, 1));
 }
 
 /* ============================================================
@@ -2773,7 +2773,7 @@ li { padding: 3px 0; }
   background: var(--paper);
   border-radius: 20px;
   width: min(520px, 100%);
-  max-height: calc(100vh - 32px);
+  max-height: calc(100vh / var(--ui-zoom, 1) - 32px);
   overflow-y: auto;
   padding: 22px;
   display: flex;
@@ -3287,7 +3287,7 @@ li { padding: 3px 0; }
 .ud-logout { color: #b84729; border-top: 1px solid var(--line); border-radius: 0 0 10px 10px; margin-top: 6px; font-weight: 600; }
 .ud-logout:hover { background: #faeae6; color: #9c361c; }
 
-html.modal-open, body.modal-open { overflow: hidden; height: 100vh; }
+html.modal-open, body.modal-open { overflow: hidden; height: calc(100vh / var(--ui-zoom, 1)); }
 body.modal-open .sidebar { overflow: hidden; }
 
 .auth-overlay {
