@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Bell, Send } from 'lucide-react'
+import { CookingPot, ShoppingCart, Snowflake, HeartPulse, Rows3, Send } from 'lucide-react'
 import { useToast } from '@/context/ToastContext'
 import { useApp } from '@/context/AppContext'
 
@@ -12,11 +12,11 @@ const DEFAULTS = {
   compact: false,
 }
 const ROWS = [
-  ['notifyMeal', 'Nhắc giờ nấu ăn', 'Thông báo khi đến giờ vào bếp theo thực đơn trong ngày'],
-  ['notifyShopping', 'Nhắc đi chợ', 'Thông báo danh sách nguyên liệu còn thiếu cần mua'],
-  ['notifyFridge', 'Cảnh báo thực phẩm tủ lạnh', 'Nhắc giải cứu nguyên liệu sắp hết hạn trong 24h'],
-  ['notifyFamily', 'Lưu ý khẩu vị & dị ứng gia đình', 'Cảnh báo khi món ăn có nguyên liệu trùng dị ứng thành viên'],
-  ['compact', 'Giao diện gọn', 'Giảm khoảng cách giữa các thành phần'],
+  ['notifyMeal', CookingPot, 'rust', 'Nhắc giờ nấu ăn', 'Thông báo khi đến giờ vào bếp theo thực đơn trong ngày'],
+  ['notifyShopping', ShoppingCart, 'amber', 'Nhắc đi chợ', 'Thông báo danh sách nguyên liệu còn thiếu cần mua'],
+  ['notifyFridge', Snowflake, 'sky', 'Cảnh báo thực phẩm tủ lạnh', 'Nhắc giải cứu nguyên liệu sắp hết hạn trong 24h'],
+  ['notifyFamily', HeartPulse, 'plum', 'Lưu ý khẩu vị & dị ứng gia đình', 'Cảnh báo khi món ăn có nguyên liệu trùng dị ứng thành viên'],
+  ['compact', Rows3, 'olive', 'Giao diện gọn', 'Giảm khoảng cách giữa các thành phần'],
 ]
 
 export default function SettingsPage() {
@@ -44,11 +44,8 @@ export default function SettingsPage() {
 
   return (
     <section id="page-settings">
-      <div className="section-head">
-        <div>
-          <h3>Cài đặt thông báo & hiển thị</h3>
-          <p>Tuỳ chỉnh các thông báo nhắc việc bếp nhà và trải nghiệm DailyMeal.</p>
-        </div>
+      <div className="page-intro-row">
+        <p className="page-intro">Tuỳ chỉnh các thông báo nhắc việc bếp nhà và trải nghiệm DailyMeal.</p>
         <button
           type="button"
           className="btn-plan-outline"
@@ -61,15 +58,13 @@ export default function SettingsPage() {
       </div>
 
       <div className="account-list">
-        {ROWS.map(([k, t, d]) => (
-          <div key={k} className="account-row">
-            <span className="row-icon" style={{ color: 'var(--wine)', display: 'grid', placeItems: 'center' }}>
-              <Bell size={18} strokeWidth={2} />
-            </span>
-            <div style={{ flex: 1 }}>
+        {ROWS.map(([k, Icon, tone, t, d]) => (
+          <div key={k} className="account-row is-static">
+            <span className={'icon-chip tone-' + tone}><Icon size={19} strokeWidth={2} /></span>
+            <span className="row-text">
               <strong>{t}</strong>
-              <div className="pf-muted">{d}</div>
-            </div>
+              <small className="pf-muted">{d}</small>
+            </span>
             <button
               id={'set-' + k}
               role="switch"

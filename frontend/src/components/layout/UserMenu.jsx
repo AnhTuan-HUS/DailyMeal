@@ -1,15 +1,14 @@
 import { useEffect, useRef, useState } from 'react'
-import { LogOut, Settings } from 'lucide-react'
+import { LogOut, Settings, User, SlidersHorizontal, BookOpen, LifeBuoy, ShieldCheck } from 'lucide-react'
 import { useAuth } from '@/context/AuthContext'
 import { useToast } from '@/context/ToastContext'
 import { getInitials } from '@/utils/user'
 
 const BASE_ITEMS = [
-  { ico: '👤', label: 'Hồ sơ cá nhân', page: 'profile' },
-  { ico: '⚙', label: 'Cài đặt tài khoản', page: 'settings' },
-  { ico: 'ⓘ', label: 'Hướng dẫn sử dụng', page: 'guide' },
-  { ico: '◉', label: 'Điều khoản & Quyền riêng tư', page: 'account' },
-  { ico: '✉', label: 'Hỗ trợ & Liên hệ', action: 'contact' },
+  { Icon: User, label: 'Hồ sơ cá nhân', page: 'profile' },
+  { Icon: SlidersHorizontal, label: 'Cài đặt tài khoản', page: 'settings' },
+  { Icon: BookOpen, label: 'Hướng dẫn sử dụng', page: 'guide' },
+  { Icon: LifeBuoy, label: 'Hỗ trợ & Liên hệ', action: 'contact' },
 ]
 const ADMIN_PERMS = ['user:manage', 'role:manage', 'permission:manage']
 
@@ -20,7 +19,7 @@ export default function UserMenu({ onNavigate }) {
   const ref = useRef(null)
 
   const items = ADMIN_PERMS.some(hasPermission)
-    ? [...BASE_ITEMS.slice(0, 3), { ico: '🛡', label: 'Quản trị hệ thống', page: 'admin' }, ...BASE_ITEMS.slice(3)]
+    ? [...BASE_ITEMS.slice(0, 3), { Icon: ShieldCheck, label: 'Quản trị hệ thống', page: 'admin' }, ...BASE_ITEMS.slice(3)]
     : BASE_ITEMS
 
   // Dong menu khi bam ra ngoai hoac nhan Esc
@@ -87,7 +86,7 @@ export default function UserMenu({ onNavigate }) {
                 className="ud-item"
                 onClick={() => handleItemClick(it)}
               >
-                <span className="ud-ico">{it.ico}</span>
+                <span className="ud-ico"><it.Icon size={17} strokeWidth={2} /></span>
                 <span className="ud-text">{it.label}</span>
               </button>
             ))}
